@@ -10,19 +10,24 @@
 
 Node is basically a wrapper around the V8 JavaScript runtime (the same one that chrome uses to run JS) to allow us to build JS applications outside of the browser.
 
-Ryan Dhal created Node in 2009 while 
+Ryan Dhal created Node in 2009. 
 
 **NodeJS is event-driven, non-blocking and modular.**
 
 #### Event-driven
 Being event-driven, almost all of the code in Node is written to either respond to an event or itself fire an event. This is essentially the mechanism buy which different Node objects and modules communicate. It also makes Node apps scale very well as many connections can be handled concurrently but if there is no work to be done, Node is sleeping.
 
+#### Blocking vs non-blocking calls
+Blocking calls, or synchronous calls, are those where control doesn't return to the application until the requested operation is completed. This commonly occurs in I/O operations. For example, when reading and writing using a blocking call, the application must wait until the read or write operation is done before further logic can be processed. This means that the application is idle while waiting for a potentially lengthy operation to complete.
 
+Non-blocking calls are those where control returns to the application almost immediately, before waiting for the operation to complete. This is called asynchronous programming. The completion of the operation is often communicated to the application via a callback routine. Node uses non-blocking calls along with a queue to priotize tasks and a dispatcher to assign tasks to workers and pass back completed packages.
 #### Callbacks
+A callback is a piece of executable code that runs in response to a certain event. It is passed as an argument to other code that will execute the callback when specified. Callbacks are often used to notify the application that an I/O operation is complete. For example, timer functions often include a callback function:
 
-
-#### Blocking vs non-blocking code
-
+```
+setTimeout(function() {sys.puts("timer done")}, 1000);
+```
+In this case, "timer done" will be printed after one second. 
 
 #### Modules
 
