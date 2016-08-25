@@ -8,9 +8,25 @@
 
 ### What is Node.JS?
 
-Node is basically a wrapper around the V8 JavaScript runtime (the same one that chrome uses to run JS ) to allow it to run JS as 'apps' on a server.
+Node is basically a wrapper around the V8 JavaScript runtime (the same one that chrome uses to run JS) to allow us to build JS applications outside of the browser.
+
+Ryan Dhal created Node in 2009 while 
+
+**NodeJS is event-driven, non-blocking and modular.**
+
+#### Event-driven
+Being event-driven, almost all of the code in Node is written to either respond to an event or itself fire an event. This is essentially the mechanism buy which different Node objects and modules communicate. It also makes Node apps scale very well as many connections can be handled concurrently but if there is no work to be done, Node is sleeping.
+
+
+#### Callbacks
+
 
 #### Blocking vs non-blocking code
+
+
+#### Modules
+
+
 
 
 The general principle of Node is that operations should never block. 
@@ -48,7 +64,7 @@ Look at the earlier Hello World code.
 When its executed, Node goes through the code and registers any known events. 
 In this case it registers  *request*.
 
->> Pop over to the node docs page for the [http module](https://nodejs.org/dist/latest-v6.x/docs/api/http.html) and see the objects within the http.ClientRequest class it considers to be events.
+>> Pop over to the node docs page for the [http module][1] and see the objects within the http.ClientRequest class it considers to be events.
 
 Node then goes into an event loop. Where its continuously checking for the registered events.
 
@@ -78,6 +94,14 @@ You'll see "Incoming request:/bobsyouruncle" now gets logged to the console.
 
 This is at the core of how we can use the url property to differentiate incoming requests and serve up different pages in response. 
 
+### Event emmitters
+
+Just as events can be triggered in the DOM (click, submit, load, hover etc..), many objects in Node emit events.
+Most of these inherit from the [EventEmitter][2] constructor.
+For example, in our Hello World app, the ```http.createServer(function(request, response) {``` method is passed the request event
+
+[1]: https://nodejs.org/api/http.html "NodeJS Docs - http"
+[2]: https://nodejs.org/api/events.html#events_class_eventemitter "NodeJS Docs - EventEmitter"
 
 </xmp>
 </body>
