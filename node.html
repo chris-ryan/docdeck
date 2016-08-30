@@ -21,17 +21,82 @@ Being event-driven, almost all of the code in Node is written to either respond 
 Blocking calls, or synchronous calls, are those where control doesn't return to the application until the requested operation is completed. This commonly occurs in I/O operations. For example, when reading and writing using a blocking call, the application must wait until the read or write operation is done before further logic can be processed. This means that the application is idle while waiting for a potentially lengthy operation to complete.
 
 Non-blocking calls are those where control returns to the application almost immediately, before waiting for the operation to complete. This is called asynchronous programming. The completion of the operation is often communicated to the application via a callback routine. Node uses non-blocking calls along with a queue to priotize tasks and a dispatcher to assign tasks to workers and pass back completed packages.
-#### Callbacks
-A callback is a piece of executable code that runs in response to a certain event. It is passed as an argument to other code that will execute the callback when specified. Callbacks are often used to notify the application that an I/O operation is complete. For example, timer functions often include a callback function:
+
+## Callbacks
+A callback is a piece of executable code that runs in response to a certain event. 
+It is passed as an argument to other code that will execute the callback when specified. 
+
+- Function call
+- call back to a function that deals with the results (with an error handler)
+
+For example, 
+
+if B requires A to be done first.
 
 ```
-setTimeout(function() {sys.puts("timer done")}, 1000);
+var doSomething = function(input1, callback) {
+    var newThing = Math.random()*input1;
+    if isNaN {
+        callback(new Error("Not a number"));
+    }
+    else {
+        callback (null, newThing);
+    }
+}
+
+var handleResults = function(error, results) {
+ if (error == undefined) {
+    console.log("something has been done")
+ }
+}
+
+doSomething(param1, param2, handleResults);
+where handleResults has been previously defined as a function. 
 ```
-In this case, "timer done" will be printed after one second. 
 
-#### Modules
+Note: As a convention, the callback function is usually the last parameter passed.
+Also, an error handler should always be the first value passed to the callback.
+
+For simple callback anonymous functions are common but named functions make it easier down the track for debugging and maintining code.
+
+## Modules
 
 
+### Using Modules
+Properties and functions from modules are made available using require()
+
+You can require an entire module: ```var express = require('express');```
+.. or just a single variable of function: ``` var maxAge = require('express').maxAge;```
+
+### Getting Modules
+There are three main sources of modules that can be used in Node apps.
+####1. Built-in: While there are a few functions in the global namespace, there are many built-in modules that still need to be explicitly required in your code.
+some of these include: fs, http, crypto, os.
+
+####2. Other files within your project. Each of your .js files is considered to be a node module and as such can be required.
+To access you need to pass the relative path as a parameter to the require() function.
+eg: ```require('./somefolder/somefile')``` or ```require('../somefile')```
+
+To make variables available to other files, you need to assign them to the module.exports object.
+eg: 
+```
+var doSomething = function(i, callback) {
+    ...
+}
+
+module.exports.doSomething = doSomething;
+```
+
+Just like with other modules you can require individual variables from your own files using dot notation.
+
+####3. Node Package Manager
+Third-party modules are available by using ```npm install module-name --save``` which downloads all the required files into the node_modules folder. (--save adds the modules to the dependencies list in your package.json file)
+You can then require them by simply referring to their name just like with built-in modules, and node knows to go looking in that folder.
+eg: ```var mongodb = require('mongodb');
+You can still import individual files by referring to their relative path but be careful as you may miss out on required dependencies.
+
+You can find third-party npm packages using the commandline: ```npm search <search terms>```
+or on the [web][1].
 
 
 The general principle of Node is that operations should never block. 
@@ -69,7 +134,7 @@ Look at the earlier Hello World code.
 When its executed, Node goes through the code and registers any known events. 
 In this case it registers  *request*.
 
->> Pop over to the node docs page for the [http module][1] and see the objects within the http.ClientRequest class it considers to be events.
+>> Pop over to the node docs page for the [http module][2] and see the objects within the http.ClientRequest class it considers to be events.
 
 Node then goes into an event loop. Where its continuously checking for the registered events.
 
@@ -99,14 +164,72 @@ You'll see "Incoming request:/bobsyouruncle" now gets logged to the console.
 
 This is at the core of how we can use the url property to differentiate incoming requests and serve up different pages in response. 
 
+
+### Events vs Callbacks
+In the callback model, you make a request and provide a function to be called when the request is completed. (Request/Reponse)
+Whereas with the Events approach, we provide functions to invoke on specific events (Publish/Subscribe). 
+
+Typically the callback approach involves an all-or-nothing scenario where the response to the call is either an error, indicating that the call has failed, or the callback function indicating success.
+In the events scenario, an error is emmitted as a separate event, allowing you to pass an error instead of any item events or after some item events have been emmitted, allowing the possibility of a 'partial success' scenario.
+
 ### Event emmitters
 
 Just as events can be triggered in the DOM (click, submit, load, hover etc..), many objects in Node emit events.
-Most of these inherit from the [EventEmitter][2] constructor.
-For example, in our Hello World app, the ```http.createServer(function(request, response) {``` method is passed the request event
+Most of these inherit from the [EventEmitter][3] class.
 
-[1]: https://nodejs.org/api/http.html "NodeJS Docs - http"
-[2]: https://nodejs.org/api/events.html#events_class_eventemitter "NodeJS Docs - EventEmitter"
+For example, in our Hello World app, the ```http.createServer(function(request, response) {``` method is passed the *request* event 
+which it has inherited from the net.Server class. You can view the [Node API][4] to see the way this results in the on and emit functions being called.
+
+Let's say we wanted to create our own custom EvenEmitter
+that can emit and listen for the following events: error, warn, info
+
+```
+var EventEmitter = require('events').EventEmitter;
+
+//listen for error event
+var logger = new EventEmitter();
+logger.on('error', function(message) {
+    console.log('ERROR: ' + message);
+});
+//emit error event
+logger.emit('error', 'amount is too high');
+
+
+```
+
+The code that is subscribing to events, calls the ```emitter.on(event, listener)``` function, specifiying the event being subscribed to.
+The code publishing events calls the ```emitter.emit(event, [args])``` function, specfying the event being emmitted.
+
+
+
+The *events* are simply Strings and can be any value. They can also be *emitted* with zero or more arguments.
+
+### Streams
+
+Streams extend the EventEmitter class to provide functionality for managing data flow such as network traffic or file I/O.
+
+A stream is either an instance of ReadableStream or a WriteableStream
+
+#### ReadableStream
+includes:
+- boolean - indicating whether the stream is readable
+- events (data, end, error, close) - emitted when new data arrives or when it stops
+- functions: pause(), resume(), destroy(), pipe() - that can act on the stream.
+
+#### WritableStream
+
+includes: 
+- boolean - indicating whether the stream is writable
+- events (drain, error, close, pipe) - emitted when its safe to write to a stream or when data has been piped to a readableStream
+- functions: write(), end(), destroy(), destroySoon() - that can act on the stream.
+
+The power of streams is seen when ReadableStream and WriteableStream are used together, using the pipe() function.
+
+
+[1]: https://www.npmjs.com/ "NPM - Find packages" 
+[2]: https://nodejs.org/api/http.html "NodeJS Docs - http"
+[3]: https://nodejs.org/api/events.html#events_class_eventemitter "NodeJS API - EventEmitter"
+[4]: https://nodejs.org/api/net.html#net_event_connection "NodeJS API - net.Server"
 
 </xmp>
 </body>
