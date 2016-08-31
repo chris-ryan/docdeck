@@ -15,7 +15,7 @@ Ryan Dhal created Node in 2009.
 **NodeJS is event-driven, non-blocking and modular.**
 
 #### Event-driven
-Being event-driven, almost all of the code in Node is written to either respond to an event or itself fire an event. This is essentially the mechanism buy which different Node objects and modules communicate. It also makes Node apps scale very well as many connections can be handled concurrently but if there is no work to be done, Node is sleeping.
+Being event-driven, almost all of the code in Node is written to either respond to an event or itself fire an event. This is essentially the mechanism by which different Node objects and modules communicate. It also makes Node apps scale very well as many connections can be handled concurrently but if there is no work to be done, Node is sleeping.
 
 #### Blocking vs non-blocking calls
 Blocking calls, or synchronous calls, are those where control doesn't return to the application until the requested operation is completed. This commonly occurs in I/O operations. For example, when reading and writing using a blocking call, the application must wait until the read or write operation is done before further logic can be processed. This means that the application is idle while waiting for a potentially lengthy operation to complete.
@@ -172,6 +172,7 @@ Whereas with the Events approach, we provide functions to invoke on specific eve
 Typically the callback approach involves an all-or-nothing scenario where the response to the call is either an error, indicating that the call has failed, or the callback function indicating success.
 In the events scenario, an error is emmitted as a separate event, allowing you to pass an error instead of any item events or after some item events have been emmitted, allowing the possibility of a 'partial success' scenario.
 
+You can listen to multiple events on an object or have multiple functions that listen to the same event
 ### Event emmitters
 
 Just as events can be triggered in the DOM (click, submit, load, hover etc..), many objects in Node emit events.
@@ -200,15 +201,15 @@ logger.emit('error', 'amount is too high');
 The code that is subscribing to events, calls the ```emitter.on(event, listener)``` function, specifiying the event being subscribed to.
 The code publishing events calls the ```emitter.emit(event, [args])``` function, specfying the event being emmitted.
 
-
-
 The *events* are simply Strings and can be any value. They can also be *emitted* with zero or more arguments.
 
 ### Streams
 
+In keeping with Node's core principle of better data I/O efficiency, streams were developed to allow us to handle data piece by piece (or chunk by chunk) as its being transferred. 
+
 Streams extend the EventEmitter class to provide functionality for managing data flow such as network traffic or file I/O.
 
-A stream is either an instance of ReadableStream or a WriteableStream
+The two most-common instances of Streams are ReadableStream and WriteableStream
 
 #### ReadableStream
 includes:
@@ -225,11 +226,121 @@ includes:
 
 The power of streams is seen when ReadableStream and WriteableStream are used together, using the pipe() function.
 
+Let's modify our hello.js app to take in a request as a readable stream and output it back to the browser as a writeable stream.
+
+```
+var http = require('http');
+
+http.createServer(function(request, response) {
+    response.writeHead(200); 
+    request.on('readable', function() {
+        var chunk = null;
+        while(null !== (chunk = request.read())) {
+            response.write(chunk);
+            console.log(chunk.toString());
+        }
+    });
+   request.on('end', function() {
+        response.end();
+   });
+
+}).listen(8080);
+```
+
+run the app and from another terminal window, POST a message using the curl command:
+```curl -d 'hello' http://localhost:8080
+
+Take a look at your node console and you should see the message outputted to the console.
+
+It's quite common in node that you would want to read a stream then write it to a writeable stream. For this, Node provides the pipe() helper method.
+
+We can rewrite the above code using the pipe() method as:
+
+```
+var http = require('http');
+
+http.createServer(function(request, response) {
+    response.writeHead(200); 
+    request.pipe(response);
+}).listen(8080);
+```
+
+### Working with file streams
+
+Say we wanted to read the contents from a file and stream it into another file.
+
+```
+var fs = require('fs');
+
+var oldFile = fs.createReadStream("readme.md"); //ReadStream
+var newFile = fs.createWriteStream("readme-copy.md"); //WriteStream
+
+file.pipe(newFile);
+```
+
+You can pipe any read stream into any write stream. For example, combining the two examples above would allow you read from the HTTP request and pipe it into a file
+
+```
+var fs = require('fs');
+var http = require('http');
+
+http.createServer(function(request, response) {
+var newFile = fs.createWriteStream("response-log.txt");
+request.pipe(newFile);
+
+request.on('end', function() {
+response.end('uploaded!');
+});
+
+}).listen(8080);
+
+```
+
+To test, in terminal, cd to somewhere with a file that you can send via a HTTP request using curl:
+curl --upload-file somefile.txt http://localhost:8080
+
+...then have a look in the directory where your hello.js app was run from and you'll now see a copy of the file!.
+
+#### Notifying the end-user of progress
+Because node is reading and writing the file in chunks as it arrives, we can easily refer to those chunks to provide a notification of upload progress.
+
+In the earlier example, we already have access to the properties we need via the fs & http modules. We just need to compare the total size of the file (content length header) against the sum of chunks sizes as they come in.
+for this, [fs.read][5] provides us with the length property (for chunk size in bytes) and the http module gives us access to the http message headers. As part of the HTTP protocol, the size of a message (along with other properties) can be send in the message's header. curl, like any good client, obliges us by sending this. In this case, the header we're interested in is [content-length][6]
+
+```
+var fs = require('fs');
+var http = require('http');
+
+http.createServer(function(request, response) {
+var newFile = fs.createWriteStream("response-log.txt");
+//find out how big the file is
+var fileBytes = request.headers['content-length'];
+var uploadedBytes = 0;
+
+request.on('readable', function() {
+    var chunk = null;
+    while(null !== (chunk = request.read())){
+        uploadedBytes += chunk.length;
+        var progress = (uploadedBytes / fileBytes) * 100;
+        response.write("progress: " + parseInt(progress, 10) + "%\n");
+    }
+})
+
+request.pipe(newFile);
+
+request.on('end', function() {
+response.end('uploaded!');
+});
+
+}).listen(8080);
+```
 
 [1]: https://www.npmjs.com/ "NPM - Find packages" 
 [2]: https://nodejs.org/api/http.html "NodeJS Docs - http"
 [3]: https://nodejs.org/api/events.html#events_class_eventemitter "NodeJS API - EventEmitter"
 [4]: https://nodejs.org/api/net.html#net_event_connection "NodeJS API - net.Server"
+[5]: https://nodejs.org/api/fs.html#fs_fs_read_fd_buffer_offset_length_position_callback "NodeJS API - fs.read"
+[6]: https://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Request_fields "Wikipedia - HTTP headers"
 
 </xmp>
 </body>
