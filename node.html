@@ -70,10 +70,12 @@ You can require an entire module: ```var express = require('express');```
 
 ### Getting Modules
 There are three main sources of modules that can be used in Node apps.
-####1. Built-in: While there are a few functions in the global namespace, there are many built-in modules that still need to be explicitly required in your code.
+####1. Built-in: 
+While there are a few functions in the global namespace, there are many built-in modules that still need to be explicitly required in your code.
 some of these include: fs, http, crypto, os.
 
-####2. Other files within your project. Each of your .js files is considered to be a node module and as such can be required.
+####2. Other files within your project. 
+Each of your .js files is considered to be a node module and as such can be required.
 To access you need to pass the relative path as a parameter to the require() function.
 eg: ```require('./somefolder/somefile')``` or ```require('../somefile')```
 
@@ -83,7 +85,6 @@ eg:
 var doSomething = function(i, callback) {
     ...
 }
-
 module.exports.doSomething = doSomething;
 ```
 
@@ -252,6 +253,8 @@ run the app and from another terminal window, POST a message using the curl comm
 
 Take a look at your node console and you should see the message outputted to the console.
 
+####The pipe() method
+
 It's quite common in node that you would want to read a stream then write it to a writeable stream. For this, Node provides the pipe() helper method.
 
 We can rewrite the above code using the pipe() method as:
@@ -264,6 +267,13 @@ http.createServer(function(request, response) {
     request.pipe(response);
 }).listen(8080);
 ```
+
+As you can see, pipe() automatically takes a readable stream and *pipes* it into a writable destination. 
+syntax: ```readablestream.pipe(writablestream);```
+
+> Note: Its possible to pipe into multiple destinations by setting up a chain of pipe streams.
+eg: ```readablestream.pipe(x).pipe(y);```
+
 
 ### Working with file streams
 
