@@ -63,11 +63,35 @@ var server = app.listen( function() {
 });
 ```
 
-To keep our main file lean, let's create a configure.js file to store our global configuration settings.
+### Routing & templates
 
 ```
+var request = require('request');
+var url = require('url');
 
+app.get ('/tweets/:username', function(req, response) {
+        var username = req.params.username;
+
+        options = {
+            protocol: "http",
+            host: api.twitter.com,
+            pathname: '/1/statuses/user_timeline.json',
+            query: { screen_name: username, count: 10}
+        }
+
+        var twitterUrl = url.format(options);
+        request(url, function(err, res, body) {
+            var tweets = JSON.parse(body);
+            response.locals = {tweets: tweets, name: username};
+            response.render('tweets.ejs') //template engine
+        });
+
+});
 ```
+
+
+
+
 
 
 ### Connecting Node to MongoDB
