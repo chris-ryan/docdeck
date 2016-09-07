@@ -253,6 +253,7 @@ run the app and from another terminal window, POST a message using the curl comm
 
 Take a look at your node console and you should see the message outputted to the console.
 
+
 ####The pipe() method
 
 It's quite common in node that you would want to read a stream then write it to a writeable stream. For this, Node provides the pipe() helper method.
@@ -310,6 +311,11 @@ To test, in terminal, cd to somewhere with a file that you can send via a HTTP r
 curl --upload-file somefile.txt http://localhost:8080
 
 ...then have a look in the directory where your hello.js app was run from and you'll now see a copy of the file!.
+
+A simpler example using *request()* to read a webpage, then pipe it into a file...
+```request('http://www.unimelb.edu.au/').pipe(fs.createWriteStream('unimelb.html'));```
+... or chaining the pipe() commands to compress the file...
+```request('http://www.unimelb.edu.au/').pipe(zlib.createGzip()).pipe(fs.createWriteStream('unimelb.gz'));```
 
 #### Notifying the end-user of progress
 Because node is reading and writing the file in chunks as it arrives, we can easily refer to those chunks to provide a notification of upload progress.
