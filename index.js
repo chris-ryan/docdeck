@@ -2,6 +2,12 @@ var fs = require('fs');
 var marked = require('marked');
 var path = require('path');
 
+marked.setOptions({
+    highlight: function (code) {
+        return require('highlight.js').highlightAuto(code).value;
+    }
+});
+
 function makePage(srcPath) { 
     var destPath = path.join('www', path.parse(srcPath).dir, path.parse(srcPath).name + '.html');
     srcPath = path.join('doc-root', srcPath);

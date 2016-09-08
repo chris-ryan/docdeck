@@ -19,36 +19,36 @@
 </div>
 
 <div class="main-content"><p>The socket.io library abstracts websockets with fallbacks to support browsers that don&#39;t support websockets</p>
-<pre><code>var express = require(&#39;exress&#39;);
-var app = express();
-var server = require(&#39;http&#39;).createServer(app);
-var io = require(&#39;socket.io&#39;)(server);
+<pre><code><span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'exress'</span>);
+<span class="hljs-keyword">var</span> app = express();
+<span class="hljs-keyword">var</span> server = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http'</span>).createServer(app);
+<span class="hljs-keyword">var</span> io = <span class="hljs-built_in">require</span>(<span class="hljs-string">'socket.io'</span>)(server);
 
-io.on(&#39;connection&#39;, function(client) {
-    client.on(&#39;join&#39;, function(name) {
+io.on(<span class="hljs-string">'connection'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">client</span>) </span>{
+    client.on(<span class="hljs-string">'join'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">name</span>) </span>{
         client.nickname = name;
     });
-    console.log(&#39;Client connected...&#39;);
-    //emit the message event on the client
-    client.emit(&#39;messages&#39;, {hello: &#39;world&#39; });
-    //listen for message events
-    client.on(&#39;messages&#39;, function(data){
-        var nickname = client.nickname;
-        //broadcast message to all other clients
-        client.broadcast.emit(&quot;messages&quot;, nickname + &quot;: &quot; + message);
-        //send the same mesasge back to client
-        client.emit(&quot;messages&quot;, nickname + &quot;: &quot; + message);
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Client connected...'</span>);
+    <span class="hljs-comment">//emit the message event on the client</span>
+    client.emit(<span class="hljs-string">'messages'</span>, {hello: <span class="hljs-string">'world'</span> });
+    <span class="hljs-comment">//listen for message events</span>
+    client.on(<span class="hljs-string">'messages'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+        <span class="hljs-keyword">var</span> nickname = client.nickname;
+        <span class="hljs-comment">//broadcast message to all other clients</span>
+        client.broadcast.emit(<span class="hljs-string">"messages"</span>, nickname + <span class="hljs-string">": "</span> + message);
+        <span class="hljs-comment">//send the same mesasge back to client</span>
+        client.emit(<span class="hljs-string">"messages"</span>, nickname + <span class="hljs-string">": "</span> + message);
     });
 });
 
-app.get(&#39;/&#39;, function (req, res) {
-    res.sendFile(__dirname + &#39;/index.html&#39;);
+app.get(<span class="hljs-string">'/'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">req, res</span>) </span>{
+    res.sendFile(__dirname + <span class="hljs-string">'/index.html'</span>);
 });
 
-server.listen(8080);
+server.listen(<span class="hljs-number">8080</span>);
 
 
-in the html you need to load the socket.io library and connect to the server...
+<span class="hljs-keyword">in</span> the html you need to load the socket.io library and connect to the server...
 </code></pre><script src="/socket.io/socket.io.js"></script>
 
 <script>
@@ -67,77 +67,77 @@ in the html you need to load the socket.io library and connect to the server...
         //emit messages event on the server
         socket.emit(&#39;messages&#39;, message);
     });</p>
-<pre><code>socket.on(&#39;messages&#39;, function(data) {
+<pre><code>socket.<span class="hljs-keyword">on</span>(<span class="hljs-string">'messages'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> <span class="hljs-comment">{
     insertMessage(data);
-});
+}</span>);</span>
 </code></pre><p></script></p>
-<pre><code>Socket&#39;s broadcast property allows us to emit to all clients connected to a server (such as in the case of a chatroom).
-```socket.broadcast.emit(&quot;messsage&quot;, &quot;Hello&quot;);
+<pre><code>Socket<span class="hljs-symbol">'s</span> broadcast <span class="hljs-keyword">property</span> allows us <span class="hljs-keyword">to</span> emit <span class="hljs-keyword">to</span> <span class="hljs-keyword">all</span> clients connected <span class="hljs-keyword">to</span> a server (such as <span class="hljs-keyword">in</span> the <span class="hljs-keyword">case</span> <span class="hljs-keyword">of</span> a chatroom).
+```socket.broadcast.emit(<span class="hljs-string">"messsage"</span>, <span class="hljs-string">"Hello"</span>);
 </code></pre><p>To configure a socket client within a JS app, instead of referencing socket.io.js in a <script> tag as above, we just need to 
 <code>require (socket.io-client);</code></p>
 <h3 id="persisting-data">Persisting data</h3>
-<pre><code>var express = require(&#39;exress&#39;);
-var app = express();
-var server = require(&#39;http&#39;).createServer(app);
-var io = require(&#39;socket.io&#39;)(server);
-var redis = require(&#39;redis&#39;);
-var redisClient = redis.createClient();
-// client.set(&quot;message1&quot;, &quot;hello, this is Bob&quot;);
+<pre><code><span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'exress'</span>);
+<span class="hljs-keyword">var</span> app = express();
+<span class="hljs-keyword">var</span> server = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http'</span>).createServer(app);
+<span class="hljs-keyword">var</span> io = <span class="hljs-built_in">require</span>(<span class="hljs-string">'socket.io'</span>)(server);
+<span class="hljs-keyword">var</span> redis = <span class="hljs-built_in">require</span>(<span class="hljs-string">'redis'</span>);
+<span class="hljs-keyword">var</span> redisClient = redis.createClient();
+<span class="hljs-comment">// client.set("message1", "hello, this is Bob");</span>
 
-var messages = [];
-var storeMessage = function(name, data){
-    var message = JSON.stringify({name: name, data: data});
-    /*messages.push({name: name, data: data}); //add message to end of array
+<span class="hljs-keyword">var</span> messages = [];
+<span class="hljs-keyword">var</span> storeMessage = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">name, data</span>)</span>{
+    <span class="hljs-keyword">var</span> message = <span class="hljs-built_in">JSON</span>.stringify({name: name, data: data});
+    <span class="hljs-comment">/*messages.push({name: name, data: data}); //add message to end of array
     if (messages.length &gt; 10) {
         messages.shift();
-    }*/
-    redisClient.lpush(&quot;messages&quot;, message, function(err, response){
-        redisClient.ltrim(&quot;messages&quot;, 0, 9);
+    }*/</span>
+    redisClient.lpush(<span class="hljs-string">"messages"</span>, message, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, response</span>)</span>{
+        redisClient.ltrim(<span class="hljs-string">"messages"</span>, <span class="hljs-number">0</span>, <span class="hljs-number">9</span>);
     });
 }
 
-io.sockets.on(&#39;connection&#39;, function(client) {
-    client.on(&#39;messages&#39;, function(message) {
-        client.get(&quot;nickname&quot;, function(error, name) {
-            client.broadcast.emit(&quot;messages&quot;, name + &quot;: &quot; + message);
-            client.emit(&quot;messages&quot;, name + &quot;: &quot; + message);
+io.sockets.on(<span class="hljs-string">'connection'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">client</span>) </span>{
+    client.on(<span class="hljs-string">'messages'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">message</span>) </span>{
+        client.get(<span class="hljs-string">"nickname"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">error, name</span>) </span>{
+            client.broadcast.emit(<span class="hljs-string">"messages"</span>, name + <span class="hljs-string">": "</span> + message);
+            client.emit(<span class="hljs-string">"messages"</span>, name + <span class="hljs-string">": "</span> + message);
             storeMessage(name, message);
         });
     });
 
-    client.on(&#39;join&#39;, function(name) {
-        redisClient.lrange(&quot;messages&quot;, 0, -1, function(err, messages){
+    client.on(<span class="hljs-string">'join'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">name</span>) </span>{
+        redisClient.lrange(<span class="hljs-string">"messages"</span>, <span class="hljs-number">0</span>, <span class="hljs-number">-1</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, messages</span>)</span>{
             messages = messages.reverse();
-            messages.forEach(function(message){
-                message = JSON.parse(message);
-                client.emit(&quot;messages&quot;, message.name + &quot;: &quot; + message.data);
+            messages.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">message</span>)</span>{
+                message = <span class="hljs-built_in">JSON</span>.parse(message);
+                client.emit(<span class="hljs-string">"messages"</span>, message.name + <span class="hljs-string">": "</span> + message.data);
             });
         });
 
-        //notify other clients a chatter has joined
-        client.broadcast.emit(&quot;add chatter&quot;, name);
-        redisClient.smembers(&#39;names&#39;, function(err, names){
-            names.forEach(function(name){
-                client.emit(&#39;add chatter&#39;, name);
+        <span class="hljs-comment">//notify other clients a chatter has joined</span>
+        client.broadcast.emit(<span class="hljs-string">"add chatter"</span>, name);
+        redisClient.smembers(<span class="hljs-string">'names'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, names</span>)</span>{
+            names.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">name</span>)</span>{
+                client.emit(<span class="hljs-string">'add chatter'</span>, name);
             });
         });
-        redisClient.sadd(&quot;chatters&quot;, name);
+        redisClient.sadd(<span class="hljs-string">"chatters"</span>, name);
     });
 
-    //remove chatter when they disconnect
-    client.on(&#39;disconnect&#39;, function(name){
-        client.get(&#39;nickname&#39;, function(err, name){
-            client.broadcast.emit(&quot;remove chatter&quot;, name);
-            redisClient.srem(&quot;chatters&quot;, name);
+    <span class="hljs-comment">//remove chatter when they disconnect</span>
+    client.on(<span class="hljs-string">'disconnect'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">name</span>)</span>{
+        client.get(<span class="hljs-string">'nickname'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, name</span>)</span>{
+            client.broadcast.emit(<span class="hljs-string">"remove chatter"</span>, name);
+            redisClient.srem(<span class="hljs-string">"chatters"</span>, name);
         });
     });
 });
 
-app.get(&#39;/&#39;, function (req, res) {
-    res.sendFile(__dirname + &#39;/index.html&#39;);
+app.get(<span class="hljs-string">'/'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">req, res</span>) </span>{
+    res.sendFile(__dirname + <span class="hljs-string">'/index.html'</span>);
 });
 
-server.listen(8080);
+server.listen(<span class="hljs-number">8080</span>);
 </code></pre><p>and in the html
 ```
 socket.on(&#39;add chatter&#39;, function(name) {

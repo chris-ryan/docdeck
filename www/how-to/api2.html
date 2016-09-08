@@ -23,24 +23,24 @@
 <p>Let&#39;s install the most basic: mongodb in our Express API app.</p>
 <p><code>npm install mongodb --save</code></p>
 <p>Create a new file in the root of our project called: db-connect.js</p>
-<pre><code>var mongoClient = require(&#39;mongodb&#39;);
+<pre><code><span class="hljs-keyword">var</span> mongoClient = <span class="hljs-built_in">require</span>(<span class="hljs-string">'mongodb'</span>);
 
-mongoClient.connect(&#39;mongodb://dev.diabcre.cloud:27017/mongotest&#39;, function(err, db) {
-    console.log(&quot;Connected to MongoDB!&quot;);
+mongoClient.connect(<span class="hljs-string">'mongodb://dev.diabcre.cloud:27017/mongotest'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, db</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Connected to MongoDB!"</span>);
 
     db.close();
 });
 </code></pre><p>run <code>node db-connect.js</code> and you should see the connection message outputted to your console.</p>
 <h3 id="retrieving-a-document">Retrieving a document</h3>
 <p>Within our client connect function, we&#39;ll use the findOne() method retrieve a patient...</p>
-<pre><code>var mongoClient = require(&#39;mongodb&#39;);
+<pre><code><span class="hljs-keyword">var</span> mongoClient = <span class="hljs-built_in">require</span>(<span class="hljs-string">'mongodb'</span>);
 
-mongoClient.connect(&#39;mongodb://dev.diabcre.cloud:27017/mongotest&#39;, function(err, db) {
-    console.log(&quot;Connected to MongoDB!&quot;);
+mongoClient.connect(<span class="hljs-string">'mongodb://dev.diabcre.cloud:27017/mongotest'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, db</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Connected to MongoDB!"</span>);
 
-    var collection = db.collection(&#39;patients&#39;);
-    collection.findOne({&#39;id&#39;: &#39;10003&#39;}, function(err, doc) {
-        console.log(doc.id + &quot; - &quot; + doc.name.family + &quot;, &quot; + doc.name.given);
+    <span class="hljs-keyword">var</span> collection = db.collection(<span class="hljs-string">'patients'</span>);
+    collection.findOne({<span class="hljs-string">'id'</span>: <span class="hljs-string">'10003'</span>}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, doc</span>) </span>{
+        <span class="hljs-built_in">console</span>.log(doc.id + <span class="hljs-string">" - "</span> + doc.name.family + <span class="hljs-string">", "</span> + doc.name.given);
     });
 
     db.close();

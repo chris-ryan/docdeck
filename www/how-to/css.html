@@ -31,19 +31,19 @@ Open index.html in the knowledgebase project.</p>
 <code>&lt;a&gt;</code> - a link element</p>
 <p>The syntax of a css file is pretty straightforward. It&#39;s basically the name of the element you wish to style, then the properties and parameters you wish to set for that element inside some curly brackets { }
 For example, to make the top-level heading blue:</p>
-<pre><code>h1 { color: blue; }
+<pre><code><span class="hljs-selector-tag">h1</span> { <span class="hljs-attribute">color</span>: blue; }
 </code></pre><blockquote>
 <p>As an exercise: paste the above into a new file, call it style.css and save it into the same folder as index.html</p>
 </blockquote>
 <h3 id="linking-a-style-sheet-to-a-web-page">Linking a style sheet to a web page</h3>
 <p>To apply a style sheet to an html page, we have to add a reference to it, within the <code>&lt;head&gt;</code> section of the html code.
 Open index.html and add the following line anywhere between the <code>&lt;head&gt; ... &lt;/head&gt;</code> tags.</p>
-<pre><code class="lang-html"> &lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;
+<pre><code class="lang-html"> <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"stylesheet"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"style.css"</span>&gt;</span>
 </code></pre>
 <p> Now save the file and view it in your browser.</p>
 <p> The <code>&lt;body&gt;</code> of an html page is an element that simply refers to the entire page. Any CSS we apply to the body, will apply by default to anything on the page, unless we override it with style code for a child element.
 In you style.css file add the line:</p>
-<pre><code>body { color: yellow; }
+<pre><code><span class="hljs-selector-tag">body</span> { <span class="hljs-attribute">color</span>: yellow; }
 </code></pre><p>Save and reload your index.html file. You&#39;ll notice that although most of the text is now yellow, the text of the child-element (h1) is still blue.</p>
 <p>For a reference of the different style properties and their parameters, check out:
 <a href="http://www.w3schools.com/cssref/">w3schools</a></p>

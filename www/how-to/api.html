@@ -36,8 +36,8 @@ and run: <code>npm init</code></p>
 <p>When we ran <code>npm init</code> we were prompted for the name of our main file (default: index.js). </p>
 <p>The convention for Node apps is to create this file in the root of our project.</p>
 <p>Let&#39;s do that now and put in a reference to our newly install module.</p>
-<pre><code>var express = require (&#39;express&#39;),
-    app = express();
+<pre><code><span class="hljs-built_in">var</span> <span class="hljs-built_in">express</span> = require ('<span class="hljs-built_in">express</span>'),
+    app = <span class="hljs-built_in">express</span>();
 </code></pre><p>Here we&#39;ve assigned the Express module to the variable <em>express</em>, then declared a variable call <em>app</em> which will contain the object returned by the Express framework.
 As Express is essentially a framework that returns a Node app, this variable is <em>app</em>tly named (boom-tish!)</p>
 <p>Express has a very straight-forward syntax for <a href="http://expressjs.com/en/starter/basic-routing.html" title="ExpressJS - Basic Routing">routing requests</a>.
@@ -88,16 +88,16 @@ The get() method, routes the HTTP GET requests by matching requests to a callbac
 <li>parse the supplied variables and calculate the bmi using some basic JavaScript</li>
 <li>using json() to return the result in JSON syntax.</li>
 </ul>
-<pre><code>app.get(&quot;/bmi/:weight/:height&quot;, function (req, res) {
-    var weight = parseInt(req.params.weight);
-    var height = parseFloat(req.params.height);
+<pre><code>app.get(<span class="hljs-string">"/bmi/:weight/:height"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">req, res</span>) </span>{
+    <span class="hljs-keyword">var</span> weight = <span class="hljs-built_in">parseInt</span>(req.params.weight);
+    <span class="hljs-keyword">var</span> height = <span class="hljs-built_in">parseFloat</span>(req.params.height);
 
-    var result = weight / Math.pow(height, 2);
+    <span class="hljs-keyword">var</span> result = weight / <span class="hljs-built_in">Math</span>.pow(height, <span class="hljs-number">2</span>);
     res.json({ result });
 });
 </code></pre><p>Now Let&#39;s tell express to create an HTTP server using the app object and  listen for connections.</p>
-<pre><code>var server = app.listen(8080, function() {
-    console.log (&#39;Server started on port 8080&#39;);
+<pre><code><span class="hljs-keyword">var</span> server = app.listen(<span class="hljs-number">8080</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log (<span class="hljs-string">'Server started on port 8080'</span>);
 });
 </code></pre><p>Save our file, run it using <code>node index.js</code> </p>
 <p>Now in your browser go to <a href="http://localhost:8080/bmi/yourweight/yourheight">http://localhost:8080/bmi/yourweight/yourheight</a>

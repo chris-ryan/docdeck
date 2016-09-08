@@ -24,19 +24,19 @@
 <p>#####MacOS and Windows
 Go to <a href="https://nodejs.org/en/">https://nodejs.org/en/</a> and download and install the &quot;current&quot; installer package.</p>
 <p>#####Ubuntu Linux</p>
-<pre><code class="lang-bash">apt-get install nodejs
-apt-get install npm
-sudo ln -s /usr/bin/nodejs /usr/bin/node
+<pre><code class="lang-bash">apt-get <span class="hljs-keyword">install</span> nodejs
+apt-<span class="hljs-keyword">get</span> <span class="hljs-keyword">install</span> npm
+sudo <span class="hljs-keyword">ln</span> -s /usr/<span class="hljs-keyword">bin</span>/nodejs /usr/<span class="hljs-keyword">bin</span>/node
 </code></pre>
 <h4 id="install-the-aurelia-cli-tool">Install the Aurelia CLI tool</h4>
-<pre><code class="lang-bash">sudo npm install -g aurelia-cli
+<pre><code class="lang-bash">sudo npm install -g aurelia-<span class="hljs-keyword">cli</span>
 </code></pre>
 <p>Install JavaScript package manager jspm</p>
-<pre><code class="lang-bash">sudo npm install jspm@0.16.15 -g
+<pre><code class="lang-bash"><span class="hljs-selector-tag">sudo</span> <span class="hljs-selector-tag">npm</span> <span class="hljs-selector-tag">install</span> <span class="hljs-selector-tag">jspm</span>@<span class="hljs-keyword">0</span>.<span class="hljs-keyword">16</span>.<span class="hljs-keyword">15</span> -g
 </code></pre>
 <p>####Creating a new Aurelia project
 From terminal, navigate to the folder that you keep your development projects in and run the command:</p>
-<pre><code class="lang-bash">au new
+<pre><code class="lang-bash"><span class="hljs-keyword">au</span> <span class="hljs-keyword">new</span>
 </code></pre>
 <ul>
 <li>Give the project a name</li>
@@ -45,7 +45,7 @@ From terminal, navigate to the folder that you keep your development projects in
 <li>Would you like to install the project dependencies? - 1 (Yes)</li>
 </ul>
 <p>To view the project, navigate into the new project&#39;s folder and run:</p>
-<pre><code class="lang-bash">au run --watch
+<pre><code class="lang-bash">au <span class="hljs-built_in">run</span> <span class="hljs-comment">--watch</span>
 </code></pre>
 <p>Then browse to <a href="http://127.0.0.1:9000">http://127.0.0.1:9000</a> to test that the environment works. you should see &quot;Welcome to Aurelia!&quot;</p>
 <blockquote>
@@ -55,35 +55,35 @@ From terminal, navigate to the folder that you keep your development projects in
 <p>The user interface is comprised of two parts: the view (html) and the view-model (JavaScript).</p>
 <p>From the downloaded starter kit, open <code>index.html</code> in your preferred code editor.</p>
 <p>The aurelia-bootstrapper module scans <code>index.html</code>, looking for an element with the <em>aurelia-app</em> attribute to load the view into. In this case it&#39;s the <code>&lt;body&gt;</code> tag:</p>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-  &lt;head&gt;
-    &lt;title&gt;Aurelia&lt;/title&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;styles/styles.css&quot;&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
-  &lt;/head&gt;
+<pre><code><span class="hljs-meta">&lt;!DOCTYPE html&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Aurelia<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"stylesheet"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"styles/styles.css"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"viewport"</span> <span class="hljs-attr">content</span>=<span class="hljs-string">"width=device-width, initial-scale=1"</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
 
-  &lt;body aurelia-app&gt;
-    &lt;script src=&quot;jspm_packages/system.js&quot;&gt;&lt;/script&gt;
-    &lt;script src=&quot;config.js&quot;&gt;&lt;/script&gt;
-    &lt;script&gt;
-      SystemJS.import(&#39;aurelia-bootstrapper&#39;);
-    &lt;/script&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
+  <span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">aurelia-app</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"jspm_packages/system.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"config.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="actionscript">
+      SystemJS.import(<span class="hljs-string">'aurelia-bootstrapper'</span>);
+    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
 </code></pre><p><em>index.html</em></p>
 <blockquote>
 <p>Note: by default, Aurelia loads <code>app.html</code> and <code>app.js</code> unless a different name is specified as a value of the Aurelia-app attribute.
 E.g. <code>&lt;body aurelia-app=&quot;othername&quot;&gt;</code> would look for <code>othername.js</code> and <code>othername.html</code></p>
 </blockquote>
 <p>The view...</p>
-<pre><code>&lt;template&gt;
-    &lt;h1&gt;${message}&lt;/h1&gt;
-&lt;/template&gt;
+<pre><code><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>$</span><span class="hljs-template-variable">{message}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></span>
 </code></pre><p><em>src/app.html</em></p>
 <p>... references the variable <code>$message</code> defined in the view-model.</p>
-<pre><code>export class App {
-    message = &#39;Welcome to Aurelia!&#39;;
+<pre><code><span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> </span>{
+    message = <span class="hljs-string">'Welcome to Aurelia!'</span>;
 }
 </code></pre><p><em>src/app.js</em></p>
 <p>####Creating a new user interface</p>
@@ -91,67 +91,67 @@ E.g. <code>&lt;body aurelia-app=&quot;othername&quot;&gt;</code> would look for 
 <p><code>jspm install bootstrap</code></p>
 <p>Create the view model</p>
 <p>in the src folder, create a new view-model: <code>patient.js</code> and insert the following:</p>
-<pre><code>export class Patient {
-    constructor () {
-        this.clinicId = &quot;1001&quot;;
-        this.lastName = &quot;Smithers&quot;;
-        this.firstName = &quot;Waylon&quot;;
+<pre><code>export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Patient</span> </span>{
+    <span class="hljs-keyword">constructor</span> () {
+        <span class="hljs-keyword">this</span>.clinicId = <span class="hljs-string">"1001"</span>;
+        <span class="hljs-keyword">this</span>.lastName = <span class="hljs-string">"Smithers"</span>;
+        <span class="hljs-keyword">this</span>.firstName = <span class="hljs-string">"Waylon"</span>;
     }
 }
 </code></pre><p><em>src/patient.js</em></p>
 <p>Here we&#39;ve just manually defined a patient with fixed properties to get something up on the screen. Later we&#39;ll look at connecting the view to a data source.</p>
 <p>####Creating the view template</p>
 <p>In the same folder, create the corresponding view <code>patient.html</code> and insert the following:</p>
-<pre><code>&lt;template&gt;
-    &lt;div class=&quot;jumbotron&quot;&gt;
-        &lt;h2&gt;Patient List&lt;/h2&gt;
-    &lt;/div&gt;
-    &lt;table class = table&gt;
-        &lt;tr&gt;
-            &lt;td&gt;${clinicId}&lt;/td&gt;
-            &lt;td&gt;${lastName}, ${firstName}&lt;/td&gt;
-        &lt;/tr&gt;
-    &lt;/table&gt;
-&lt;/template&gt;
+<pre><code><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"jumbotron"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Patient List<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">class</span> = <span class="hljs-string">table</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>$</span><span class="hljs-template-variable">{clinicId}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>$</span><span class="hljs-template-variable">{lastName}</span><span class="xml">, $</span><span class="hljs-template-variable">{firstName}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></span>
 </code></pre><p><em>src/patient.html</em></p>
 <p>####Create a route to the page</p>
 <p>When building an application with multiple pages, we can use Aurelia’s navigation model to configure a <em>router</em> to define <em>routes</em> to the different views. This allows us to dynamically create navigation without having to code in links on every view.</p>
 <p>As Aurelia first looks at the app view/view-model by default, we’ll just configure our routes in there.</p>
 <p>Open <code>src/app.js</code> in your preferred code editor. Inside the App class definition, replace the message variable with:</p>
-<pre><code>export class App {
+<pre><code>export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> {</span>
     configureRouter(config, router) {
-    config.title = &#39;Aurelia Prototype&#39;;
+    config.title = <span class="hljs-string">'Aurelia Prototype'</span>;
     config.map([
-        {route: [&#39;&#39;,&#39;patient&#39;], name:&#39;patient&#39;, moduleId: &#39;./patient&#39;, nav: true, title: &#39;Patient List&#39; }
+        {<span class="hljs-string">route:</span> [<span class="hljs-string">''</span>,<span class="hljs-string">'patient'</span>], <span class="hljs-string">name:</span><span class="hljs-string">'patient'</span>, <span class="hljs-string">moduleId:</span> <span class="hljs-string">'./patient'</span>, <span class="hljs-string">nav:</span> <span class="hljs-literal">true</span>, <span class="hljs-string">title:</span> <span class="hljs-string">'Patient List'</span> }
         ])
-    this.router = router;
+    <span class="hljs-keyword">this</span>.router = router;
     }
 }
 </code></pre><p><em>src/app.js</em></p>
 <p>To call the router from the default view, we add to app.html...</p>
-<pre><code>&lt;template&gt;
-    &lt;router-view&gt;&lt;/router-view&gt;
-&lt;/template&gt;
+<pre><code><span class="hljs-section">&lt;template&gt;</span>
+    <span class="hljs-section">&lt;router-view&gt;</span><span class="hljs-section">&lt;/router-view&gt;</span>
+<span class="hljs-section">&lt;/template&gt;</span>
 </code></pre><p>For further tutorials see the <a href="http://aurelia.io/hub.html#/doc/article/aurelia/framework/latest/quick-start">Aurelia Quick Start</a> guide</p>
 <h2 id="dealing-with-data">Dealing with data</h2>
 <h3 id="populating-a-page-with-external-data">Populating a page with external data</h3>
 <h4 id="install-the-aurelia-fetch-client-plugin">Install the aurelia-fetch-client plugin</h4>
-<pre><code class="lang-bash">npm install aurelia-fetch-client
+<pre><code class="lang-bash">npm <span class="hljs-keyword">install</span> aurelia-<span class="hljs-keyword">fetch</span>-<span class="hljs-keyword">client</span>
 </code></pre>
 <h4 id="add-aurelia-fetch-client-to-the-list-of-dependencies-in-your-package-manifest">Add aurelia-fetch-client to the list of dependencies in your package manifest</h4>
 <p>In <code>aurelia_project/aurelia.json</code> insert the following line under &quot;dependencies&quot;</p>
-<pre><code>aurelia-fetch-client,
+<pre><code>aurelia-fetch-<span class="hljs-keyword">client</span>,
 </code></pre><p><i class="icon-file"></i> Create a sample data file (<code>patients.json</code>) in the root of your aurelia project:</p>
 <pre><code>{
-    &quot;id&quot; : &quot;10001&quot;,
-    &quot;name&quot;: 
+    <span class="hljs-attr">"id"</span> : <span class="hljs-string">"10001"</span>,
+    <span class="hljs-attr">"name"</span>: 
     {
-        &quot;family&quot;: &quot;Bloggs&quot;,
-        &quot;given&quot;: &quot;Joe&quot;
+        <span class="hljs-attr">"family"</span>: <span class="hljs-string">"Bloggs"</span>,
+        <span class="hljs-attr">"given"</span>: <span class="hljs-string">"Joe"</span>
     }
     ,
-    &quot;gender&quot;: &quot;Male&quot;,
-    &quot;birthDate&quot;: &quot;1952-09-24&quot;
+    <span class="hljs-attr">"gender"</span>: <span class="hljs-string">"Male"</span>,
+    <span class="hljs-attr">"birthDate"</span>: <span class="hljs-string">"1952-09-24"</span>
 }
 </code></pre><h4 id="use-the-fetch-api-to-return-the-file-contents">Use the fetch API to return the file contents</h4>
 <p>In the <code>patients.js</code> view-model, we&#39;ll need to</p>
@@ -165,60 +165,60 @@ import {inject} from &#39;aurelia-framework&#39;;</li>
 </ul>
 <p>@inject(HttpClient)
 export class Patient {</p>
-<pre><code>constructor (http) {
+<pre><code><span class="hljs-function"><span class="hljs-keyword">constructor</span> <span class="hljs-params">(http)</span> <span class="hljs-comment">{
     this.http = http;
-}
+}</span>
 
-activate() {
-    return this.http.fetch(&#39;patients.json&#39;)
+<span class="hljs-title">activate</span><span class="hljs-params">()</span> <span class="hljs-comment">{
+    return this.http.fetch('patients.json')
     .then(response =&gt; response.json())
     .then(patientData =&gt; this.patientData = patientData)
-}
+}</span></span>
 </code></pre><p>}</p>
-<pre><code>Now to display this object in our view (`patient.html`)
+<pre><code><span class="xml">Now to display this object in our view (`patient.html`)
 ```JS
-&lt;table class = table&gt;
-        &lt;tr&gt;
-            &lt;th&gt;Clinic Id&lt;/th&gt;
-            &lt;th&gt;Surname&lt;/th&gt;
-            &lt;th&gt;Given name&lt;/th&gt;
-            &lt;th&gt;Gender&lt;/th&gt;
-            &lt;th&gt;Birth Date&lt;/th&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;${patientData.id}&lt;/td&gt;
-            &lt;td&gt;${patientData.name.family}&lt;/td&gt;
-            &lt;td&gt;${patientData.name.given}&lt;/td&gt;
-            &lt;td&gt;${patientData.gender}&lt;/td&gt;
-            &lt;td&gt;${patientData.birthDate}&lt;/td&gt;
-        &lt;/tr&gt;
-    &lt;/table&gt;
+<span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">class</span> = <span class="hljs-string">table</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Clinic Id<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Surname<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Given name<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Gender<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Birth Date<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>$</span><span class="hljs-template-variable">{patientData.id}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>$</span><span class="hljs-template-variable">{patientData.name.family}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>$</span><span class="hljs-template-variable">{patientData.name.given}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>$</span><span class="hljs-template-variable">{patientData.gender}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>$</span><span class="hljs-template-variable">{patientData.birthDate}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span></span>
 </code></pre><p>####Using the repeat.for loop to display arrays of external data</p>
 <p>Update the <code>patients.json</code> file to have several patients stored in an array:</p>
 <pre><code>[
-    {&quot;id&quot;:&quot;10001&quot;,
-    &quot;name&quot;: {&quot;family&quot;:&quot;Bloggs&quot;, &quot;given&quot;:&quot;Joe&quot;}, 
-    &quot;gender&quot;: &quot;Male&quot;,
-    &quot;birthDate&quot;: &quot;1952-09-24&quot;},
+    {<span class="hljs-attr">"id"</span>:<span class="hljs-string">"10001"</span>,
+    <span class="hljs-attr">"name"</span>: {<span class="hljs-attr">"family"</span>:<span class="hljs-string">"Bloggs"</span>, <span class="hljs-attr">"given"</span>:<span class="hljs-string">"Joe"</span>}, 
+    <span class="hljs-attr">"gender"</span>: <span class="hljs-string">"Male"</span>,
+    <span class="hljs-attr">"birthDate"</span>: <span class="hljs-string">"1952-09-24"</span>},
 
-    {&quot;id&quot;:&quot;10002&quot;,
-    &quot;name&quot;: {&quot;family&quot;:&quot;Bloggs&quot;, &quot;given&quot;:&quot;Jim&quot;}, 
-    &quot;gender&quot;: &quot;Male&quot;,
-    &quot;birthDate&quot;: &quot;1953-10-25&quot;},   
+    {<span class="hljs-attr">"id"</span>:<span class="hljs-string">"10002"</span>,
+    <span class="hljs-attr">"name"</span>: {<span class="hljs-attr">"family"</span>:<span class="hljs-string">"Bloggs"</span>, <span class="hljs-attr">"given"</span>:<span class="hljs-string">"Jim"</span>}, 
+    <span class="hljs-attr">"gender"</span>: <span class="hljs-string">"Male"</span>,
+    <span class="hljs-attr">"birthDate"</span>: <span class="hljs-string">"1953-10-25"</span>},   
 
-    {&quot;id&quot;:&quot;10003&quot;,
-    &quot;name&quot;: {&quot;family&quot;:&quot;Bloggs&quot;, &quot;given&quot;:&quot;Jon&quot;}, 
-    &quot;gender&quot;: &quot;Male&quot;,
-    &quot;birthDate&quot;: &quot;1954-11-26&quot;}
+    {<span class="hljs-attr">"id"</span>:<span class="hljs-string">"10003"</span>,
+    <span class="hljs-attr">"name"</span>: {<span class="hljs-attr">"family"</span>:<span class="hljs-string">"Bloggs"</span>, <span class="hljs-attr">"given"</span>:<span class="hljs-string">"Jon"</span>}, 
+    <span class="hljs-attr">"gender"</span>: <span class="hljs-string">"Male"</span>,
+    <span class="hljs-attr">"birthDate"</span>: <span class="hljs-string">"1954-11-26"</span>}
 ]
 </code></pre><p>To populate the table in our view, we can add a repeat.for loop in the <code>patient.html</code> file:</p>
-<pre><code class="lang-JS">        &lt;tr repeat.for = &quot;patientRecord of patientData&quot;&gt;
-            &lt;td&gt;${patientRecord.id}&lt;/td&gt;
-            &lt;td&gt;${patientRecord.name.family}&lt;/td&gt;
-            &lt;td&gt;${patientRecord.name.given}&lt;/td&gt;
-            &lt;td&gt;${patientRecord.gender}&lt;/td&gt;
-            &lt;td&gt;${patientRecord.birthDate}&lt;/td&gt;
-        &lt;/tr&gt;
+<pre><code class="lang-JS"><span class="xml">        <span class="hljs-tag">&lt;<span class="hljs-name">tr</span> <span class="hljs-attr">repeat.for</span> = <span class="hljs-string">"patientRecord of patientData"</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>$</span><span class="hljs-template-variable">{patientRecord.id}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>$</span><span class="hljs-template-variable">{patientRecord.name.family}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>$</span><span class="hljs-template-variable">{patientRecord.name.given}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>$</span><span class="hljs-template-variable">{patientRecord.gender}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>$</span><span class="hljs-template-variable">{patientRecord.birthDate}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span></span>
 </code></pre>
 <h3 id="coding-the-ui">Coding the UI</h3>
 <p>So far we&#39;ve been making views (html) and view-models (js) for each of our pages.

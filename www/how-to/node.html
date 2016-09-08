@@ -36,24 +36,24 @@ It is passed as an argument to other code that will execute the callback when sp
 </ul>
 <p>For example, </p>
 <p>if B requires A to be done first.</p>
-<pre><code>var doSomething = function(input1, callback) {
-    var newThing = Math.random()*input1;
-    if isNaN {
-        callback(new Error(&quot;Not a number&quot;));
+<pre><code><span class="hljs-keyword">var</span> doSomething = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">input1, callback</span>) </span>{
+    <span class="hljs-keyword">var</span> newThing = <span class="hljs-built_in">Math</span>.random()*input1;
+    <span class="hljs-keyword">if</span> <span class="hljs-built_in">isNaN</span> {
+        callback(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"Not a number"</span>));
     }
-    else {
-        callback (null, newThing);
+    <span class="hljs-keyword">else</span> {
+        callback (<span class="hljs-literal">null</span>, newThing);
     }
 }
 
-var handleResults = function(error, results) {
- if (error == undefined) {
-    console.log(&quot;something has been done&quot;)
+<span class="hljs-keyword">var</span> handleResults = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">error, results</span>) </span>{
+ <span class="hljs-keyword">if</span> (error == <span class="hljs-literal">undefined</span>) {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"something has been done"</span>)
  }
 }
 
 doSomething(param1, param2, handleResults);
-where handleResults has been previously defined as a function.
+where handleResults has been previously defined <span class="hljs-keyword">as</span> a <span class="hljs-function"><span class="hljs-keyword">function</span>.</span>
 </code></pre><p>Note: As a convention, the callback function is usually the last parameter passed.
 Also, an error handler should always be the first value passed to the callback.</p>
 <p>For simple callback anonymous functions are common but named functions make it easier down the track for debugging and maintining code.</p>
@@ -73,10 +73,10 @@ To access you need to pass the relative path as a parameter to the require() fun
 eg: <code>require(&#39;./somefolder/somefile&#39;)</code> or <code>require(&#39;../somefile&#39;)</code></p>
 <p>To make variables available to other files, you need to assign them to the module.exports object.
 eg: </p>
-<pre><code>var doSomething = function(i, callback) {
+<pre><code><span class="hljs-keyword">var</span> doSomething = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">i, callback</span>) </span>{
     ...
 }
-module.exports.doSomething = doSomething;
+<span class="hljs-built_in">module</span>.exports.doSomething = doSomething;
 </code></pre><p>Just like with other modules you can require individual variables from your own files using dot notation.</p>
 <p>####3. Node Package Manager
 Third-party modules are available by using <code>npm install module-name --save</code> which downloads all the required files into the node_modules folder. (--save adds the modules to the dependencies list in your package.json file)
@@ -92,14 +92,14 @@ This is at the heart of what delivers the high concurrency and effciency.</p>
 <p>Go to <a href="https://nodejs.org/en/">https://nodejs.org/en/</a> and download and install the &quot;current&quot; installer package.</p>
 <h3 id="hello-world">Hello World</h3>
 <p>Create a new file (hello.js) and open it with your favourite editor</p>
-<pre><code>var http = require(&#39;http&#39;);
+<pre><code><span class="hljs-keyword">var</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http'</span>);
 
-http.createServer(function(request, response) {
-    response.writeHead(200); //outputs the status code in the header
-    response.write(&quot;Hello world, this is Node.JS&quot;); // the body of the response
-    response.end(); //close the connection
+http.createServer(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">request, response</span>) </span>{
+    response.writeHead(<span class="hljs-number">200</span>); <span class="hljs-comment">//outputs the status code in the header</span>
+    response.write(<span class="hljs-string">"Hello world, this is Node.JS"</span>); <span class="hljs-comment">// the body of the response</span>
+    response.end(); <span class="hljs-comment">//close the connection</span>
 
-}).listen(8080);
+}).listen(<span class="hljs-number">8080</span>);
 </code></pre><ul>
 <li>From your terminal/command line run the server using:
 <code>node hello.js</code></li>
@@ -120,15 +120,15 @@ In this case it registers  <em>request</em>.</p>
 <p>In our code, that means node is listening for a &#39;request&#39; to come in.
 When the request is received, node then runs the code in the callback (reponse)&#39;</p>
 <p>Let&#39;s modify our earlier hello.js, adding a line to log the incoming request by referring to the request.url property.</p>
-<pre><code>var http = require(&#39;http&#39;);
+<pre><code>var http = require(<span class="hljs-comment">'http');</span>
 
-http.createServer(function(request, response) {
-    response.writeHead(200);
-    console.log(&quot;Incoming request:&quot; + request.url);
-    response.write(&quot;Hello world, this is Node.JS&quot;);
-    response.end();
+http.createServer(<span class="hljs-keyword">function</span>(<span class="hljs-built_in">request</span>, <span class="hljs-built_in">response</span>) {
+    <span class="hljs-built_in">response</span>.writeHead(<span class="hljs-number">200</span>);
+    console.<span class="hljs-built_in">log</span>(<span class="hljs-string">"Incoming request:"</span> + <span class="hljs-built_in">request</span>.url);
+    <span class="hljs-built_in">response</span>.write(<span class="hljs-string">"Hello world, this is Node.JS"</span>);
+    <span class="hljs-built_in">response</span>.<span class="hljs-keyword">end</span>();
 
-}).listen(8080);
+}).listen(<span class="hljs-number">8080</span>);
 </code></pre><p>Fire up the node hello.js, go to localhost:8080 in your browser and take a look in your terminal to see the console output.</p>
 <p>You&#39;ll notice two requests, one for &quot;/&quot; and another for &quot;/favicon.ico&quot;. Don&#39;t stress about that last one. Whenever you load a url modern browsers look for a corresponding favicon to put a pretty icon in their tabs.</p>
 <p>Now try putting in something after &quot;localhost:8080/&quot; in your browser&#39;s url bar: Eg: <a href="http://localhost:8080/bobsyouruncle">http://localhost:8080/bobsyouruncle</a></p>
@@ -147,15 +147,15 @@ Most of these inherit from the <a href="https://nodejs.org/api/events.html#event
 which it has inherited from the net.Server class. You can view the <a href="https://nodejs.org/api/net.html#net_event_connection" title="NodeJS API - net.Server">Node API</a> to see the way this results in the on and emit functions being called.</p>
 <p>Let&#39;s say we wanted to create our own custom EvenEmitter
 that can emit and listen for the following events: error, warn, info</p>
-<pre><code>var EventEmitter = require(&#39;events&#39;).EventEmitter;
+<pre><code><span class="hljs-keyword">var</span> EventEmitter = <span class="hljs-built_in">require</span>(<span class="hljs-string">'events'</span>).EventEmitter;
 
-//listen for error event
-var logger = new EventEmitter();
-logger.on(&#39;error&#39;, function(message) {
-    console.log(&#39;ERROR: &#39; + message);
+<span class="hljs-comment">//listen for error event</span>
+<span class="hljs-keyword">var</span> logger = <span class="hljs-keyword">new</span> EventEmitter();
+logger.on(<span class="hljs-string">'error'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">message</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'ERROR: '</span> + message);
 });
-//emit error event
-logger.emit(&#39;error&#39;, &#39;amount is too high&#39;);
+<span class="hljs-comment">//emit error event</span>
+logger.emit(<span class="hljs-string">'error'</span>, <span class="hljs-string">'amount is too high'</span>);
 </code></pre><p>The code that is subscribing to events, calls the <code>emitter.on(event, listener)</code> function, specifiying the event being subscribed to.
 The code publishing events calls the <code>emitter.emit(event, [args])</code> function, specfying the event being emmitted.</p>
 <p>The <em>events</em> are simply Strings and can be any value. They can also be <em>emitted</em> with zero or more arguments.</p>
@@ -179,34 +179,34 @@ The code publishing events calls the <code>emitter.emit(event, [args])</code> fu
 </ul>
 <p>The power of streams is seen when ReadableStream and WriteableStream are used together, using the pipe() function.</p>
 <p>Let&#39;s modify our hello.js app to take in a request as a readable stream and output it back to the browser as a writeable stream.</p>
-<pre><code>var http = require(&#39;http&#39;);
+<pre><code><span class="hljs-keyword">var</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http'</span>);
 
-http.createServer(function(request, response) {
-    response.writeHead(200); 
-    request.on(&#39;readable&#39;, function() {
-        var chunk = null;
-        while(null !== (chunk = request.read())) {
+http.createServer(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">request, response</span>) </span>{
+    response.writeHead(<span class="hljs-number">200</span>); 
+    request.on(<span class="hljs-string">'readable'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> chunk = <span class="hljs-literal">null</span>;
+        <span class="hljs-keyword">while</span>(<span class="hljs-literal">null</span> !== (chunk = request.read())) {
             response.write(chunk);
-            console.log(chunk.toString());
+            <span class="hljs-built_in">console</span>.log(chunk.toString());
         }
     });
-   request.on(&#39;end&#39;, function() {
+   request.on(<span class="hljs-string">'end'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
         response.end();
    });
 
-}).listen(8080);
+}).listen(<span class="hljs-number">8080</span>);
 </code></pre><p>run the app and from another terminal window, POST a message using the curl command:
 ```curl -d &#39;hello&#39; <a href="http://localhost:8080">http://localhost:8080</a></p>
 <p>Take a look at your node console and you should see the message outputted to the console.</p>
 <p>####The pipe() method</p>
 <p>It&#39;s quite common in node that you would want to read a stream then write it to a writeable stream. For this, Node provides the pipe() helper method.</p>
 <p>We can rewrite the above code using the pipe() method as:</p>
-<pre><code>var http = require(&#39;http&#39;);
+<pre><code><span class="hljs-keyword">var</span> http = <span class="hljs-keyword">require</span>(<span class="hljs-string">'http'</span>);
 
-http.createServer(function(request, response) {
+http.createServer(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(request, response)</span> <span class="hljs-comment">{
     response.writeHead(200); 
     request.pipe(response);
-}).listen(8080);
+}</span>).<span class="hljs-title">listen</span><span class="hljs-params">(8080)</span>;</span>
 </code></pre><p>As you can see, pipe() automatically takes a readable stream and <em>pipes</em> it into a writable destination. 
 syntax: <code>readablestream.pipe(writablestream);</code></p>
 <blockquote>
@@ -215,59 +215,59 @@ eg: <code>readablestream.pipe(x).pipe(y);</code></p>
 </blockquote>
 <h3 id="working-with-file-streams">Working with file streams</h3>
 <p>Say we wanted to read the contents from a file and stream it into another file.</p>
-<pre><code>var fs = require(&#39;fs&#39;);
+<pre><code><span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>);
 
-var oldFile = fs.createReadStream(&quot;readme.md&quot;); //ReadStream
-var newFile = fs.createWriteStream(&quot;readme-copy.md&quot;); //WriteStream
+<span class="hljs-keyword">var</span> oldFile = fs.createReadStream(<span class="hljs-string">"readme.md"</span>); <span class="hljs-comment">//ReadStream</span>
+<span class="hljs-keyword">var</span> newFile = fs.createWriteStream(<span class="hljs-string">"readme-copy.md"</span>); <span class="hljs-comment">//WriteStream</span>
 
 file.pipe(newFile);
 </code></pre><p>You can pipe any read stream into any write stream. For example, combining the two examples above would allow you read from the HTTP request and pipe it into a file</p>
-<pre><code>var fs = require(&#39;fs&#39;);
-var http = require(&#39;http&#39;);
+<pre><code><span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>);
+<span class="hljs-keyword">var</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http'</span>);
 
-http.createServer(function(request, response) {
-var newFile = fs.createWriteStream(&quot;response-log.txt&quot;);
+http.createServer(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">request, response</span>) </span>{
+<span class="hljs-keyword">var</span> newFile = fs.createWriteStream(<span class="hljs-string">"response-log.txt"</span>);
 request.pipe(newFile);
 
-request.on(&#39;end&#39;, function() {
-response.end(&#39;uploaded!&#39;);
+request.on(<span class="hljs-string">'end'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+response.end(<span class="hljs-string">'uploaded!'</span>);
 });
 
-}).listen(8080);
+}).listen(<span class="hljs-number">8080</span>);
 </code></pre><p>To test, in terminal, cd to somewhere with a file that you can send via a HTTP request using curl:
 curl --upload-file somefile.txt <a href="http://localhost:8080">http://localhost:8080</a></p>
 <p>...then have a look in the directory where your hello.js app was run from and you&#39;ll now see a copy of the file!.</p>
 <p>A simpler example using <em>request()</em> to read a webpage, then pipe it into a file...</p>
-<pre><code class="lang-request(&#39;http://www.unimelb.edu.au/&#39;).pipe(fs.createWriteStream(&#39;unimelb.html&#39;));```">... or chaining the pipe() commands to compress the file...
-```request(&#39;http://www.unimelb.edu.au/&#39;).pipe(zlib.createGzip()).pipe(fs.createWriteStream(&#39;unimelb.gz&#39;));
+<pre><code class="lang-request(&#39;http://www.unimelb.edu.au/&#39;).pipe(fs.createWriteStream(&#39;unimelb.html&#39;));```">... <span class="hljs-selector-tag">or</span> <span class="hljs-selector-tag">chaining</span> <span class="hljs-selector-tag">the</span> <span class="hljs-selector-tag">pipe</span>() <span class="hljs-selector-tag">commands</span> <span class="hljs-selector-tag">to</span> <span class="hljs-selector-tag">compress</span> <span class="hljs-selector-tag">the</span> <span class="hljs-selector-tag">file</span>...
+```<span class="hljs-selector-tag">request</span>(<span class="hljs-string">'http://www.unimelb.edu.au/'</span>)<span class="hljs-selector-class">.pipe</span>(zlib.createGzip())<span class="hljs-selector-class">.pipe</span>(fs.createWriteStream(<span class="hljs-string">'unimelb.gz'</span>));
 </code></pre>
 <h4 id="notifying-the-end-user-of-progress">Notifying the end-user of progress</h4>
 <p>Because node is reading and writing the file in chunks as it arrives, we can easily refer to those chunks to provide a notification of upload progress.</p>
 <p>In the earlier example, we already have access to the properties we need via the fs &amp; http modules. We just need to compare the total size of the file (content length header) against the sum of chunks sizes as they come in.
 for this, <a href="https://nodejs.org/api/fs.html#fs_fs_read_fd_buffer_offset_length_position_callback" title="NodeJS API - fs.read">fs.read</a> provides us with the length property (for chunk size in bytes) and the http module gives us access to the http message headers. As part of the HTTP protocol, the size of a message (along with other properties) can be send in the message&#39;s header. curl, like any good client, obliges us by sending this. In this case, the header we&#39;re interested in is <a href="https://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Request_fields" title="Wikipedia - HTTP headers">content-length</a></p>
-<pre><code>var fs = require(&#39;fs&#39;);
-var http = require(&#39;http&#39;);
+<pre><code><span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>);
+<span class="hljs-keyword">var</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http'</span>);
 
-http.createServer(function(request, response) {
-var newFile = fs.createWriteStream(&quot;response-log.txt&quot;);
-//find out how big the file is
-var fileBytes = request.headers[&#39;content-length&#39;];
-var uploadedBytes = 0;
+http.createServer(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">request, response</span>) </span>{
+<span class="hljs-keyword">var</span> newFile = fs.createWriteStream(<span class="hljs-string">"response-log.txt"</span>);
+<span class="hljs-comment">//find out how big the file is</span>
+<span class="hljs-keyword">var</span> fileBytes = request.headers[<span class="hljs-string">'content-length'</span>];
+<span class="hljs-keyword">var</span> uploadedBytes = <span class="hljs-number">0</span>;
 
-request.on(&#39;readable&#39;, function() {
-    var chunk = null;
-    while(null !== (chunk = request.read())){
+request.on(<span class="hljs-string">'readable'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">var</span> chunk = <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">while</span>(<span class="hljs-literal">null</span> !== (chunk = request.read())){
         uploadedBytes += chunk.length;
-        var progress = (uploadedBytes / fileBytes) * 100;
-        response.write(&quot;progress: &quot; + parseInt(progress, 10) + &quot;%\n&quot;);
+        <span class="hljs-keyword">var</span> progress = (uploadedBytes / fileBytes) * <span class="hljs-number">100</span>;
+        response.write(<span class="hljs-string">"progress: "</span> + <span class="hljs-built_in">parseInt</span>(progress, <span class="hljs-number">10</span>) + <span class="hljs-string">"%\n"</span>);
     }
 })
 
 request.pipe(newFile);
 
-request.on(&#39;end&#39;, function() {
-response.end(&#39;uploaded!&#39;);
+request.on(<span class="hljs-string">'end'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+response.end(<span class="hljs-string">'uploaded!'</span>);
 });
 
-}).listen(8080);
+}).listen(<span class="hljs-number">8080</span>);
 </code></pre></div></body></html>
