@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link type="text/css" href="../style.css" rel="stylesheet"/>
+  <title>DiabCRE - Knowledgebase</title>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="top">
+        <h1>Diab CRE Knowledgebase</h1>
+    </div>
+  </header>
+
+<div class="left-navbar">
+</div>
+
+<div class="main-content"><h1 id="working-with-aurelia">Working with Aurelia</h1>
+<p>[TOC]</p>
+<h4 id="installing-dependencies">Installing Dependencies</h4>
+<p>#####MacOS and Windows
+Go to <a href="https://nodejs.org/en/">https://nodejs.org/en/</a> and download and install the &quot;current&quot; installer package.</p>
+<p>#####Ubuntu Linux</p>
+<pre><code class="lang-bash">apt-get install nodejs
+apt-get install npm
+sudo ln -s /usr/bin/nodejs /usr/bin/node
+</code></pre>
+<h4 id="install-the-aurelia-cli-tool">Install the Aurelia CLI tool</h4>
+<pre><code class="lang-bash">sudo npm install -g aurelia-cli
+</code></pre>
+<p>Install JavaScript package manager jspm</p>
+<pre><code class="lang-bash">sudo npm install jspm@0.16.15 -g
+</code></pre>
+<p>####Creating a new Aurelia project
+From terminal, navigate to the folder that you keep your development projects in and run the command:</p>
+<pre><code class="lang-bash">au new
+</code></pre>
+<ul>
+<li>Give the project a name</li>
+<li>Would you like to use the default setup?: 1 - (Default ESNext)</li>
+<li>Would you like to create this project?: 1 - (Yes)</li>
+<li>Would you like to install the project dependencies? - 1 (Yes)</li>
+</ul>
+<p>To view the project, navigate into the new project&#39;s folder and run:</p>
+<pre><code class="lang-bash">au run --watch
+</code></pre>
+<p>Then browse to <a href="http://127.0.0.1:9000">http://127.0.0.1:9000</a> to test that the environment works. you should see &quot;Welcome to Aurelia!&quot;</p>
+<blockquote>
+<p>Note: to exit the server enter <code>ctrl-c</code> in the terminal</p>
+</blockquote>
+<h4 id="how-does-it-work-">How does it work?</h4>
+<p>The user interface is comprised of two parts: the view (html) and the view-model (JavaScript).</p>
+<p>From the downloaded starter kit, open <code>index.html</code> in your preferred code editor.</p>
+<p>The aurelia-bootstrapper module scans <code>index.html</code>, looking for an element with the <em>aurelia-app</em> attribute to load the view into. In this case it&#39;s the <code>&lt;body&gt;</code> tag:</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Aurelia&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;styles/styles.css&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;/head&gt;
+
+  &lt;body aurelia-app&gt;
+    &lt;script src=&quot;jspm_packages/system.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;config.js&quot;&gt;&lt;/script&gt;
+    &lt;script&gt;
+      SystemJS.import(&#39;aurelia-bootstrapper&#39;);
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p><em>index.html</em></p>
+<blockquote>
+<p>Note: by default, Aurelia loads <code>app.html</code> and <code>app.js</code> unless a different name is specified as a value of the Aurelia-app attribute.
+E.g. <code>&lt;body aurelia-app=&quot;othername&quot;&gt;</code> would look for <code>othername.js</code> and <code>othername.html</code></p>
+</blockquote>
+<p>The view...</p>
+<pre><code>&lt;template&gt;
+    &lt;h1&gt;${message}&lt;/h1&gt;
+&lt;/template&gt;
+</code></pre><p><em>src/app.html</em></p>
+<p>... references the variable <code>$message</code> defined in the view-model.</p>
+<pre><code>export class App {
+    message = &#39;Welcome to Aurelia!&#39;;
+}
+</code></pre><p><em>src/app.js</em></p>
+<p>####Creating a new user interface</p>
+<p>Install Twitter&#39;s Bootstrap plugin (to make our app look pretty with minimal effort)</p>
+<p><code>jspm install bootstrap</code></p>
+<p>Create the view model</p>
+<p>in the src folder, create a new view-model: <code>patient.js</code> and insert the following:</p>
+<pre><code>export class Patient {
+    constructor () {
+        this.clinicId = &quot;1001&quot;;
+        this.lastName = &quot;Smithers&quot;;
+        this.firstName = &quot;Waylon&quot;;
+    }
+}
+</code></pre><p><em>src/patient.js</em></p>
+<p>Here we&#39;ve just manually defined a patient with fixed properties to get something up on the screen. Later we&#39;ll look at connecting the view to a data source.</p>
+<p>####Creating the view template</p>
+<p>In the same folder, create the corresponding view <code>patient.html</code> and insert the following:</p>
+<pre><code>&lt;template&gt;
+    &lt;div class=&quot;jumbotron&quot;&gt;
+        &lt;h2&gt;Patient List&lt;/h2&gt;
+    &lt;/div&gt;
+    &lt;table class = table&gt;
+        &lt;tr&gt;
+            &lt;td&gt;${clinicId}&lt;/td&gt;
+            &lt;td&gt;${lastName}, ${firstName}&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/template&gt;
+</code></pre><p><em>src/patient.html</em></p>
+<p>####Create a route to the page</p>
+<p>When building an application with multiple pages, we can use Aurelia’s navigation model to configure a <em>router</em> to define <em>routes</em> to the different views. This allows us to dynamically create navigation without having to code in links on every view.</p>
+<p>As Aurelia first looks at the app view/view-model by default, we’ll just configure our routes in there.</p>
+<p>Open <code>src/app.js</code> in your preferred code editor. Inside the App class definition, replace the message variable with:</p>
+<pre><code>export class App {
+    configureRouter(config, router) {
+    config.title = &#39;Aurelia Prototype&#39;;
+    config.map([
+        {route: [&#39;&#39;,&#39;patient&#39;], name:&#39;patient&#39;, moduleId: &#39;./patient&#39;, nav: true, title: &#39;Patient List&#39; }
+        ])
+    this.router = router;
+    }
+}
+</code></pre><p><em>src/app.js</em></p>
+<p>To call the router from the default view, we add to app.html...</p>
+<pre><code>&lt;template&gt;
+    &lt;router-view&gt;&lt;/router-view&gt;
+&lt;/template&gt;
+</code></pre><p>For further tutorials see the <a href="http://aurelia.io/hub.html#/doc/article/aurelia/framework/latest/quick-start">Aurelia Quick Start</a> guide</p>
+<h2 id="dealing-with-data">Dealing with data</h2>
+<h3 id="populating-a-page-with-external-data">Populating a page with external data</h3>
+<h4 id="install-the-aurelia-fetch-client-plugin">Install the aurelia-fetch-client plugin</h4>
+<pre><code class="lang-bash">npm install aurelia-fetch-client
+</code></pre>
+<h4 id="add-aurelia-fetch-client-to-the-list-of-dependencies-in-your-package-manifest">Add aurelia-fetch-client to the list of dependencies in your package manifest</h4>
+<p>In <code>aurelia_project/aurelia.json</code> insert the following line under &quot;dependencies&quot;</p>
+<pre><code>aurelia-fetch-client,
+</code></pre><p><i class="icon-file"></i> Create a sample data file (<code>patients.json</code>) in the root of your aurelia project:</p>
+<pre><code>{
+    &quot;id&quot; : &quot;10001&quot;,
+    &quot;name&quot;: 
+    {
+        &quot;family&quot;: &quot;Bloggs&quot;,
+        &quot;given&quot;: &quot;Joe&quot;
+    }
+    ,
+    &quot;gender&quot;: &quot;Male&quot;,
+    &quot;birthDate&quot;: &quot;1952-09-24&quot;
+}
+</code></pre><h4 id="use-the-fetch-api-to-return-the-file-contents">Use the fetch API to return the file contents</h4>
+<p>In the <code>patients.js</code> view-model, we&#39;ll need to</p>
+<ul>
+<li>Import the required plugins</li>
+<li>Inject the HttpClient</li>
+<li>Fetch the contents of the json file as an object patientData
+```JS
+import {HttpClient} from &#39;aurelia-fetch-client&#39;;
+import {inject} from &#39;aurelia-framework&#39;;</li>
+</ul>
+<p>@inject(HttpClient)
+export class Patient {</p>
+<pre><code>constructor (http) {
+    this.http = http;
+}
+
+activate() {
+    return this.http.fetch(&#39;patients.json&#39;)
+    .then(response =&gt; response.json())
+    .then(patientData =&gt; this.patientData = patientData)
+}
+</code></pre><p>}</p>
+<pre><code>Now to display this object in our view (`patient.html`)
+```JS
+&lt;table class = table&gt;
+        &lt;tr&gt;
+            &lt;th&gt;Clinic Id&lt;/th&gt;
+            &lt;th&gt;Surname&lt;/th&gt;
+            &lt;th&gt;Given name&lt;/th&gt;
+            &lt;th&gt;Gender&lt;/th&gt;
+            &lt;th&gt;Birth Date&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;${patientData.id}&lt;/td&gt;
+            &lt;td&gt;${patientData.name.family}&lt;/td&gt;
+            &lt;td&gt;${patientData.name.given}&lt;/td&gt;
+            &lt;td&gt;${patientData.gender}&lt;/td&gt;
+            &lt;td&gt;${patientData.birthDate}&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+</code></pre><p>####Using the repeat.for loop to display arrays of external data</p>
+<p>Update the <code>patients.json</code> file to have several patients stored in an array:</p>
+<pre><code>[
+    {&quot;id&quot;:&quot;10001&quot;,
+    &quot;name&quot;: {&quot;family&quot;:&quot;Bloggs&quot;, &quot;given&quot;:&quot;Joe&quot;}, 
+    &quot;gender&quot;: &quot;Male&quot;,
+    &quot;birthDate&quot;: &quot;1952-09-24&quot;},
+
+    {&quot;id&quot;:&quot;10002&quot;,
+    &quot;name&quot;: {&quot;family&quot;:&quot;Bloggs&quot;, &quot;given&quot;:&quot;Jim&quot;}, 
+    &quot;gender&quot;: &quot;Male&quot;,
+    &quot;birthDate&quot;: &quot;1953-10-25&quot;},   
+
+    {&quot;id&quot;:&quot;10003&quot;,
+    &quot;name&quot;: {&quot;family&quot;:&quot;Bloggs&quot;, &quot;given&quot;:&quot;Jon&quot;}, 
+    &quot;gender&quot;: &quot;Male&quot;,
+    &quot;birthDate&quot;: &quot;1954-11-26&quot;}
+]
+</code></pre><p>To populate the table in our view, we can add a repeat.for loop in the <code>patient.html</code> file:</p>
+<pre><code class="lang-JS">        &lt;tr repeat.for = &quot;patientRecord of patientData&quot;&gt;
+            &lt;td&gt;${patientRecord.id}&lt;/td&gt;
+            &lt;td&gt;${patientRecord.name.family}&lt;/td&gt;
+            &lt;td&gt;${patientRecord.name.given}&lt;/td&gt;
+            &lt;td&gt;${patientRecord.gender}&lt;/td&gt;
+            &lt;td&gt;${patientRecord.birthDate}&lt;/td&gt;
+        &lt;/tr&gt;
+</code></pre>
+<h3 id="coding-the-ui">Coding the UI</h3>
+<p>So far we&#39;ve been making views (html) and view-models (js) for each of our pages.
+Let&#39;s say that we wanted to make a reusable html element (like a navigation bar).
+For this, Aurelia lets us specify view templates without needing an associated view model.</p>
+<p>Make a file in the src directory: nav.html and insert the following:</p>
+<pre><code>
+</code></pre><p>last updated: 19 Aug 2016</p>
+</div></body></html>

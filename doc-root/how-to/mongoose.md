@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<html>
-<title>Diabetic Retinopathy CRE - NodeJS</title>
-<body>
-
-<!-- Markdown under here -->    
-<xmp theme="cerulean" style="display:none;">
-
 ### Mongoose
 Another way of connecting to a Mongo Database with node, is by using the Mongoose module.
 Mongoose extends on the mongodb module to make working the more complex data models easier through the use of schemas.
@@ -84,8 +76,3 @@ var listPatients = function(db, callback) {
   });
 };
 ```
-
-</xmp>
-</body>
-<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
-</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link type="text/css" href="../style.css" rel="stylesheet"/>
+  <title>DiabCRE - Knowledgebase</title>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="top">
+        <h1>Diab CRE Knowledgebase</h1>
+    </div>
+  </header>
+
+<div class="left-navbar">
+</div>
+
+<div class="main-content"><h1 id="collection-imagingstudies">Collection: imagingStudies</h1>
+<p>FHIR reference: <a href="http://hl7.org/fhir/imagingstudy.html" title="fhir docs - ImagingStudy">Resource: ImagingStudy</a></p>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Example</th>
+<th>FHIR v 1.02</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>uid</td>
+<td>integer</td>
+<td>A study identifier internal to the application</td>
+<td>10000001</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>patient</td>
+<td><a href="patients.html" title="DB schema - patients">reference</a></td>
+<td>A reference to a patient document</td>
+<td>Patient/10001</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>order</td>
+<td><a href="investigations.html" title="DB schema - investigations">reference</a></td>
+<td>A reference to a diagnosticOrder document</td>
+<td>Investigation/10000001</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>referrer</td>
+<td><a href="practitioners.html" title="DB schema - practitioners">reference</a></td>
+<td>A reference to the referring practitioner</td>
+<td>Practitioner/10000001</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>availability</td>
+<td>code</td>
+<td>availability of the studies</td>
+<td>ONLINE</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>url</td>
+<td>string</td>
+<td>A url for retreiving the study</td>
+<td><a href="http://localhost:8080/wado?studyUID=1.3.6.1.4.1.25403.166563008443">http://localhost:8080/wado?studyUID=1.3.6.1.4.1.25403.166563008443</a></td>
+<td>Y</td>
+</tr>
+<tr>
+<td>procedure</td>
+<td><a href="procedures.html" title="DB schema - procedures">reference</a></td>
+<td>A reference to the procedure</td>
+<td>Practitioner/10000001</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>series</td>
+<td>child</td>
+<td>The DICOM series subtype</td>
+<td>series {}</td>
+<td>Y</td>
+</tr>
+</tbody>
+</table>
+<h3 id="child-objects">Child objects</h3>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Example</th>
+<th>FHIR v 1.02</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>series.uid</td>
+<td>integer</td>
+<td>Series identifier</td>
+<td>0.9.2342.19200300.100</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>series.number</td>
+<td>integer</td>
+<td>Numeric identifier of the series</td>
+<td>002</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>series.modality</td>
+<td>code</td>
+<td>Type of Imaging Study</td>
+<td>OP</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>series.description</td>
+<td>string</td>
+<td>A human readable summary of the series</td>
+<td>Ophthalmic Photography</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>series.numberOfInstances</td>
+<td>integer</td>
+<td>Number of images in the series</td>
+<td>7</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>series.availability</td>
+<td>code</td>
+<td>availability of the series</td>
+<td>ONLINE</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>series.url</td>
+<td>string</td>
+<td>A url for retreiving the series</td>
+<td><a href="http://localhost:8080/wado?studyUID=1.3.6.1.4.1.25403.166563008443">http://localhost:8080/wado?studyUID=1.3.6.1.4.1.25403.166563008443</a></td>
+<td>Y</td>
+</tr>
+<tr>
+<td>series.bodySite</td>
+<td>code</td>
+<td>anatomical part imaged</td>
+<td>410437008</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>series.laterality</td>
+<td>code</td>
+<td>side imaged (eg left or right)</td>
+<td>RIGHT</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>series.started</td>
+<td>dateTime</td>
+<td>The date and time the series was started</td>
+<td>2016-08-10T10:50:42.389Z</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>series.instance</td>
+<td>child</td>
+<td>The DICOM instance subtype</td>
+<td>instance {}</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>series.instance.uid</td>
+<td>oid</td>
+<td>Instance identifier</td>
+<td>0.3.1001.19200300.100</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>series.instance.number</td>
+<td>integer</td>
+<td>Numeric identifier of the series</td>
+<td>001</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>series.instance.sopClass</td>
+<td>oid</td>
+<td><a href="http://www.dicomlibrary.com/dicom/sop/" title="DICOM SOP Classes">DICOM SOP Class</a></td>
+<td>1.2.840.10008.5.1.4.1.1.77.1.5.2</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>series.instance.title</td>
+<td>string</td>
+<td>Description of instance</td>
+<td>OD-Central</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>series.instance.content</td>
+<td>reference</td>
+<td>Reference to the file ObjectID</td>
+<td>51299e0881b8e10011000001</td>
+<td>Y</td>
+</tr>
+</tbody>
+</table>
+<h3 id="codes">Codes</h3>
+<ul>
+<li><strong>availability</strong> : ONLINE | OFFLINE | NEARLINE | UNAVAILABLE</li>
+<li><strong>series.modality</strong>: AR | IVOCT | KER | LEN | OAM | OCT | OP | OPM | OPR | OPV | OSS | SRF | VA</li>
+<li><strong>series.bodySite</strong>: See <a href="http://browser.ihtsdotools.org/?perspective=full&amp;conceptId1=371398005&amp;edition=au-edition&amp;release=v20150531&amp;server=https://browser-aws-1.ihtsdotools.org/api/snomed&amp;langRefset=32570271000036106" title="IHTSDO SNOMED CT Browser">SNOMED CT Body Structures</a></li>
+<li><strong>series.laterality</strong>: RIGHT | LEFT | BILATERAL</li>
+</ul>
+<h4 id="sample-mongodb-bson">Sample MongoDB BSON</h4>
+<pre><code class="lang-json">{
+    &quot;uid&quot; : &quot;10000001&quot;,
+    &quot;patient&quot;: {
+        &quot;reference&quot;: &quot;Patient/10001&quot;,
+    },
+    &quot;order&quot;: {
+        &quot;reference&quot;: &quot;DiagOrder/1010111&quot;
+    },
+    &quot;referrer&quot;: {
+        &quot;reference&quot;: &quot;Practioner/1000001&quot;
+    },
+    &quot;availability&quot;: &quot;ONLINE&quot;,
+    &quot;url&quot;: &quot;http://localhost:8080/wado?studyUID=1.3.6.1.4.1.25403.166563008443&quot;,
+     &quot;procedure&quot;: {
+        &quot;reference&quot;: &quot;Procedure/166563008443&quot;
+    },
+     &quot;series&quot;: {
+        &quot;uid&quot;: &quot;0.9.2342.19200300.100&quot;,
+        &quot;number&quot;: &quot;002&quot;,
+        &quot;modality&quot;: &quot;OP&quot;,
+        &quot;description&quot;: &quot;Ophthalmic Photography&quot;,
+        &quot;numberOfInstances&quot;: 7,
+        &quot;availability&quot;: &quot;ONLINE&quot;,
+        &quot;url&quot;: &quot;http://localhost:8080/wado?studyUID=1.3.6.1.4.1.25404.1348534534583&quot;,
+        &quot;bodySite&quot;: &quot;410437008&quot;,
+        &quot;laterality&quot;: &quot;RIGHT&quot;,
+        &quot;started&quot;: &quot;2016-08-10T10:50:42.389Z&quot;,
+        &quot;instance&quot;: {
+             &quot;uid&quot;: &quot;0.9.2342.20102020.100&quot;,
+             &quot;number&quot;: &quot;002&quot;,
+             &quot;sopClass&quot;: &quot;1.2.840.10008.5.1.4.1.1.77.1.5.2&quot;,
+             &quot;title&quot;: &quot;OD-Central&quot;,
+             &quot;content&quot;: &quot;51299e0881b8e10011000001&quot;
+        }
+     }
+}
+</code></pre>
+<p>last updated: 25-Aug-2016</p>
+</div></body></html>

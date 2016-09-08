@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<html>
-<title>Diabetic Retinopathy CRE - NodeJS</title>
-<body>
-
-<!-- Markdown under here -->    
-<xmp theme="cerulean" style="display:none;">
-
 ## Using Express to build a MongoDB API
 
 Express is a framework built with NodeJS, much in the same way that Aurelia is a framework built with JavaScript.
@@ -87,9 +79,3 @@ Now in your browser go to http://localhost:8080/bmi/yourweight/yourheight
 (where *yourweight* is your weight in kgs and *yourheight* is your heght in metres.)
 
 [1]: http://expressjs.com/en/starter/basic-routing.html "ExpressJS - Basic Routing"
-
-
-</xmp>
-</body>
-<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
-</html>

@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<html>
-<title>Diabetic Retinopathy CRE - NodeJS</title>
-<body>
-
-<!-- Markdown under here -->    
-<xmp theme="cerulean" style="display:none;">
-
 ### What is Node.JS?
 
 Node is basically a wrapper around the V8 JavaScript runtime (the same one that chrome uses to run JS) to allow us to build JS applications outside of the browser.
@@ -357,8 +349,3 @@ response.end('uploaded!');
 [4]: https://nodejs.org/api/net.html#net_event_connection "NodeJS API - net.Server"
 [5]: https://nodejs.org/api/fs.html#fs_fs_read_fd_buffer_offset_length_position_callback "NodeJS API - fs.read"
 [6]: https://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Request_fields "Wikipedia - HTTP headers"
-
-</xmp>
-</body>
-<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
-</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link type="text/css" href="../style.css" rel="stylesheet"/>
+  <title>DiabCRE - Knowledgebase</title>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="top">
+        <h1>Diab CRE Knowledgebase</h1>
+    </div>
+  </header>
+
+<div class="left-navbar">
+</div>
+
+<div class="main-content"><h3 id="what-is-node-js-">What is Node.JS?</h3>
+<p>Node is basically a wrapper around the V8 JavaScript runtime (the same one that chrome uses to run JS) to allow us to build JS applications outside of the browser.</p>
+<p>Ryan Dhal created Node in 2009. </p>
+<p><strong>NodeJS is event-driven, non-blocking and modular.</strong></p>
+<h4 id="event-driven">Event-driven</h4>
+<p>Being event-driven, almost all of the code in Node is written to either respond to an event or itself fire an event. This is essentially the mechanism by which different Node objects and modules communicate. It also makes Node apps scale very well as many connections can be handled concurrently but if there is no work to be done, Node is sleeping.</p>
+<h4 id="blocking-vs-non-blocking-calls">Blocking vs non-blocking calls</h4>
+<p>Blocking calls, or synchronous calls, are those where control doesn&#39;t return to the application until the requested operation is completed. This commonly occurs in I/O operations. For example, when reading and writing using a blocking call, the application must wait until the read or write operation is done before further logic can be processed. This means that the application is idle while waiting for a potentially lengthy operation to complete.</p>
+<p>Non-blocking calls are those where control returns to the application almost immediately, before waiting for the operation to complete. This is called asynchronous programming. The completion of the operation is often communicated to the application via a callback routine. Node uses non-blocking calls along with a queue to priotize tasks and a dispatcher to assign tasks to workers and pass back completed packages.</p>
+<h2 id="callbacks">Callbacks</h2>
+<p>A callback is a piece of executable code that runs in response to a certain event. 
+It is passed as an argument to other code that will execute the callback when specified. </p>
+<ul>
+<li>Function call</li>
+<li>call back to a function that deals with the results (with an error handler)</li>
+</ul>
+<p>For example, </p>
+<p>if B requires A to be done first.</p>
+<pre><code>var doSomething = function(input1, callback) {
+    var newThing = Math.random()*input1;
+    if isNaN {
+        callback(new Error(&quot;Not a number&quot;));
+    }
+    else {
+        callback (null, newThing);
+    }
+}
+
+var handleResults = function(error, results) {
+ if (error == undefined) {
+    console.log(&quot;something has been done&quot;)
+ }
+}
+
+doSomething(param1, param2, handleResults);
+where handleResults has been previously defined as a function.
+</code></pre><p>Note: As a convention, the callback function is usually the last parameter passed.
+Also, an error handler should always be the first value passed to the callback.</p>
+<p>For simple callback anonymous functions are common but named functions make it easier down the track for debugging and maintining code.</p>
+<h2 id="modules">Modules</h2>
+<h3 id="using-modules">Using Modules</h3>
+<p>Properties and functions from modules are made available using require()</p>
+<p>You can require an entire module: <code>var express = require(&#39;express&#39;);</code>
+.. or just a single variable of function: <code>var maxAge = require(&#39;express&#39;).maxAge;</code></p>
+<h3 id="getting-modules">Getting Modules</h3>
+<p>There are three main sources of modules that can be used in Node apps.</p>
+<p>####1. Built-in: 
+While there are a few functions in the global namespace, there are many built-in modules that still need to be explicitly required in your code.
+some of these include: fs, http, crypto, os.</p>
+<p>####2. Other files within your project. 
+Each of your .js files is considered to be a node module and as such can be required.
+To access you need to pass the relative path as a parameter to the require() function.
+eg: <code>require(&#39;./somefolder/somefile&#39;)</code> or <code>require(&#39;../somefile&#39;)</code></p>
+<p>To make variables available to other files, you need to assign them to the module.exports object.
+eg: </p>
+<pre><code>var doSomething = function(i, callback) {
+    ...
+}
+module.exports.doSomething = doSomething;
+</code></pre><p>Just like with other modules you can require individual variables from your own files using dot notation.</p>
+<p>####3. Node Package Manager
+Third-party modules are available by using <code>npm install module-name --save</code> which downloads all the required files into the node_modules folder. (--save adds the modules to the dependencies list in your package.json file)
+You can then require them by simply referring to their name just like with built-in modules, and node knows to go looking in that folder.
+eg: ```var mongodb = require(&#39;mongodb&#39;);
+You can still import individual files by referring to their relative path but be careful as you may miss out on required dependencies.</p>
+<p>You can find third-party npm packages using the commandline: <code>npm search &lt;search terms&gt;</code>
+or on the <a href="https://www.npmjs.com/" title="NPM - Find packages">web</a>.</p>
+<p>The general principle of Node is that operations should never block. 
+This is at the heart of what delivers the high concurrency and effciency.</p>
+<h3 id="installing-node-js">Installing Node.js</h3>
+<h4 id="macos-and-windows">MacOS and Windows</h4>
+<p>Go to <a href="https://nodejs.org/en/">https://nodejs.org/en/</a> and download and install the &quot;current&quot; installer package.</p>
+<h3 id="hello-world">Hello World</h3>
+<p>Create a new file (hello.js) and open it with your favourite editor</p>
+<pre><code>var http = require(&#39;http&#39;);
+
+http.createServer(function(request, response) {
+    response.writeHead(200); //outputs the status code in the header
+    response.write(&quot;Hello world, this is Node.JS&quot;); // the body of the response
+    response.end(); //close the connection
+
+}).listen(8080);
+</code></pre><ul>
+<li>From your terminal/command line run the server using:
+<code>node hello.js</code></li>
+<li>In another terminal/command line window, hit the server to view the response:
+<code>curl http://localhost:8080</code></li>
+<li>ctrl + c to stop the node server process.</li>
+</ul>
+<h2 id="events">Events</h2>
+<p>Look at the earlier Hello World code.</p>
+<p>When its executed, Node goes through the code and registers any known events. 
+In this case it registers  <em>request</em>.</p>
+<blockquote>
+<blockquote>
+<p>Pop over to the node docs page for the <a href="https://nodejs.org/api/http.html" title="NodeJS Docs - http">http module</a> and see the objects within the http.ClientRequest class it considers to be events.</p>
+</blockquote>
+</blockquote>
+<p>Node then goes into an event loop. Where its continuously checking for the registered events.</p>
+<p>In our code, that means node is listening for a &#39;request&#39; to come in.
+When the request is received, node then runs the code in the callback (reponse)&#39;</p>
+<p>Let&#39;s modify our earlier hello.js, adding a line to log the incoming request by referring to the request.url property.</p>
+<pre><code>var http = require(&#39;http&#39;);
+
+http.createServer(function(request, response) {
+    response.writeHead(200);
+    console.log(&quot;Incoming request:&quot; + request.url);
+    response.write(&quot;Hello world, this is Node.JS&quot;);
+    response.end();
+
+}).listen(8080);
+</code></pre><p>Fire up the node hello.js, go to localhost:8080 in your browser and take a look in your terminal to see the console output.</p>
+<p>You&#39;ll notice two requests, one for &quot;/&quot; and another for &quot;/favicon.ico&quot;. Don&#39;t stress about that last one. Whenever you load a url modern browsers look for a corresponding favicon to put a pretty icon in their tabs.</p>
+<p>Now try putting in something after &quot;localhost:8080/&quot; in your browser&#39;s url bar: Eg: <a href="http://localhost:8080/bobsyouruncle">http://localhost:8080/bobsyouruncle</a></p>
+<p>You&#39;ll see &quot;Incoming request:/bobsyouruncle&quot; now gets logged to the console. </p>
+<p>This is at the core of how we can use the url property to differentiate incoming requests and serve up different pages in response. </p>
+<h3 id="events-vs-callbacks">Events vs Callbacks</h3>
+<p>In the callback model, you make a request and provide a function to be called when the request is completed. (Request/Reponse)
+Whereas with the Events approach, we provide functions to invoke on specific events (Publish/Subscribe). </p>
+<p>Typically the callback approach involves an all-or-nothing scenario where the response to the call is either an error, indicating that the call has failed, or the callback function indicating success.
+In the events scenario, an error is emmitted as a separate event, allowing you to pass an error instead of any item events or after some item events have been emmitted, allowing the possibility of a &#39;partial success&#39; scenario.</p>
+<p>You can listen to multiple events on an object or have multiple functions that listen to the same event</p>
+<h3 id="event-emmitters">Event emmitters</h3>
+<p>Just as events can be triggered in the DOM (click, submit, load, hover etc..), many objects in Node emit events.
+Most of these inherit from the <a href="https://nodejs.org/api/events.html#events_class_eventemitter" title="NodeJS API - EventEmitter">EventEmitter</a> class.</p>
+<p>For example, in our Hello World app, the <code>http.createServer(function(request, response) {</code> method is passed the <em>request</em> event 
+which it has inherited from the net.Server class. You can view the <a href="https://nodejs.org/api/net.html#net_event_connection" title="NodeJS API - net.Server">Node API</a> to see the way this results in the on and emit functions being called.</p>
+<p>Let&#39;s say we wanted to create our own custom EvenEmitter
+that can emit and listen for the following events: error, warn, info</p>
+<pre><code>var EventEmitter = require(&#39;events&#39;).EventEmitter;
+
+//listen for error event
+var logger = new EventEmitter();
+logger.on(&#39;error&#39;, function(message) {
+    console.log(&#39;ERROR: &#39; + message);
+});
+//emit error event
+logger.emit(&#39;error&#39;, &#39;amount is too high&#39;);
+</code></pre><p>The code that is subscribing to events, calls the <code>emitter.on(event, listener)</code> function, specifiying the event being subscribed to.
+The code publishing events calls the <code>emitter.emit(event, [args])</code> function, specfying the event being emmitted.</p>
+<p>The <em>events</em> are simply Strings and can be any value. They can also be <em>emitted</em> with zero or more arguments.</p>
+<h3 id="streams">Streams</h3>
+<p>In keeping with Node&#39;s core principle of better data I/O efficiency, streams were developed to allow us to handle data piece by piece (or chunk by chunk) as its being transferred. </p>
+<p>Streams extend the EventEmitter class to provide functionality for managing data flow such as network traffic or file I/O.</p>
+<p>The two most-common instances of Streams are ReadableStream and WriteableStream</p>
+<h4 id="readablestream">ReadableStream</h4>
+<p>includes:</p>
+<ul>
+<li>boolean - indicating whether the stream is readable</li>
+<li>events (data, end, error, close) - emitted when new data arrives or when it stops</li>
+<li>functions: pause(), resume(), destroy(), pipe() - that can act on the stream.</li>
+</ul>
+<h4 id="writablestream">WritableStream</h4>
+<p>includes: </p>
+<ul>
+<li>boolean - indicating whether the stream is writable</li>
+<li>events (drain, error, close, pipe) - emitted when its safe to write to a stream or when data has been piped to a readableStream</li>
+<li>functions: write(), end(), destroy(), destroySoon() - that can act on the stream.</li>
+</ul>
+<p>The power of streams is seen when ReadableStream and WriteableStream are used together, using the pipe() function.</p>
+<p>Let&#39;s modify our hello.js app to take in a request as a readable stream and output it back to the browser as a writeable stream.</p>
+<pre><code>var http = require(&#39;http&#39;);
+
+http.createServer(function(request, response) {
+    response.writeHead(200); 
+    request.on(&#39;readable&#39;, function() {
+        var chunk = null;
+        while(null !== (chunk = request.read())) {
+            response.write(chunk);
+            console.log(chunk.toString());
+        }
+    });
+   request.on(&#39;end&#39;, function() {
+        response.end();
+   });
+
+}).listen(8080);
+</code></pre><p>run the app and from another terminal window, POST a message using the curl command:
+```curl -d &#39;hello&#39; <a href="http://localhost:8080">http://localhost:8080</a></p>
+<p>Take a look at your node console and you should see the message outputted to the console.</p>
+<p>####The pipe() method</p>
+<p>It&#39;s quite common in node that you would want to read a stream then write it to a writeable stream. For this, Node provides the pipe() helper method.</p>
+<p>We can rewrite the above code using the pipe() method as:</p>
+<pre><code>var http = require(&#39;http&#39;);
+
+http.createServer(function(request, response) {
+    response.writeHead(200); 
+    request.pipe(response);
+}).listen(8080);
+</code></pre><p>As you can see, pipe() automatically takes a readable stream and <em>pipes</em> it into a writable destination. 
+syntax: <code>readablestream.pipe(writablestream);</code></p>
+<blockquote>
+<p>Note: Its possible to pipe into multiple destinations by setting up a chain of pipe streams.
+eg: <code>readablestream.pipe(x).pipe(y);</code></p>
+</blockquote>
+<h3 id="working-with-file-streams">Working with file streams</h3>
+<p>Say we wanted to read the contents from a file and stream it into another file.</p>
+<pre><code>var fs = require(&#39;fs&#39;);
+
+var oldFile = fs.createReadStream(&quot;readme.md&quot;); //ReadStream
+var newFile = fs.createWriteStream(&quot;readme-copy.md&quot;); //WriteStream
+
+file.pipe(newFile);
+</code></pre><p>You can pipe any read stream into any write stream. For example, combining the two examples above would allow you read from the HTTP request and pipe it into a file</p>
+<pre><code>var fs = require(&#39;fs&#39;);
+var http = require(&#39;http&#39;);
+
+http.createServer(function(request, response) {
+var newFile = fs.createWriteStream(&quot;response-log.txt&quot;);
+request.pipe(newFile);
+
+request.on(&#39;end&#39;, function() {
+response.end(&#39;uploaded!&#39;);
+});
+
+}).listen(8080);
+</code></pre><p>To test, in terminal, cd to somewhere with a file that you can send via a HTTP request using curl:
+curl --upload-file somefile.txt <a href="http://localhost:8080">http://localhost:8080</a></p>
+<p>...then have a look in the directory where your hello.js app was run from and you&#39;ll now see a copy of the file!.</p>
+<p>A simpler example using <em>request()</em> to read a webpage, then pipe it into a file...</p>
+<pre><code class="lang-request(&#39;http://www.unimelb.edu.au/&#39;).pipe(fs.createWriteStream(&#39;unimelb.html&#39;));```">... or chaining the pipe() commands to compress the file...
+```request(&#39;http://www.unimelb.edu.au/&#39;).pipe(zlib.createGzip()).pipe(fs.createWriteStream(&#39;unimelb.gz&#39;));
+</code></pre>
+<h4 id="notifying-the-end-user-of-progress">Notifying the end-user of progress</h4>
+<p>Because node is reading and writing the file in chunks as it arrives, we can easily refer to those chunks to provide a notification of upload progress.</p>
+<p>In the earlier example, we already have access to the properties we need via the fs &amp; http modules. We just need to compare the total size of the file (content length header) against the sum of chunks sizes as they come in.
+for this, <a href="https://nodejs.org/api/fs.html#fs_fs_read_fd_buffer_offset_length_position_callback" title="NodeJS API - fs.read">fs.read</a> provides us with the length property (for chunk size in bytes) and the http module gives us access to the http message headers. As part of the HTTP protocol, the size of a message (along with other properties) can be send in the message&#39;s header. curl, like any good client, obliges us by sending this. In this case, the header we&#39;re interested in is <a href="https://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Request_fields" title="Wikipedia - HTTP headers">content-length</a></p>
+<pre><code>var fs = require(&#39;fs&#39;);
+var http = require(&#39;http&#39;);
+
+http.createServer(function(request, response) {
+var newFile = fs.createWriteStream(&quot;response-log.txt&quot;);
+//find out how big the file is
+var fileBytes = request.headers[&#39;content-length&#39;];
+var uploadedBytes = 0;
+
+request.on(&#39;readable&#39;, function() {
+    var chunk = null;
+    while(null !== (chunk = request.read())){
+        uploadedBytes += chunk.length;
+        var progress = (uploadedBytes / fileBytes) * 100;
+        response.write(&quot;progress: &quot; + parseInt(progress, 10) + &quot;%\n&quot;);
+    }
+})
+
+request.pipe(newFile);
+
+request.on(&#39;end&#39;, function() {
+response.end(&#39;uploaded!&#39;);
+});
+
+}).listen(8080);
+</code></pre></div></body></html>

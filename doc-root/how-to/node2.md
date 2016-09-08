@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<html>
-<title>Diabetic Retinopathy CRE - NodeJS</title>
-<body>
-
-<!-- Markdown under here -->    
-<xmp theme="cerulean" style="display:none;">
-
 ### Node Chapter 2
 
 
@@ -160,8 +152,3 @@ For example, in our Hello World app, the ```http.createServer(function(request, 
 
 [1]: https://nodejs.org/api/http.html "NodeJS Docs - http"
 [2]: https://nodejs.org/api/events.html#events_class_eventemitter "NodeJS Docs - EventEmitter"
-
-</xmp>
-</body>
-<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
-</html>

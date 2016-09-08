@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link type="text/css" href="../style.css" rel="stylesheet"/>
+  <title>DiabCRE - Knowledgebase</title>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="top">
+        <h1>Diab CRE Knowledgebase</h1>
+    </div>
+  </header>
+
+<div class="left-navbar">
+</div>
+
+<div class="main-content"><h3 id="mongoose">Mongoose</h3>
+<p>Another way of connecting to a Mongo Database with node, is by using the Mongoose module.
+Mongoose extends on the mongodb module to make working the more complex data models easier through the use of schemas.</p>
+<p>A schema, is like a table definition. It allows to use features we&#39;re used to in relational databases to ensure database integrity like required fields and strict data types.
+A mongoose schema is basically a key-value pair, where the <em>key</em> is the property name we want and the <em>value</em> is the Schema data type. </p>
+<p>The schema data types Mongoose allows are:</p>
+<ul>
+<li>String</li>
+<li>Number</li>
+<li>Date</li>
+<li>Buffer</li>
+<li>Boolean</li>
+<li>Mixed</li>
+<li>ObjectId</li>
+<li>Array</li>
+</ul>
+<h4 id="an-example-mongoose-schema">An example mongoose schema</h4>
+<pre><code>var PatientSchema = new Schema({
+    id: {
+        type: String,
+        required: true;
+    },
+    name: {
+        family: {
+            type: String,
+            required: true
+        },
+        given: {
+            type: String,
+            required: true
+        }
+    },
+    gender: {
+        type: String
+    },
+    birthDate: {
+        type: Date
+    }
+});
+</code></pre><h3 id="models">Models</h3>
+<p>Much like in a typical Model-View-Controller architecture, in Mongoose, we work with instances of models to refernce our data.
+ie. When you execute a query on the database, a model is returned with the properties deined by the schema.</p>
+<p>Models are declared by simply passing the model constructor, a name for the model, and a schema to associate it with.</p>
+<pre><code>var Patient = mongoose.model(&#39;Patient&#39;, PatientSchema);
+</code></pre><p>This then allows us to refer to the returned data as if it was a native JS object</p>
+<pre><code>Patient[0].surname = &quot;bob&quot;;
+</code></pre><h3 id="queries">Queries</h3>
+<p>The syntax for querying in Mongoose is very similar as for when using the mondodb module, just slightly cleaner.</p>
+<p>In Mongodb...</p>
+<pre><code>var listPatients = function(db, callback) {
+    var list = db.collection(&#39;patients&#39;).find({}, {&quot;_id&quot;: false}).toArray(function(err, docs) {
+            callback(docs);
+    });
+};
+</code></pre><p>is now in Mongoose...</p>
+<pre><code>var listPatients = function(db, callback) {
+  Patient.find({}, &#39;-_id&#39;, function(error, results) { 
+    callback(null, results);
+  });
+};
+</code></pre></div></body></html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link type="text/css" href="../style.css" rel="stylesheet"/>
+  <title>DiabCRE - Knowledgebase</title>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="top">
+        <h1>Diab CRE Knowledgebase</h1>
+    </div>
+  </header>
+
+<div class="left-navbar">
+</div>
+
+<div class="main-content"><table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Example</th>
+<th>FHIR v 1.02</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>integer</td>
+<td>A patient identifier internal to the application</td>
+<td>10001</td>
+<td>Y</td>
+</tr>
+</tbody>
+</table>
+<h1 id="table-patients">Table: patients</h1>
+<h3 id="sample-mongodb-bson">Sample MongoDB BSON</h3>
+<pre><code class="lang-json">{
+    &quot;id&quot; : &quot;10001&quot;,
+    &quot;identifier&quot;:
+        {
+            &quot;use&quot;: &quot;usual&quot;,
+            &quot;label&quot;: &quot;MRN-Communicare&quot;,
+            &quot;system&quot;: &quot;urn:oid:2.16.840.1.113883.2.3.3.17&quot;,
+            &quot;value&quot;: &quot;48076&quot;
+        },
+    &quot;active&quot;: true,
+    &quot;name&quot;: 
+        {
+            &quot;use&quot;: &quot;usual&quot;,
+            &quot;family&quot;: &quot;Demo&quot;,
+            &quot;given&quot;: &quot;Henry&quot;
+        }
+    ,
+    &quot;gender&quot;: {
+        &quot;text&quot;: &quot;Male&quot;
+    },
+    &quot;birthDate&quot;: new Date(1952, 8, 24),
+    &quot;managingOrganization&quot;: {
+        &quot;reference&quot;: &quot;Organization/1&quot;,
+        &quot;display&quot;: &quot;Alice Springs Base Hospital&quot;
+    }
+}
+</code></pre>
+<p>last updated: 8/11/2016</p>
+</div></body></html>

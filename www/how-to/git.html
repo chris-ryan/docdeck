@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link type="text/css" href="../style.css" rel="stylesheet"/>
+  <title>DiabCRE - Knowledgebase</title>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="top">
+        <h1>Diab CRE Knowledgebase</h1>
+    </div>
+  </header>
+
+<div class="left-navbar">
+</div>
+
+<div class="main-content"><h1 id="getting-started-with-git">Getting started with git</h1>
+<h3 id="configuring-git-on-your-local-computer">Configuring git on your local computer</h3>
+<p><strong>Configure your user details</strong></p>
+<pre><code class="lang-bash">git config --global user.name &quot;Allison Irvin&quot;
+git config --global user.email &quot;someperson@gmail.com&quot;
+</code></pre>
+<h3 id="cloning-a-remote-git-project">Cloning a remote git project</h3>
+<p>Browse to the directory on your local computer that you&#39;d like to save the project to
+For example, let&#39;s say that we wanted to work on the <em>knowledgebase</em> project:
+we&#39;d make a directory called in our favourite folder called &quot;knowledgebase&quot;:</p>
+<pre><code class="lang-bash">mkdir -p ~/Development/knowledgebase
+cd ~/Development/knowledgebase
+</code></pre>
+<p>... and clone the project:
+<code>git clone git.diabcre.cloud:knowledgebase .</code></p>
+<blockquote>
+<p>note: if your local username is different to your remote username, you&#39;ll need to use:
+<code>git clone username@git.diabcre.cloud:knowledgebase</code></p>
+</blockquote>
+<h3 id="adding-new-files-to-be-tracked-by-git">Adding new files to be tracked by git</h3>
+<p>If you&#39;ve added a new file or folder you need to tell git to track  it using the add command
+<code>git add filename.html</code>
+or for a new folder: <code>git add foldername/*</code></p>
+<h3 id="commiting-your-changes">Commiting your changes</h3>
+<p>If you make changes to files, you upload to the server using the <code>commit</code> command.
+<code>git commit -am &quot;some message here&quot;</code></p>
+<h3 id="checking-the-status">Checking the status</h3>
+<p>To see the status of the files and folders in your project use the status comman
+<code>git status</code></p>
+<h3 id="uploading-changes-to-the-server">Uploading changes to the server</h3>
+<p>To publish your committed changes to the server, use the <code>push</code> command:
+Syntax: git push <em>server</em> <em>branch</em>
+eg: <code>git push git.diabcre.cloud:knowledgebase master</code>
+last updated: 18 Aug 2016</p>
+<h3 id="list-all-previous-commit-and-their-summary-details">List all previous commit and their summary details</h3>
+<p><code>git list --all</code></p>
+<h3 id="visualising-changes-to-files-in-commits">Visualising changes to files in commits</h3>
+<p><code>gitk --all</code></p>
+<h3 id="rolling-back-all-files-to-a-version-from-a-previous-commit-">Rolling back all files to a version from a previous commit.</h3>
+<p><code>git reset --hard *commit id*</code></p>
+<h2 id="administrative-stuff">Administrative stuff</h2>
+<p><strong> git remote -v</strong> - shows details of the remote repository of the current git project.</p>
+</div></body></html>

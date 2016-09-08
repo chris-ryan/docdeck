@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<html>
-<title>Diabetic Retinopathy CRE - NodeJS</title>
-<body>
-
-<!-- Markdown under here -->    
-<xmp theme="cerulean" style="display:none;">
-
 ### Connecting a Node/Express app to MongoDB
 
 Just like with everything else in the node universe, there are pre-built packages for interacting with MongoDB databases.
@@ -46,10 +38,3 @@ mongoClient.connect('mongodb://dev.diabcre.cloud:27017/mongotest', function(err,
     db.close();
 });
 ```
-
-
-
-</xmp>
-</body>
-<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
-</html>

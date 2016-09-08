@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link type="text/css" href="../style.css" rel="stylesheet"/>
+  <title>DiabCRE - Knowledgebase</title>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="top">
+        <h1>Diab CRE Knowledgebase</h1>
+    </div>
+  </header>
+
+<div class="left-navbar">
+</div>
+
+<div class="main-content"><h2 id="using-express-to-build-a-mongodb-api">Using Express to build a MongoDB API</h2>
+<p>Express is a framework built with NodeJS, much in the same way that Aurelia is a framework built with JavaScript.</p>
+<p>Its syntax is easier to read and write than pure NodeJS and it has built-in methods for supporting a basic MVC app.</p>
+<h3 id="creating-a-basic-json-api-using-express">Creating a basic JSON API using express</h3>
+<p>Instead of an app that returns a html-formated web page, we&#39;re going to make a simple api that returns JSON.</p>
+<p>Our api is going to be a BMI calculator, that reads in a user&#39;s weight and height from the HTTP GET request, and responds with the calculated BMI in JSON.</p>
+<p>Express is installed as a Node package</p>
+<p>Let&#39;s create a new Node.JS project: 
+and run: <code>npm init</code></p>
+<blockquote>
+<p>when asked, just leave the &quot;test command:&quot; empty for now.</p>
+</blockquote>
+<p>Install the Express package via npm
+<code>npm install express --save</code></p>
+<h5 id="the-main-file">The main file</h5>
+<p>When we ran <code>npm init</code> we were prompted for the name of our main file (default: index.js). </p>
+<p>The convention for Node apps is to create this file in the root of our project.</p>
+<p>Let&#39;s do that now and put in a reference to our newly install module.</p>
+<pre><code>var express = require (&#39;express&#39;),
+    app = express();
+</code></pre><p>Here we&#39;ve assigned the Express module to the variable <em>express</em>, then declared a variable call <em>app</em> which will contain the object returned by the Express framework.
+As Express is essentially a framework that returns a Node app, this variable is <em>app</em>tly named (boom-tish!)</p>
+<p>Express has a very straight-forward syntax for <a href="http://expressjs.com/en/starter/basic-routing.html" title="ExpressJS - Basic Routing">routing requests</a>.
+The get() method, routes the HTTP GET requests by matching requests to a callback function based on the supplied url</p>
+<p>A response method is used to send a response to the client.</p>
+<h4 id="response-methods">Response methods</h4>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>download()</td>
+<td>Prompts for a file to be downloaded</td>
+</tr>
+<tr>
+<td>json()</td>
+<td>Sends a JSON response</td>
+</tr>
+<tr>
+<td>redirect()</td>
+<td>Redirects a request to another url</td>
+</tr>
+<tr>
+<td>render()</td>
+<td>Renders a view template</td>
+</tr>
+<tr>
+<td>send()</td>
+<td>Sends a response (can be pretty much anything)</td>
+</tr>
+<tr>
+<td>sendFile()</td>
+<td>Sends a file as an octet stream</td>
+</tr>
+<tr>
+<td>sendStatus()</td>
+<td>Sends the response status code</td>
+</tr>
+</tbody>
+</table>
+<p>Let&#39;s add a few more lines to index.js... </p>
+<ul>
+<li>using get() to assign the values of weight and height when an HTTP GET request is made to the /bmi/ url</li>
+<li>parse the supplied variables and calculate the bmi using some basic JavaScript</li>
+<li>using json() to return the result in JSON syntax.</li>
+</ul>
+<pre><code>app.get(&quot;/bmi/:weight/:height&quot;, function (req, res) {
+    var weight = parseInt(req.params.weight);
+    var height = parseFloat(req.params.height);
+
+    var result = weight / Math.pow(height, 2);
+    res.json({ result });
+});
+</code></pre><p>Now Let&#39;s tell express to create an HTTP server using the app object and  listen for connections.</p>
+<pre><code>var server = app.listen(8080, function() {
+    console.log (&#39;Server started on port 8080&#39;);
+});
+</code></pre><p>Save our file, run it using <code>node index.js</code> </p>
+<p>Now in your browser go to <a href="http://localhost:8080/bmi/yourweight/yourheight">http://localhost:8080/bmi/yourweight/yourheight</a>
+(where <em>yourweight</em> is your weight in kgs and <em>yourheight</em> is your heght in metres.)</p>
+</div></body></html>

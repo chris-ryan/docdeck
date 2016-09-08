@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link type="text/css" href="../style.css" rel="stylesheet"/>
+  <title>DiabCRE - Knowledgebase</title>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="top">
+        <h1>Diab CRE Knowledgebase</h1>
+    </div>
+  </header>
+
+<div class="left-navbar">
+</div>
+
+<div class="main-content"><p>The socket.io library abstracts websockets with fallbacks to support browsers that don&#39;t support websockets</p>
+<pre><code>var express = require(&#39;exress&#39;);
+var app = express();
+var server = require(&#39;http&#39;).createServer(app);
+var io = require(&#39;socket.io&#39;)(server);
+
+io.on(&#39;connection&#39;, function(client) {
+    client.on(&#39;join&#39;, function(name) {
+        client.nickname = name;
+    });
+    console.log(&#39;Client connected...&#39;);
+    //emit the message event on the client
+    client.emit(&#39;messages&#39;, {hello: &#39;world&#39; });
+    //listen for message events
+    client.on(&#39;messages&#39;, function(data){
+        var nickname = client.nickname;
+        //broadcast message to all other clients
+        client.broadcast.emit(&quot;messages&quot;, nickname + &quot;: &quot; + message);
+        //send the same mesasge back to client
+        client.emit(&quot;messages&quot;, nickname + &quot;: &quot; + message);
+    });
+});
+
+app.get(&#39;/&#39;, function (req, res) {
+    res.sendFile(__dirname + &#39;/index.html&#39;);
+});
+
+server.listen(8080);
+
+
+in the html you need to load the socket.io library and connect to the server...
+</code></pre><script src="/socket.io/socket.io.js"></script>
+
+<script>
+    var server = io.connect('http://localhost:8080');
+    server.on('connect', function(data) {
+        $('#status').html('Connected to chattr');
+        nickname = prompt("What is your nickname?");
+        server.emit('join', nickname);
+    });
+</script>
+
+<p><script>
+    var socket = io.connect(<a href="http://localhost:8080">http://localhost:8080</a>&#39;);
+    $(&#39;#chat_form&#39;).submit(function(e){
+        var message = $(&#39;#chat_input&#39;).val();
+        //emit messages event on the server
+        socket.emit(&#39;messages&#39;, message);
+    });</p>
+<pre><code>socket.on(&#39;messages&#39;, function(data) {
+    insertMessage(data);
+});
+</code></pre><p></script></p>
+<pre><code>Socket&#39;s broadcast property allows us to emit to all clients connected to a server (such as in the case of a chatroom).
+```socket.broadcast.emit(&quot;messsage&quot;, &quot;Hello&quot;);
+</code></pre><p>To configure a socket client within a JS app, instead of referencing socket.io.js in a <script> tag as above, we just need to 
+<code>require (socket.io-client);</code></p>
+<h3 id="persisting-data">Persisting data</h3>
+<pre><code>var express = require(&#39;exress&#39;);
+var app = express();
+var server = require(&#39;http&#39;).createServer(app);
+var io = require(&#39;socket.io&#39;)(server);
+var redis = require(&#39;redis&#39;);
+var redisClient = redis.createClient();
+// client.set(&quot;message1&quot;, &quot;hello, this is Bob&quot;);
+
+var messages = [];
+var storeMessage = function(name, data){
+    var message = JSON.stringify({name: name, data: data});
+    /*messages.push({name: name, data: data}); //add message to end of array
+    if (messages.length &gt; 10) {
+        messages.shift();
+    }*/
+    redisClient.lpush(&quot;messages&quot;, message, function(err, response){
+        redisClient.ltrim(&quot;messages&quot;, 0, 9);
+    });
+}
+
+io.sockets.on(&#39;connection&#39;, function(client) {
+    client.on(&#39;messages&#39;, function(message) {
+        client.get(&quot;nickname&quot;, function(error, name) {
+            client.broadcast.emit(&quot;messages&quot;, name + &quot;: &quot; + message);
+            client.emit(&quot;messages&quot;, name + &quot;: &quot; + message);
+            storeMessage(name, message);
+        });
+    });
+
+    client.on(&#39;join&#39;, function(name) {
+        redisClient.lrange(&quot;messages&quot;, 0, -1, function(err, messages){
+            messages = messages.reverse();
+            messages.forEach(function(message){
+                message = JSON.parse(message);
+                client.emit(&quot;messages&quot;, message.name + &quot;: &quot; + message.data);
+            });
+        });
+
+        //notify other clients a chatter has joined
+        client.broadcast.emit(&quot;add chatter&quot;, name);
+        redisClient.smembers(&#39;names&#39;, function(err, names){
+            names.forEach(function(name){
+                client.emit(&#39;add chatter&#39;, name);
+            });
+        });
+        redisClient.sadd(&quot;chatters&quot;, name);
+    });
+
+    //remove chatter when they disconnect
+    client.on(&#39;disconnect&#39;, function(name){
+        client.get(&#39;nickname&#39;, function(err, name){
+            client.broadcast.emit(&quot;remove chatter&quot;, name);
+            redisClient.srem(&quot;chatters&quot;, name);
+        });
+    });
+});
+
+app.get(&#39;/&#39;, function (req, res) {
+    res.sendFile(__dirname + &#39;/index.html&#39;);
+});
+
+server.listen(8080);
+</code></pre><p>and in the html
+```
+socket.on(&#39;add chatter&#39;, function(name) {
+    var chatter = $(&#39;<li>&#39;+ name + &#39;</li>&#39;).data(&#39;name&#39;, name);
+    $(&#39;#chatters&#39;).append(chatter);
+});</p>
+<p>// remove client when they disconnect
+server.on(&#39;remove chatter&#39;, fucntion(name) {
+    $(&#39;#chatters li[data-name=&#39; + name + &#39;]&#39;).remove();
+});</p>
+</div></body></html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link type="text/css" href="../style.css" rel="stylesheet"/>
+  <title>DiabCRE - Knowledgebase</title>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="top">
+        <h1>Diab CRE Knowledgebase</h1>
+    </div>
+  </header>
+
+<div class="left-navbar">
+</div>
+
+<div class="main-content"><h3 id="connecting-a-node-express-app-to-mongodb">Connecting a Node/Express app to MongoDB</h3>
+<p>Just like with everything else in the node universe, there are pre-built packages for interacting with MongoDB databases.</p>
+<p>Let&#39;s install the most basic: mongodb in our Express API app.</p>
+<p><code>npm install mongodb --save</code></p>
+<p>Create a new file in the root of our project called: db-connect.js</p>
+<pre><code>var mongoClient = require(&#39;mongodb&#39;);
+
+mongoClient.connect(&#39;mongodb://dev.diabcre.cloud:27017/mongotest&#39;, function(err, db) {
+    console.log(&quot;Connected to MongoDB!&quot;);
+
+    db.close();
+});
+</code></pre><p>run <code>node db-connect.js</code> and you should see the connection message outputted to your console.</p>
+<h3 id="retrieving-a-document">Retrieving a document</h3>
+<p>Within our client connect function, we&#39;ll use the findOne() method retrieve a patient...</p>
+<pre><code>var mongoClient = require(&#39;mongodb&#39;);
+
+mongoClient.connect(&#39;mongodb://dev.diabcre.cloud:27017/mongotest&#39;, function(err, db) {
+    console.log(&quot;Connected to MongoDB!&quot;);
+
+    var collection = db.collection(&#39;patients&#39;);
+    collection.findOne({&#39;id&#39;: &#39;10003&#39;}, function(err, doc) {
+        console.log(doc.id + &quot; - &quot; + doc.name.family + &quot;, &quot; + doc.name.given);
+    });
+
+    db.close();
+});
+</code></pre></div></body></html>

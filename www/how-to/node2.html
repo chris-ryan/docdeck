@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link type="text/css" href="../style.css" rel="stylesheet"/>
+  <title>DiabCRE - Knowledgebase</title>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="top">
+        <h1>Diab CRE Knowledgebase</h1>
+    </div>
+  </header>
+
+<div class="left-navbar">
+</div>
+
+<div class="main-content"><h3 id="node-chapter-2">Node Chapter 2</h3>
+<h3 id="packages">Packages</h3>
+<p>All npm packages contain a file, usually in the project root, called <em>package.json</em>.
+This file contains metadata relevant to the project including:</p>
+<ul>
+<li>name</li>
+<li>description</li>
+<li>version</li>
+<li>author</li>
+<li>dependencies</li>
+<li>repository location</li>
+<li>main file</li>
+</ul>
+<p>The easiest way to create one, is to execute <code>npm init</code> from the root of our project&#39;s folder.</p>
+<p>Let&#39;s create a new project: 
+and run: <code>npm init</code></p>
+<blockquote>
+<p>when asked, just leave the &quot;test command:&quot; empty for now.</p>
+</blockquote>
+<h4 id="working-with-other-packages">Working with other packages</h4>
+<p>Install the Express package via npm
+<code>npm install express --save</code></p>
+<p>Take a look at your package.json file and in the newly created node_modules folder.
+You&#39;ll see that &quot;express&quot; has now been added to the list of dependencies and a heap of modules have been downloaded and installed into node_modules.</p>
+<blockquote>
+<p>Express is a pretty big framework. Most Node packages only contain a handful of modules.</p>
+</blockquote>
+<h3 id="the-main-file">The main file</h3>
+<p>When we ran npm init where were prompted for the name of our main file (default: index.js). The convention for Node apps is to create this file in the root of our project.
+Let&#39;s do that now and put in a reference to our newly install module.</p>
+<pre><code>var express = require (&#39;express&#39;),
+app = express();
+</code></pre><p>Here we&#39;ve assigned the Express module to the variable <em>express</em>, then declared a variable call <em>app</em> which will contain the object returned by the Express framework.
+As Express is essentially a framework that returns a Node app, this variable is <em>app</em>tly named (boom-tish!)</p>
+<p>Let&#39;s add a few more lines to index.js, using Express&#39; set() function to define some settings.</p>
+<pre><code>app.set(&#39;port&#39;, process.env.PORT || 8080);
+app.set(&#39;views&#39;, __dirname + &#39;/views&#39;);
+</code></pre><p>Let&#39;s add a few lines to index.js to create an HTTP server using the app object and tell it to listen for connections.</p>
+<pre><code>var server = app.listen( function() {
+    console.log (&#39;The server is listening&#39;);
+});
+</code></pre><h3 id="routing-templates">Routing &amp; templates</h3>
+<pre><code>var request = require(&#39;request&#39;);
+var url = require(&#39;url&#39;);
+
+app.get (&#39;/tweets/:username&#39;, function(req, response) {
+        var username = req.params.username;
+
+        options = {
+            protocol: &quot;http&quot;,
+            host: api.twitter.com,
+            pathname: &#39;/1/statuses/user_timeline.json&#39;,
+            query: { screen_name: username, count: 10}
+        }
+
+        var twitterUrl = url.format(options);
+        request(url, function(err, res, body) {
+            var tweets = JSON.parse(body);
+            response.locals = {tweets: tweets, name: username};
+            response.render(&#39;tweets.ejs&#39;) //template engine
+        });
+
+});
+</code></pre><h3 id="connecting-node-to-mongodb">Connecting Node to MongoDB</h3>
+<p>Install the Node - MongoDB module
+<code>npm install mongodb --save</code></p>
+<pre><code>var http = require(&#39;http&#39;);
+
+http.createServer(function(request, response) {
+    response.writeHead(200); //outputs the status code in the header
+    response.write(&quot;Hello world, this is Node.JS&quot;); // the body of the response
+    response.end(); //close the connection
+
+}).listen(8080);
+</code></pre><ul>
+<li>From your terminal/command line run the server using:
+<code>node hello.js</code></li>
+<li>In another terminal/command line window, hit the server to view the response:
+<code>curl http://localhost:8080</code></li>
+<li>ctrl + c to stop the node server process.</li>
+</ul>
+<h2 id="events">Events</h2>
+<p>Look at the earlier Hello World code.</p>
+<p>When its executed, Node goes through the code and registers any known events. 
+In this case it registers  <em>request</em>.</p>
+<blockquote>
+<blockquote>
+<p>Pop over to the node docs page for the <a href="https://nodejs.org/api/http.html" title="NodeJS Docs - http">http module</a> and see the objects within the http.ClientRequest class it considers to be events.</p>
+</blockquote>
+</blockquote>
+<p>Node then goes into an event loop. Where its continuously checking for the registered events.</p>
+<p>In our code, that means node is listening for a &#39;request&#39; to come in.
+When the request is received, node then runs the code in the callback (reponse)&#39;</p>
+<p>Let&#39;s modify our earlier hello.js, adding a line to log the incoming request by referring to the request.url property.</p>
+<pre><code>var http = require(&#39;http&#39;);
+
+http.createServer(function(request, response) {
+    response.writeHead(200);
+    console.log(&quot;Incoming request:&quot; + request.url);
+    response.write(&quot;Hello world, this is Node.JS&quot;);
+    response.end();
+
+}).listen(8080);
+</code></pre><p>Fire up the node hello.js, go to localhost:8080 in your browser and take a look in your terminal to see the console output.</p>
+<p>You&#39;ll notice two requests, one for &quot;/&quot; and another for &quot;/favicon.ico&quot;. Don&#39;t stress about that last one. Whenever you load a url modern browsers look for a corresponding favicon to put a pretty icon in their tabs.</p>
+<p>Now try putting in something after &quot;localhost:8080/&quot; in your browser&#39;s url bar: Eg: <a href="http://localhost:8080/bobsyouruncle">http://localhost:8080/bobsyouruncle</a></p>
+<p>You&#39;ll see &quot;Incoming request:/bobsyouruncle&quot; now gets logged to the console. </p>
+<p>This is at the core of how we can use the url property to differentiate incoming requests and serve up different pages in response. </p>
+<h3 id="event-emmitters">Event emmitters</h3>
+<p>Just as events can be triggered in the DOM (click, submit, load, hover etc..), many objects in Node emit events.
+Most of these inherit from the <a href="https://nodejs.org/api/events.html#events_class_eventemitter" title="NodeJS Docs - EventEmitter">EventEmitter</a> constructor.
+For example, in our Hello World app, the <code>http.createServer(function(request, response) {</code> method is passed the request event</p>
+</div></body></html>

@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html>
-<title>Diabetic Retinopathy CRE - intro to aurelia</title>
-<body>
-
-<!-- Markdown under here -->    
-<xmp theme="journal" style="display:none;">
-
-    Working with Aurelia
+Working with Aurelia
 =============
 
 [TOC]
@@ -282,7 +274,3 @@ Make a file in the src directory: nav.html and insert the following:
 ```
 
 last updated: 19 Aug 2016
-</xmp>
-</body>
-<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
-</html>
