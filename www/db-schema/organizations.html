@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link type="text/css" href="../atom-one-light.css" rel="stylesheet"/>
+  <link type="text/css" href="../style.css" rel="stylesheet"/>
+  <script src="../server/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <title>DiabCRE - Knowledgebase</title>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="top">
+        <h1>Diab CRE Knowledgebase</h1>
+    </div>
+  </header>
+
+<div class="left-navbar">
+</div>
+
+<div class="main-content"><h1 id="collection-organizations">Collection: organizations</h1>
+<p>FHIR reference: <a href="https://www.hl7.org/fhir/organization.html" title="fhir docs - Organization">Resource: Organization</a></p>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Example</th>
+<th>FHIR v 1.02</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>integer</td>
+<td>An organization identifier internal to the application</td>
+<td>10000001</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>identifier</td>
+<td>custom</td>
+<td>An organization identifier internal to the application</td>
+<td>identifier {}</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>active</td>
+<td>boolean</td>
+<td>Whether the organization is in active use</td>
+<td>true</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>type</td>
+<td>code</td>
+<td>The type of organization</td>
+<td>prov</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>name</td>
+<td>string</td>
+<td>Name used for the organization</td>
+<td>Sunrise Health Service</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>address</td>
+<td>custom</td>
+<td>An address for the organization</td>
+<td>address {}</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>contact</td>
+<td>child</td>
+<td>A contact for the organization</td>
+<td>contact {}</td>
+<td>Y</td>
+</tr>
+</tbody>
+</table>
+<h3 id="child-and-custom-objects">Child and Custom objects</h3>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Example</th>
+<th>FHIR v 1.02</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>address.type</td>
+<td>code</td>
+<td>type of location</td>
+<td>both</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>address.line</td>
+<td>array</td>
+<td>Street name and number etc</td>
+<td>[&quot;Level 1, 25 River St&quot;]</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>address.city</td>
+<td>string</td>
+<td>name of city/town/suburb</td>
+<td>Katherine</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>address.state</td>
+<td>string</td>
+<td>name of state</td>
+<td>NT</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>address.postalCode</td>
+<td>string</td>
+<td>Post code for area</td>
+<td>0851</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>address.country</td>
+<td>string</td>
+<td>Country</td>
+<td>Australia</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>contact.purpose</td>
+<td>code</td>
+<td>Type of contact</td>
+<td>ADMIN</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>contact.name</td>
+<td>custom</td>
+<td>Name of the contact</td>
+<td>name {}</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>contact.telecom</td>
+<td>custom</td>
+<td>Contact details</td>
+<td>telecom {}</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>contact.address</td>
+<td>custom</td>
+<td>An address for the contact</td>
+<td>address {}</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>contact.telecom.system</td>
+<td>code</td>
+<td>method of contact stored</td>
+<td>email</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>contact.telecom.value</td>
+<td>string</td>
+<td>the actual contact details</td>
+<td>sabriggs@unimelb.edu.au</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>contact.telecom.use</td>
+<td>code</td>
+<td>purpose of contact point</td>
+<td>work</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>contact.telecom.rank</td>
+<td>integer</td>
+<td>preferred order of use</td>
+<td>1</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>identifier.use</td>
+<td>code</td>
+<td>purpose of the identifier</td>
+<td>usual</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>identifier.type</td>
+<td>code</td>
+<td>type of identifier</td>
+<td>UDI</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>identifier.system</td>
+<td>string</td>
+<td>namespace of the identifier</td>
+<td>urn:oid:2.16.804.1.113883.4.3.1</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>identifier.value</td>
+<td>string</td>
+<td>the unique value used to identify</td>
+<td>8003627396026523</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>identifier.assigner</td>
+<td>string</td>
+<td>the organisation that issued the identifer</td>
+<td>Medicare</td>
+<td>Y</td>
+</tr>
+</tbody>
+</table>
+<h3 id="codes">Codes</h3>
+<ul>
+<li><strong>type</strong> : prov | dept | team | govt | ins | edu | reli | crs | cg | bus | other</li>
+<li><strong>address.type</strong>: postal | physical | both</li>
+<li><strong>contact.purpose</strong>: BILL | ADMIN | HR | PAYOR | PATINF | PRESS</li>
+<li><strong>contact.telecom.system</strong>: phone | fax | email | pager | other</li>
+<li><strong>contact.telecom.use</strong>: home | work | temp | old | mobile</li>
+<li><strong>identifier.use</strong>: usual | official | temp | secondary</li>
+<li><strong>identifier.type</strong>: UDI | SNO | SB | PLAC | FILL</li>
+</ul>
+<h4 id="sample-mongodb-bson">Sample MongoDB BSON</h4>
+<pre><code class="lang-json">{
+    <span class="hljs-string">"id"</span> : <span class="hljs-string">"10000001"</span>,
+    <span class="hljs-string">"identifier"</span>: {
+        <span class="hljs-string">"use"</span>: <span class="hljs-string">"usual"</span>,
+        <span class="hljs-string">"type"</span>: <span class="hljs-string">"both"</span>,
+        <span class="hljs-string">"system"</span>: <span class="hljs-string">"urn:oid:2.16.804.1.113883.4.3.1"</span>,
+        <span class="hljs-string">"value"</span>: <span class="hljs-string">"8003627396026523"</span>,
+        <span class="hljs-string">"assigner"</span>: <span class="hljs-string">"Medicare"</span>
+    },
+    <span class="hljs-string">"active"</span>: <span class="hljs-string">"true"</span>,
+    <span class="hljs-string">"type"</span>: <span class="hljs-string">"prov"</span>,
+    <span class="hljs-string">"name"</span>: <span class="hljs-string">"Sunrise Health Service"</span>,
+    <span class="hljs-string">"address"</span>: {
+        <span class="hljs-string">"type"</span>: <span class="hljs-string">"both"</span>,
+        <span class="hljs-string">"line"</span>: [<span class="hljs-string">"Level 1, 25 River St"</span>],
+        <span class="hljs-string">"city"</span>: <span class="hljs-string">"Katherine"</span>,
+        <span class="hljs-string">"state"</span>: <span class="hljs-string">"NT"</span>,
+        <span class="hljs-string">"postalCode"</span>: <span class="hljs-string">"0851"</span>,
+        <span class="hljs-string">"country"</span>: <span class="hljs-string">"Australia"</span>,
+    },
+    <span class="hljs-string">"contact"</span>: {
+        <span class="hljs-string">"purpose"</span>: <span class="hljs-string">"ADMIN"</span>,
+        <span class="hljs-string">"name"</span>: {
+            <span class="hljs-string">"text"</span>: <span class="hljs-string">"Sharon Atkinson-Briggs"</span>,
+            <span class="hljs-string">"family"</span>: <span class="hljs-string">"Atkinson-Briggs"</span>,
+            <span class="hljs-string">"given"</span>: <span class="hljs-string">"Sharon"</span>,
+            <span class="hljs-string">"prefix"</span>: <span class="hljs-string">"Ms"</span>,
+            <span class="hljs-string">"suffix"</span>: NULL,
+        },
+        <span class="hljs-string">"telecom"</span>: {
+            <span class="hljs-string">"system"</span>: <span class="hljs-string">"email"</span>,
+            <span class="hljs-string">"value"</span>: <span class="hljs-string">"sabriggs@unimelb.edu.au"</span>,
+            <span class="hljs-string">"use"</span>: <span class="hljs-string">"work"</span>,
+            <span class="hljs-string">"rank"</span>: <span class="hljs-number">1</span>,
+        },
+        <span class="hljs-string">"sopClass"</span>: <span class="hljs-string">"1.2.840.10008.5.1.4.1.1.77.1.5.2"</span>,
+             <span class="hljs-string">"title"</span>: <span class="hljs-string">"OD-Central"</span>,
+             <span class="hljs-string">"content"</span>: <span class="hljs-string">"51299e0881b8e10011000001"</span>
+        }
+     }
+}
+</code></pre>
+<p>last updated: 09-Sep-2016</p>
+</div></body></html>

@@ -10,7 +10,6 @@ FHIR reference: [Resource: ImagingStudy][1]
 | referrer | [reference][4] | A reference to the referring practitioner | Practitioner/10000001 | Y |
 | availability | code | availability of the studies | ONLINE | Y |
 | url | string | A url for retreiving the study | http://localhost:8080/wado?studyUID=1.3.6.1.4.1.25403.166563008443 | Y |
-| procedure | [reference][5] | A reference to the procedure | Practitioner/10000001 | Y |
 | series | child | The DICOM series subtype | series {} | Y |
 
 ### Child objects
@@ -29,14 +28,14 @@ FHIR reference: [Resource: ImagingStudy][1]
 | series.instance | child | The DICOM instance subtype | instance {} | Y |
 | series.instance.uid | oid | Instance identifier | 0.3.1001.19200300.100 | Y |
 | series.instance.number | integer | Numeric identifier of the series | 001 | Y |
-| series.instance.sopClass | oid | [DICOM SOP Class][6] | 1.2.840.10008.5.1.4.1.1.77.1.5.2 | Y |
+| series.instance.sopClass | oid | [DICOM SOP Class][5] | 1.2.840.10008.5.1.4.1.1.77.1.5.2 | Y |
 | series.instance.title | string | Description of instance | OD-Central | Y |
 | series.instance.content | reference | Reference to the file ObjectID | 51299e0881b8e10011000001 | Y |
 
 ### Codes
 - **availability** : ONLINE | OFFLINE | NEARLINE | UNAVAILABLE
 - **series.modality**: AR | IVOCT | KER | LEN | OAM | OCT | OP | OPM | OPR | OPV | OSS | SRF | VA
-- **series.bodySite**: See [SNOMED CT Body Structures][7]
+- **series.bodySite**: See [SNOMED CT Body Structures][6]
 - **series.laterality**: RIGHT | LEFT | BILATERAL
 
 #### Sample MongoDB BSON
@@ -55,9 +54,6 @@ FHIR reference: [Resource: ImagingStudy][1]
     },
     "availability": "ONLINE",
     "url": "http://localhost:8080/wado?studyUID=1.3.6.1.4.1.25403.166563008443",
-     "procedure": {
-        "reference": "Procedure/166563008443"
-    },
      "series": {
         "uid": "0.9.2342.19200300.100",
         "number": "002",
@@ -85,6 +81,5 @@ last updated: 25-Aug-2016
 [2]: patients.html "DB schema - patients"
 [3]: investigations.html "DB schema - investigations"
 [4]: practitioners.html "DB schema - practitioners"
-[5]: procedures.html "DB schema - procedures"
-[6]: http://www.dicomlibrary.com/dicom/sop/ "DICOM SOP Classes"
-[7]: http://browser.ihtsdotools.org/?perspective=full&conceptId1=371398005&edition=au-edition&release=v20150531&server=https://browser-aws-1.ihtsdotools.org/api/snomed&langRefset=32570271000036106 "IHTSDO SNOMED CT Browser"
+[5]: http://www.dicomlibrary.com/dicom/sop/ "DICOM SOP Classes"
+[6]: http://browser.ihtsdotools.org/?perspective=full&conceptId1=371398005&edition=au-edition&release=v20150531&server=https://browser-aws-1.ihtsdotools.org/api/snomed&langRefset=32570271000036106 "IHTSDO SNOMED CT Browser"
