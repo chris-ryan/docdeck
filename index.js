@@ -1,4 +1,5 @@
 var fs = require('fs');
+var htmlparser = require('htmlparser2');
 var marked = require('marked');
 var path = require('path');
 
@@ -7,6 +8,20 @@ marked.setOptions({
         return require('highlight.js').highlightAuto(code).value;
     }
 });
+
+function makeTOC(convertedData){
+    var tableOfContents = {};
+    var parser = new htmlparser.Parser({
+        onopentag: function(name, attribs){
+            if(name === "h1" || name === "h2" || name === "h3"){
+                console.log(name + ": " + attribs.id);
+                tableOfContents.row1 = {header: name, val: attribs.id};
+            }
+        }
+    });
+    parser.write(convertedData);
+    console.log(tableOfContents);
+};
 
 function makePage(srcPath) { 
     var destPath = path.join('www', path.parse(srcPath).dir, path.parse(srcPath).name + '.html');
@@ -17,6 +32,9 @@ function makePage(srcPath) {
     fs.readFile(srcPath, function(err, data){
         if (err){ throw err; }
         var convertedData = marked(data.toString()) + "</div></body></html>";
+        makeTOC(convertedData);
+        
+    
         fs.appendFile(destPath, convertedData, function(err){
             if (err) throw err;
             console.log("writing... " + destPath);

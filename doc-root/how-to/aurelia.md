@@ -4,10 +4,10 @@ Working with Aurelia
 [TOC]
 
 #### Installing Dependencies
-#####MacOS and Windows
+##### MacOS and Windows
 Go to https://nodejs.org/en/ and download and install the "current" installer package.
 
-#####Ubuntu Linux
+##### Ubuntu Linux
 ```bash
 apt-get install nodejs
 apt-get install npm
@@ -22,7 +22,7 @@ Install JavaScript package manager jspm
 ```bash
 sudo npm install jspm@0.16.15 -g
 ```
-####Creating a new Aurelia project
+#### Creating a new Aurelia project
 From terminal, navigate to the folder that you keep your development projects in and run the command:
 ```bash 
 au new
@@ -111,7 +111,7 @@ export class Patient {
 
 Here we've just manually defined a patient with fixed properties to get something up on the screen. Later we'll look at connecting the view to a data source.
 
-####Creating the view template
+#### Creating the view template
 
 In the same folder, create the corresponding view `patient.html` and insert the following:
 
@@ -130,7 +130,7 @@ In the same folder, create the corresponding view `patient.html` and insert the 
 ```
 *src/patient.html*
 
-####Create a route to the page
+#### Create a route to the page
 
 When building an application with multiple pages, we can use Aurelia’s navigation model to configure a *router* to define *routes* to the different views. This allows us to dynamically create navigation without having to code in links on every view.
 
@@ -228,7 +228,7 @@ Now to display this object in our view (`patient.html`)
         </tr>
     </table>
 ```
-####Using the repeat.for loop to display arrays of external data
+#### Using the repeat.for loop to display arrays of external data
 
 Update the `patients.json` file to have several patients stored in an array:
 
