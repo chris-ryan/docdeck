@@ -24,9 +24,9 @@
 <div class="main-content"><h1 id="working-with-aurelia">Working with Aurelia</h1>
 <p>[TOC]</p>
 <h4 id="installing-dependencies">Installing Dependencies</h4>
-<p>#####MacOS and Windows
-Go to <a href="https://nodejs.org/en/">https://nodejs.org/en/</a> and download and install the &quot;current&quot; installer package.</p>
-<p>#####Ubuntu Linux</p>
+<h5 id="macos-and-windows">MacOS and Windows</h5>
+<p>Go to <a href="https://nodejs.org/en/">https://nodejs.org/en/</a> and download and install the &quot;current&quot; installer package.</p>
+<h5 id="ubuntu-linux">Ubuntu Linux</h5>
 <pre><code class="lang-bash">apt-get <span class="hljs-keyword">install</span> nodejs
 apt-<span class="hljs-keyword">get</span> <span class="hljs-keyword">install</span> npm
 sudo <span class="hljs-keyword">ln</span> -s /usr/<span class="hljs-keyword">bin</span>/nodejs /usr/<span class="hljs-keyword">bin</span>/node
@@ -37,8 +37,8 @@ sudo <span class="hljs-keyword">ln</span> -s /usr/<span class="hljs-keyword">bin
 <p>Install JavaScript package manager jspm</p>
 <pre><code class="lang-bash"><span class="hljs-selector-tag">sudo</span> <span class="hljs-selector-tag">npm</span> <span class="hljs-selector-tag">install</span> <span class="hljs-selector-tag">jspm</span>@<span class="hljs-keyword">0</span>.<span class="hljs-keyword">16</span>.<span class="hljs-keyword">15</span> -g
 </code></pre>
-<p>####Creating a new Aurelia project
-From terminal, navigate to the folder that you keep your development projects in and run the command:</p>
+<h4 id="creating-a-new-aurelia-project">Creating a new Aurelia project</h4>
+<p>From terminal, navigate to the folder that you keep your development projects in and run the command:</p>
 <pre><code class="lang-bash"><span class="hljs-keyword">au</span> <span class="hljs-keyword">new</span>
 </code></pre>
 <ul>
@@ -103,7 +103,7 @@ E.g. <code>&lt;body aurelia-app=&quot;othername&quot;&gt;</code> would look for 
 }
 </code></pre><p><em>src/patient.js</em></p>
 <p>Here we&#39;ve just manually defined a patient with fixed properties to get something up on the screen. Later we&#39;ll look at connecting the view to a data source.</p>
-<p>####Creating the view template</p>
+<h4 id="creating-the-view-template">Creating the view template</h4>
 <p>In the same folder, create the corresponding view <code>patient.html</code> and insert the following:</p>
 <pre><code><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"jumbotron"</span>&gt;</span>
@@ -117,7 +117,7 @@ E.g. <code>&lt;body aurelia-app=&quot;othername&quot;&gt;</code> would look for 
     <span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></span>
 </code></pre><p><em>src/patient.html</em></p>
-<p>####Create a route to the page</p>
+<h4 id="create-a-route-to-the-page">Create a route to the page</h4>
 <p>When building an application with multiple pages, we can use Aurelia’s navigation model to configure a <em>router</em> to define <em>routes</em> to the different views. This allows us to dynamically create navigation without having to code in links on every view.</p>
 <p>As Aurelia first looks at the app view/view-model by default, we’ll just configure our routes in there.</p>
 <p>Open <code>src/app.js</code> in your preferred code editor. Inside the App class definition, replace the message variable with:</p>
@@ -196,7 +196,7 @@ export class Patient {</p>
             <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>$</span><span class="hljs-template-variable">{patientData.birthDate}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
         <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span></span>
-</code></pre><p>####Using the repeat.for loop to display arrays of external data</p>
+</code></pre><h4 id="using-the-repeat-for-loop-to-display-arrays-of-external-data">Using the repeat.for loop to display arrays of external data</h4>
 <p>Update the <code>patients.json</code> file to have several patients stored in an array:</p>
 <pre><code>[
     {<span class="hljs-attr">"id"</span>:<span class="hljs-string">"10001"</span>,
