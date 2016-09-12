@@ -39,6 +39,18 @@ The get() method, routes the HTTP GET requests by matching requests to a callbac
 
 A response method is used to send a response to the client.
 
+#### Request methods
+Express has built-in functions, named after HTTP verbs:
+| Method | Description |
+| ----------| ------ |
+| get() | Prompts for a file to be downloaded |
+| post() | Sends a JSON response |
+| put() | Redirects a request to another url |
+| patch() | Renders a view template |
+| delete() | Sends a response (can be pretty much anything) |
+| sendFile() | Sends a file as an octet stream |
+| sendStatus() | Sends the response status code |
+
 #### Response methods
 | Method | Description |
 | ----------| ------ |
@@ -66,6 +78,9 @@ app.get("/bmi/:weight/:height", function (req, res) {
 });
 ```
 
+The get() function creates a route that receives a get request on the bmi path and routes it to a callback 
+function that takes a request and a response object. The response object sends back the response in JSON format.
+
 Now Let's tell express to create an HTTP server using the app object and  listen for connections.
 ```
 var server = app.listen(8080, function() {
@@ -77,5 +92,46 @@ Save our file, run it using ```node index.js```
 
 Now in your browser go to http://localhost:8080/bmi/yourweight/yourheight
 (where *yourweight* is your weight in kgs and *yourheight* is your heght in metres.)
+
+#### Responding with JSON
+Express' send() function automatically sends Objects and Arrays as JSON and Strings as text.
+We could rewrite the get function from the BMI example, to:
+```
+    app.get("/bmi/:weight/:height", function (req, res) {
+    var weight = parseInt(req.params.weight);
+    var height = parseFloat(req.params.height);
+
+    var bmi = weight / Math.pow(height, 2);
+    var result = { "bmi": bmi };
+    res.send( result );
+});
+```
+... and it would return the result in JSON format. This requires more code in the case of a single variable, 
+but if we wanted to return more information, its alot cleaner to build out our result as an object and return it via send() 
+than having to specify it all within response.json({});
+
+For example, if we wanted to return the height and weight along with the calculated bmi...
+
+```
+var express = require ('express'),
+    app = express();
+
+    app.get("/bmi/:weight/:height", function (req, res) {
+    var result = {};
+    result.weight = parseInt(req.params.weight);
+    result.height = parseFloat(req.params.height);
+
+    result.bmi = result.weight / Math.pow(result.height, 2);
+    res.send( result );
+});
+
+var server = app.listen(8080, function() {
+    console.log ('Server started on port 8080');
+});
+
+```
+
+and on http://localhost:8080/bmi/72/1.8 it would return:
+``` {"weight":72,"height":1.8,"bmi":22.22222222222222} ```
 
 [1]: http://expressjs.com/en/starter/basic-routing.html "ExpressJS - Basic Routing"
