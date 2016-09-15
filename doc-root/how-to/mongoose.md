@@ -76,3 +76,21 @@ var listPatients = function(db, callback) {
   });
 };
 ```
+
+### Storing Files
+MongoDB has a specification for storing and retrieving files called [GridFS][1].
+GridFS allows us to store files larger thatn the BSON file-sie limit (16MB) and is handy when you want to sync MongoDB instances across geographically distributed replica sets.
+
+GridFS stores files across two MongoDB collections: files and chunks
+1. files - stores metadata information about the file such as filename, contentType and uploadDate.
+2. chunks - stores the file data, broken up into chunks and a reference to the file document. Note: the default chunk size is 255 kB.
+
+To use GridFS within a Node or Express app, you have to install and require gridfs-stream.
+
+``` npm install gridfs-stream```
+
+```
+
+```
+
+[1]: http://docs.mongodb.org/manual/core/gridfs/ "GridFS"
