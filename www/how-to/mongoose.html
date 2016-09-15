@@ -81,4 +81,15 @@ ie. When you execute a query on the database, a model is returned with the prope
     <span class="hljs-keyword">callback</span>(<span class="hljs-literal">null</span>, results);
   });
 };
+</code></pre><h3 id="storing-files">Storing Files</h3>
+<p>MongoDB has a specification for storing and retrieving files called <a href="http://docs.mongodb.org/manual/core/gridfs/" title="GridFS">GridFS</a>.
+GridFS allows us to store files larger thatn the BSON file-sie limit (16MB) and is handy when you want to sync MongoDB instances across geographically distributed replica sets.</p>
+<p>GridFS stores files across two MongoDB collections: files and chunks</p>
+<ol>
+<li>files - stores metadata information about the file such as filename, contentType and uploadDate.</li>
+<li>chunks - stores the file data, broken up into chunks and a reference to the file document. Note: the default chunk size is 255 kB.</li>
+</ol>
+<p>To use GridFS within a Node or Express app, you have to install and require gridfs-stream.</p>
+<p><code>npm install gridfs-stream</code></p>
+<pre><code>
 </code></pre></div></body></html>

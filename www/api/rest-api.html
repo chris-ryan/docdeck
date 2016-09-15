@@ -25,34 +25,40 @@
 <table>
 <thead>
 <tr>
-<th>HTTP Method</th>
 <th>URL</th>
+<th>HTTP Method</th>
 <th>Description</th>
 <th>Format</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>GET</td>
 <td>[base-url]/patients/</td>
+<td>GET</td>
 <td>Returns a list of all the patients</td>
 <td>JSON</td>
 </tr>
 <tr>
-<td>GET</td>
-<td>[base-url]/patients/:patient.id</td>
-<td>Returns details of the patient with the matching id</td>
-<td>JSON</td>
-</tr>
-<tr>
-<td>POST</td>
 <td>[base-url]/patients/</td>
+<td>POST</td>
 <td>Creates an instance of a patient</td>
 <td>JSON</td>
 </tr>
 <tr>
+<td>[base-url]/patients/:patient.id</td>
+<td>GET</td>
+<td>Returns details of the patient with the matching id</td>
+<td>JSON</td>
+</tr>
+<tr>
+<td>[base-url]/patients/:patientID/photo</td>
+<td>GET</td>
+<td>Downloads a photo of the patient with the matching id</td>
+<td>jpeg</td>
+</tr>
+<tr>
+<td>[base-url]/patients/:patientID/photo</td>
 <td>POST</td>
-<td>[base-url]/patients/photo/:patientID</td>
 <td>Uploads a photo of the patient with the matching id</td>
 <td>jpeg</td>
 </tr>
