@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link type="text/css" href="../atom-one-light.css" rel="stylesheet"/>
+  <link type="text/css" href="../style.css" rel="stylesheet"/>
+  <script src="../server/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <title>DiabCRE - Knowledgebase</title>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="top">
+        <h1>Diab CRE Knowledgebase</h1>
+    </div>
+  </header>
+
+<div class="left-navbar">
+</div>
+
+<div class="main-content"><h1 id="resource-patients">Resource: Patients</h1>
+<table>
+<thead>
+<tr>
+<th>URL</th>
+<th>HTTP Method</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[base-url]/patients/</td>
+<td>GET</td>
+<td>Returns a list of all the patients</td>
+<td>JSON</td>
+</tr>
+<tr>
+<td>[base-url]/patients/</td>
+<td>POST</td>
+<td>Creates an instance of a patient</td>
+<td>JSON</td>
+</tr>
+<tr>
+<td>[base-url]/patients/:patient.id</td>
+<td>GET</td>
+<td>Returns details of the patient with the matching id</td>
+<td>JSON</td>
+</tr>
+<tr>
+<td>[base-url]/patients/:patientID/photo</td>
+<td>GET</td>
+<td>Downloads a photo of the patient with the matching id</td>
+<td>jpeg</td>
+</tr>
+<tr>
+<td>[base-url]/patients/:patientID/photo</td>
+<td>POST</td>
+<td>Uploads a photo of the patient with the matching id</td>
+<td>jpeg</td>
+</tr>
+</tbody>
+</table>
+<p>last updated: 15-Sep-2016</p>
+</div></body></html>
