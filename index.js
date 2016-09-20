@@ -9,18 +9,23 @@ marked.setOptions({
     }
 });
 
+function TableOfContents(rowNum, headerTag, headerValue) { 
+        this.rowNum = rowNum;
+        this.headerTag = headerTag;
+        this.headerValue = headerValue;
+}
+
 function makeTOC(convertedData){
-    var tableOfContents = {};
     var parser = new htmlparser.Parser({
         onopentag: function(name, attribs){
             if(name === "h1" || name === "h2" || name === "h3"){
                 console.log(name + ": " + attribs.id);
-                tableOfContents.row1 = {header: name, val: attribs.id};
+                var toc1 = new TableOfContents("row1",name,attribs.id);
             }
+            console.log(toc1);
         }
     });
     parser.write(convertedData);
-    console.log(tableOfContents);
 };
 
 function makePage(srcPath) { 
