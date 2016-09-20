@@ -13,16 +13,22 @@ function TableOfContents(rowNum, headerTag, headerValue) {
         this.rowNum = rowNum;
         this.headerTag = headerTag;
         this.headerValue = headerValue;
+        this.printTOC = function() {
+            console.log(this.rowNum + ": " + this.headerTag + this.headerValue);
+        };
 }
 
 function makeTOC(convertedData){
+    var rowNum = 0;
     var parser = new htmlparser.Parser({
         onopentag: function(name, attribs){
             if(name === "h1" || name === "h2" || name === "h3"){
+                rowNum++;
                 console.log(name + ": " + attribs.id);
-                var toc1 = new TableOfContents("row1",name,attribs.id);
+                var toc1 = new TableOfContents(rowNum,name,attribs.id);
+                toc1.printTOC();
             }
-            console.log(toc1);
+           // console.log(toc1);
         }
     });
     parser.write(convertedData);
@@ -39,7 +45,6 @@ function makePage(srcPath) {
         var convertedData = marked(data.toString()) + "</div></body></html>";
         makeTOC(convertedData);
         
-    
         fs.appendFile(destPath, convertedData, function(err){
             if (err) throw err;
             console.log("writing... " + destPath);
@@ -50,7 +55,6 @@ function makePage(srcPath) {
 // scan doc-root for file and folders
 var scanFolder = function(dir, done) {
     var results = [];
-    console.log("scanning ...");
     fs.readdir(dir, function(err, list){
         if (err) return done(err);
         var pending = list.length;
@@ -81,7 +85,7 @@ var scanFolder = function(dir, done) {
         });
     });
 };
-
+console.log("scanning ...");
 scanFolder('doc-root/', function(err, results){
     if (err) throw err;
     console.log(results);
