@@ -33,6 +33,18 @@
 </thead>
 <tbody>
 <tr>
+<td>[base-url]/ImagingStudies/</td>
+<td>GET</td>
+<td>Returns a list of all the Imaging Studies</td>
+<td>JSON</td>
+</tr>
+<tr>
+<td>[base-url]/ImagingStudies/</td>
+<td>POST</td>
+<td>Creates an instance of an Imaging Study</td>
+<td>JSON</td>
+</tr>
+<tr>
 <td>[base-url]/patients/</td>
 <td>GET</td>
 <td>Returns a list of all the patients</td>
@@ -64,5 +76,15 @@
 </tr>
 </tbody>
 </table>
-<p>last updated: 15-Sep-2016</p>
+<h2 id="example-request-content">Example request content</h2>
+<p>ImagingStudies - POST</p>
+<pre><code>{
+    <span class="hljs-attr">"id"</span>: <span class="hljs-string">"99991"</span>,
+    <span class="hljs-attr">"started"</span>: <span class="hljs-string">"2016-09-27T10:59:59"</span>,
+    <span class="hljs-attr">"patient"</span>: <span class="hljs-string">"10003"</span>,
+    <span class="hljs-attr">"referrer"</span>: <span class="hljs-string">"10001"</span>,
+    <span class="hljs-attr">"availability"</span>: <span class="hljs-string">"NEARLINE"</span>,
+    <span class="hljs-attr">"numberOfSeries"</span>: <span class="hljs-number">0</span>
+}
+</code></pre><p>last updated: 27-Sep-2016</p>
 </div></body></html>
