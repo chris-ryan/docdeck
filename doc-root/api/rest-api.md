@@ -2,13 +2,16 @@
 
 | URL | HTTP Method | Description | Format |
 | ----------| ------ | ------------------ | -------- |
-| [base-url]/ImagingStudies/ | GET | Returns a list of all the Imaging Studies | JSON |
-| [base-url]/ImagingStudies/ | POST | Creates an instance of an Imaging Study | JSON |
+| [base-url]/ImagingStudy/ | GET | Returns a list of all the Imaging Studies | JSON |
+| [base-url]/ImagingStudy/ | POST | Creates an instance of an Imaging Study | JSON |
+| [base-url]/ImagingStudy/:imagingStudyId | GET | Returns a specific Imaging Study | JSON |
 | [base-url]/patients/ | GET | Returns a list of all the patients | JSON |
 | [base-url]/patients/ | POST | Creates an instance of a patient | JSON |
 | [base-url]/patients/:patient.id | GET | Returns details of the patient with the matching id | JSON |
+| [base-url]/patients/:patient.id | DELETE | Deletes the instance of the patient with the matching id | JSON |
 | [base-url]/patients/:patientID/photo | GET | Downloads a photo of the patient with the matching id | jpeg |
 | [base-url]/patients/:patientID/photo | POST | Uploads a photo of the patient with the matching id | jpeg |
+| [base-url]/patients/:patientID/ImagingStudy | GET | Returns a list of Imaging Studies for a patient | jpeg |
 
 ## Example request content
 
