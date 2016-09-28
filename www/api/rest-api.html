@@ -33,15 +33,33 @@
 </thead>
 <tbody>
 <tr>
-<td>[base-url]/ImagingStudies/</td>
+<td>[base-url]/ImagingStudy/</td>
 <td>GET</td>
 <td>Returns a list of all the Imaging Studies</td>
 <td>JSON</td>
 </tr>
 <tr>
-<td>[base-url]/ImagingStudies/</td>
+<td>[base-url]/ImagingStudy/</td>
 <td>POST</td>
 <td>Creates an instance of an Imaging Study</td>
+<td>JSON</td>
+</tr>
+<tr>
+<td>[base-url]/ImagingStudy/:imagingStudyId</td>
+<td>GET</td>
+<td>Returns a specific Imaging Study</td>
+<td>JSON</td>
+</tr>
+<tr>
+<td>[base-url]/ImagingStudy/:imagingStudyId/photo</td>
+<td>POST</td>
+<td>Uploads a file to an imaging study</td>
+<td>jpeg</td>
+</tr>
+<tr>
+<td>[base-url]/ImagingStudy/:imagingStudyId/series/:seriesId/:instanceId</td>
+<td>GET</td>
+<td>Returns a specific Imaging Study image</td>
 <td>JSON</td>
 </tr>
 <tr>
@@ -63,6 +81,12 @@
 <td>JSON</td>
 </tr>
 <tr>
+<td>[base-url]/patients/:patient.id</td>
+<td>DELETE</td>
+<td>Deletes the instance of the patient with the matching id</td>
+<td>JSON</td>
+</tr>
+<tr>
 <td>[base-url]/patients/:patientID/photo</td>
 <td>GET</td>
 <td>Downloads a photo of the patient with the matching id</td>
@@ -72,6 +96,12 @@
 <td>[base-url]/patients/:patientID/photo</td>
 <td>POST</td>
 <td>Uploads a photo of the patient with the matching id</td>
+<td>jpeg</td>
+</tr>
+<tr>
+<td>[base-url]/patients/:patientID/ImagingStudy</td>
+<td>GET</td>
+<td>Returns a list of Imaging Studies for a patient</td>
 <td>jpeg</td>
 </tr>
 </tbody>
