@@ -9,11 +9,12 @@
 | [base-url]/ImagingStudy/:imagingStudyId/series/:seriesId/:instanceId | GET | Returns a specific Imaging Study image | JSON |
 | [base-url]/patients/ | GET | Returns a list of all the patients | JSON |
 | [base-url]/patients/ | POST | Creates an instance of a patient | JSON |
-| [base-url]/patients/:patient.id | GET | Returns details of the patient with the matching id | JSON |
-| [base-url]/patients/:patient.id | DELETE | Deletes the instance of the patient with the matching id | JSON |
-| [base-url]/patients/:patientID/photo | GET | Downloads a photo of the patient with the matching id | jpeg |
-| [base-url]/patients/:patientID/photo | POST | Uploads a photo of the patient with the matching id | jpeg |
-| [base-url]/patients/:patientID/ImagingStudy | GET | Returns a list of Imaging Studies for a patient | jpeg |
+| [base-url]/patients/:patientId | GET | Returns details of the patient with the matching id | JSON |
+| [base-url]/patients/:patientId | DELETE | Deletes the instance of the patient with the matching id | JSON |
+| [base-url]/patients/:patientId/photo | GET | Downloads a photo of the patient with the matching id | jpeg |
+| [base-url]/patients/:patientId/photo | POST | Uploads a photo of the patient with the matching id | jpeg |
+| [base-url]/patients/:patientId/photo | DELETE | Deletes the photo of the patient with the matching id | JSON |
+| [base-url]/patients/:patientId/ImagingStudy | GET | Returns a list of Imaging Studies for a patient | jpeg |
 
 ## Example request content
 
