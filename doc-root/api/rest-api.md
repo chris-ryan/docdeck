@@ -5,6 +5,7 @@
 | [base-url]/ImagingStudy/ | GET | Returns a list of all the Imaging Studies | JSON |
 | [base-url]/ImagingStudy/ | POST | Creates an instance of an Imaging Study | JSON |
 | [base-url]/ImagingStudy/:imagingStudyId | GET | Returns a specific Imaging Study | JSON |
+| [base-url]/ImagingStudy/:imagingStudyId | DELETE | Deletes a specific Imaging Study | JSON |
 | [base-url]/ImagingStudy/:imagingStudyId/photo | POST | Uploads a file to an imaging study | jpeg |
 | [base-url]/ImagingStudy/:imagingStudyId/series/:seriesId/:instanceId | GET | Returns a specific Imaging Study image | JSON |
 | [base-url]/patients/ | GET | Returns a list of all the patients | JSON |

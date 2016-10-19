@@ -21,7 +21,7 @@ FHIR reference: [Resource: ImagingStudy][1]
 | series.uid | integer | Series identifier | 0.9.2342.19200300.100 | Y |
 | series.number | integer | Numeric identifier of the series | 2 | Y |
 | series.modality | code | Type of Imaging Study | OP | Y |
-| series.description | string | A human readable summary of the series | Ophthalmic Photography | Y |
+| series.description | string | A human readable summary of the series | Fundus Photography | Y |
 | series.numberOfInstances | integer | Number of images in the series | 7 | Y |
 | series.availability | code | availability of the series | ONLINE | Y |
 | series.url | string | A url for retreiving the series | http://localhost:8080/wado?studyUID=1.3.6.1.4.1.25403.166563008443 | Y |
@@ -37,7 +37,7 @@ FHIR reference: [Resource: ImagingStudy][1]
 
 ### Codes
 - **availability** : ONLINE | OFFLINE | NEARLINE | UNAVAILABLE
-- **series.modality**: AR | IVOCT | KER | LEN | OAM | OCT | OP | OPM | OPR | OPV | OSS | SRF | VA
+- **series.modality**: AR | IVOCT | KER | LEN | OAM | OCT | OP | OPM | OPR | OPV | OSS | SRF | VA | XC
 - **series.bodySite**: See [SNOMED CT Body Structures][6]
 - **series.laterality**: RIGHT | LEFT | BILATERAL
 
@@ -77,6 +77,10 @@ FHIR reference: [Resource: ImagingStudy][1]
              "uid": "0.9.2342.20102020.100.4301",
              "number": "002",
              "sopClass": "1.2.840.10008.5.1.4.1.1.77.1.5.2",
+             "centerLocation": {
+                "x": 45,
+                "y": -8
+             },
              "title": "OD-Central",
              "content": "51299e0881b8e10011000001"
         }]
