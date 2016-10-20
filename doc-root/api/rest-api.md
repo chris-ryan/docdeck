@@ -4,11 +4,11 @@
 | ----------| ------ | ------------------ | -------- |
 | [base-url]/ImagingStudy/ | GET | Returns a list of all the Imaging Studies | JSON |
 | [base-url]/ImagingStudy/ | POST | Creates an instance of an Imaging Study | JSON |
-| [base-url]/ImagingStudy/:imagingStudyId | GET | Returns a specific Imaging Study | JSON |
-| [base-url]/ImagingStudy/:imagingStudyId | DELETE | Deletes a specific Imaging Study | JSON |
-| [base-url]/ImagingStudy/:imagingStudyId/photo | POST | Uploads a file to an imaging study | jpeg |
-| [base-url]/ImagingStudy/:imagingStudyId/series/:seriesId/:instanceId | GET | Returns a specific Imaging Study image | JSON |
-| [base-url]/ImagingStudy/:imagingStudyId/:studyId/instance | POST | Creates a new imaging instance | JSON |
+| [base-url]/ImagingStudy/:studyId | GET | Returns a specific Imaging Study | JSON |
+| [base-url]/ImagingStudy/:studyId | DELETE | Deletes a specific Imaging Study | JSON |
+| [base-url]/ImagingStudy/:studyId/photo | POST | Uploads a file to an imaging study | jpeg |
+| [base-url]/ImagingStudy/:studyId/series/:seriesId/:instanceId | GET | Returns a specific Imaging Study image | JSON |
+| [base-url]/ImagingStudy/:studyId/instance | POST | Creates a new imaging instance | JSON |
 | [base-url]/patients/ | GET | Returns a list of all the patients | JSON |
 | [base-url]/patients/ | POST | Creates an instance of a patient | JSON |
 | [base-url]/patients/:patientId | GET | Returns details of the patient with the matching id | JSON |
@@ -20,7 +20,7 @@
 
 ## Example request content
 
-ImagingStudies - POST
+####ImagingStudies - POST
 ```
 {
     "id": "99991",
@@ -32,4 +32,16 @@ ImagingStudies - POST
 }
 ```
 
+####ImagingStudy/:studyId/instance - POST
+```
+{
+	"modality": "OP",
+	"laterality": "LEFT",
+	"instance": [{
+		"sopClass": "1.2.840.10008.5.1.4.1.1.77.1.5.2",
+		"type": "macular-centered",
+		"title": "CENTRAL"
+	}]
+}
+```
 last updated: 27-Sep-2016
