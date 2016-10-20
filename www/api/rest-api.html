@@ -45,21 +45,33 @@
 <td>JSON</td>
 </tr>
 <tr>
-<td>[base-url]/ImagingStudy/:imagingStudyId</td>
+<td>[base-url]/ImagingStudy/:studyId</td>
 <td>GET</td>
 <td>Returns a specific Imaging Study</td>
 <td>JSON</td>
 </tr>
 <tr>
-<td>[base-url]/ImagingStudy/:imagingStudyId/photo</td>
+<td>[base-url]/ImagingStudy/:studyId</td>
+<td>DELETE</td>
+<td>Deletes a specific Imaging Study</td>
+<td>JSON</td>
+</tr>
+<tr>
+<td>[base-url]/ImagingStudy/:studyId/photo</td>
 <td>POST</td>
 <td>Uploads a file to an imaging study</td>
 <td>jpeg</td>
 </tr>
 <tr>
-<td>[base-url]/ImagingStudy/:imagingStudyId/series/:seriesId/:instanceId</td>
+<td>[base-url]/ImagingStudy/:studyId/series/:seriesId/:instanceId</td>
 <td>GET</td>
 <td>Returns a specific Imaging Study image</td>
+<td>JSON</td>
+</tr>
+<tr>
+<td>[base-url]/ImagingStudy/:studyId/instance</td>
+<td>POST</td>
+<td>Creates a new imaging instance</td>
 <td>JSON</td>
 </tr>
 <tr>
@@ -75,31 +87,37 @@
 <td>JSON</td>
 </tr>
 <tr>
-<td>[base-url]/patients/:patient.id</td>
+<td>[base-url]/patients/:patientId</td>
 <td>GET</td>
 <td>Returns details of the patient with the matching id</td>
 <td>JSON</td>
 </tr>
 <tr>
-<td>[base-url]/patients/:patient.id</td>
+<td>[base-url]/patients/:patientId</td>
 <td>DELETE</td>
 <td>Deletes the instance of the patient with the matching id</td>
 <td>JSON</td>
 </tr>
 <tr>
-<td>[base-url]/patients/:patientID/photo</td>
+<td>[base-url]/patients/:patientId/photo</td>
 <td>GET</td>
 <td>Downloads a photo of the patient with the matching id</td>
 <td>jpeg</td>
 </tr>
 <tr>
-<td>[base-url]/patients/:patientID/photo</td>
+<td>[base-url]/patients/:patientId/photo</td>
 <td>POST</td>
 <td>Uploads a photo of the patient with the matching id</td>
 <td>jpeg</td>
 </tr>
 <tr>
-<td>[base-url]/patients/:patientID/ImagingStudy</td>
+<td>[base-url]/patients/:patientId/photo</td>
+<td>DELETE</td>
+<td>Deletes the photo of the patient with the matching id</td>
+<td>JSON</td>
+</tr>
+<tr>
+<td>[base-url]/patients/:patientId/ImagingStudy</td>
 <td>GET</td>
 <td>Returns a list of Imaging Studies for a patient</td>
 <td>jpeg</td>
@@ -107,7 +125,7 @@
 </tbody>
 </table>
 <h2 id="example-request-content">Example request content</h2>
-<p>ImagingStudies - POST</p>
+<p>####ImagingStudies - POST</p>
 <pre><code>{
     <span class="hljs-attr">"id"</span>: <span class="hljs-string">"99991"</span>,
     <span class="hljs-attr">"started"</span>: <span class="hljs-string">"2016-09-27T10:59:59"</span>,
@@ -115,6 +133,16 @@
     <span class="hljs-attr">"referrer"</span>: <span class="hljs-string">"10001"</span>,
     <span class="hljs-attr">"availability"</span>: <span class="hljs-string">"NEARLINE"</span>,
     <span class="hljs-attr">"numberOfSeries"</span>: <span class="hljs-number">0</span>
+}
+</code></pre><p>####ImagingStudy/:studyId/instance - POST</p>
+<pre><code>{
+    <span class="hljs-attr">"modality"</span>: <span class="hljs-string">"OP"</span>,
+    <span class="hljs-attr">"laterality"</span>: <span class="hljs-string">"LEFT"</span>,
+    <span class="hljs-attr">"instance"</span>: [{
+        <span class="hljs-attr">"sopClass"</span>: <span class="hljs-string">"1.2.840.10008.5.1.4.1.1.77.1.5.2"</span>,
+        <span class="hljs-attr">"type"</span>: <span class="hljs-string">"macular-centered"</span>,
+        <span class="hljs-attr">"title"</span>: <span class="hljs-string">"CENTRAL"</span>
+    }]
 }
 </code></pre><p>last updated: 27-Sep-2016</p>
 </div></body></html>
