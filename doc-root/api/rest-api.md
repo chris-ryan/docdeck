@@ -8,6 +8,7 @@
 | [base-url]/ImagingStudy/:imagingStudyId | DELETE | Deletes a specific Imaging Study | JSON |
 | [base-url]/ImagingStudy/:imagingStudyId/photo | POST | Uploads a file to an imaging study | jpeg |
 | [base-url]/ImagingStudy/:imagingStudyId/series/:seriesId/:instanceId | GET | Returns a specific Imaging Study image | JSON |
+| [base-url]/ImagingStudy/:imagingStudyId/:studyId/instance | POST | Creates a new imaging instance | JSON |
 | [base-url]/patients/ | GET | Returns a list of all the patients | JSON |
 | [base-url]/patients/ | POST | Creates an instance of a patient | JSON |
 | [base-url]/patients/:patientId | GET | Returns details of the patient with the matching id | JSON |
