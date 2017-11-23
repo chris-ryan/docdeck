@@ -1,0 +1,29 @@
+{
+    "fields" : [
+        // "fieldName": "", "type": "", "description": "", "example": "", "referenceLabel": "", "referenceURL": "", "childElements": []. "codes": [{"code": "", "display": ""}]
+        { "fieldName": "identifier", "type": "object", "description": "", "example": "", "referenceLabel": "", "referenceURL": "", "childElements": [
+            {"fieldName": "type", "type": "code", "description": "", "example": "", "referenceLabel": "", "referenceURL": "", "codes": [{"code": "oid", "display": "Object Identifier"}]},
+            {"fieldName": "system", "type": "string", "description": "A uri referencing a unique namespace for the identifier", "example": "", "referenceLabel": "FHIR - Identifier.system", "referenceURL": "https://www.hl7.org/fhir/datatypes-definitions.html#Identifier.system"},
+            {"fieldName": "value", "type": "ObjectId", "description": "A unique identifier within the context of the system", "example": "", "referenceLabel": "FHIR - Identifier.value", "referenceURL": "https://www.hl7.org/fhir/datatypes-definitions.html#Identifier.value"},
+            {"fieldName": "assigner", "type": "Reference", "description": "The organization that manages the identifier", "example": "", "referenceLabel": "FHIR - Identifier.assigner", "referenceURL": "https://www.hl7.org/fhir/datatypes-definitions.html#Identifier.assigner"}] 
+        },
+        { "fieldName": "category", "type": "code", "description": "Type of observation", "example": "", "referenceLabel": "FHIR - Observation.category", "referenceURL": "https://www.hl7.org/fhir/codesystem-observation-category.html", "codes": [
+            {"code": "social-history", "display": "Social history"}, 
+            {"code": "vital-signs", "display": "Vital signs"},
+            {"code": "imaging", "display": "Imaging"},
+            {"code": "laboratory", "display": "Lab results"},
+            {"code": "procedure", "display": "Procedure"},
+            {"code": "survey", "display": "Survey"},
+            {"code": "exam", "display": "Exam"},
+            {"code": "therapy", "display": "Therapy"}]
+        },
+        { "fieldName": "subject", "type": "Reference", "description": "Reference to Patient", "example": "", "referenceLabel": "FHIR - Observation.subject", "referenceURL": "https://www.hl7.org/fhir/observation-definitions.html#Observation.subject"},
+        { "fieldName": "context", "type": "Reference", "description": "Reference to Encounter", "example": "", "referenceLabel": "FHIR - Observation.context", "referenceURL": "https://www.hl7.org/fhir/observation-definitions.html#Observation.context"},
+        { "fieldName": "effectiveDateTime", "type": "dateTime", "description": "Reference to Encounter", "example": "", "referenceLabel": "FHIR - Observation.context", "referenceURL": "https://www.hl7.org/fhir/observation-definitions.html#Observation.context"},
+        { "fieldName": "effectivePeriod", "type": "object", "description": "", "example": "", "referenceLabel": "FHIR - Period", "referenceURL": "https://www.hl7.org/fhir/datatypes.html#Period", "childElements": [
+            { "fieldName": "start", "type": "dateTime", "description": "Starting time of observed period", "example": "", "referenceLabel": "MongoDB - Date()", "referenceURL": "https://docs.mongodb.com/manual/reference/method/Date/"},
+            { "fieldName": "end", "type": "dateTime", "description": "End time of observed period", "example": "", "referenceLabel": "MongoDB - Date()", "referenceURL": "https://docs.mongodb.com/manual/reference/method/Date/"}]
+        }
+    ]
+
+}
