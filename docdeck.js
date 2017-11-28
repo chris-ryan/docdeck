@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var program = require('commander');
+const program = require('commander');
 
 // commnander - command line options and arguments
 program.version('0.1.0')
