@@ -1,8 +1,10 @@
 {
-  "name": "knowledgebase",
+  "name": "docdeck",
   "version": "0.1.0",
-  "description": "A file-based Markdown-friendly wiki",
-  "main": "index.js",
+  "description": "A flat-file Markdown-friendly wiki",
+  "main": "docdeck.js",
+  "preferGlobal": true,
+  "bin": "./docdeck.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
