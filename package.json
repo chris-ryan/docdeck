@@ -17,6 +17,7 @@
   "license": "BSD-2-Clause",
   "dependencies": {
     "chokidar": "^1.6.0",
+    "commander": "^2.12.1",
     "express": "^4.14.0",
     "highlight.js": "^9.6.0",
     "htmlparser2": "^3.9.1",
