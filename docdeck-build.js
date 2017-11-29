@@ -1,16 +1,22 @@
-var fs = require('fs');
-var htmlparser = require('htmlparser2');
-var marked = require('marked');
-var path = require('path');
-var program = require('commander');
+const fs = require('fs-extra');
+const htmlparser = require('htmlparser2');
+const marked = require('marked');
+const path = require('path');
+const program = require('commander');
+
+var srcFilePath;
+const basePath = path.join(process.cwd(),'www');
 
 // bring across the commander.js arguments
+// <> - required input [] - optional input.
 program
 .arguments('<src>')
 .action(function(src){
-    program.src = src; 
+    // Record the src file in the global srcFilePath variable.
+    srcFilePath = src;
 })
 .parse(process.argv);
+
 
 // set marked.js configuration
 marked.setOptions({
@@ -19,35 +25,35 @@ marked.setOptions({
     }
 });
 
-// function definitions
-function TableOfContents(rowNum, headerTag, headerValue) { 
-    this.rowNum = rowNum;
-    this.headerTag = headerTag;
-    this.headerValue = headerValue;
-    this.printTOC = function() {
-        console.log(this.rowNum + ": " + this.headerTag + this.headerValue);
-    };
+// Print out a single row of the table of contents
+function printTableOfContentsRow(rowNum, headerTag, headerValue) {
+      console.log(rowNum + ": " + headerTag + " " + headerValue);
 }
 
+// Print out the entire table of contents using a custom parser
 function makeTOC(convertedData){
-var rowNum = 0;
-var parser = new htmlparser.Parser({
-    onopentag: function(name, attribs){
-        if(name === "h1" || name === "h2" || name === "h3"){
-            rowNum++;
-            console.log(name + ": " + attribs.id);
-            var toc1 = new TableOfContents(rowNum,name,attribs.id);
-            toc1.printTOC();
-        }
-    }
-});
-parser.write(convertedData);
+  let rowNum = 0;
+  // Define the parser used to parse the data
+  var parser = new htmlparser.Parser({
+      // Define the behaviour of the parser on seeing an open tag
+      onopentag: function(tag, attribs){
+          if(tag === "h1" || tag === "h2" || tag === "h3"){
+              rowNum++;
+              printTableOfContentsRow(rowNum,tag,attribs.id);
+          }
+      }
+  });
+
+  console.log("row tag header")
+  parser.write(convertedData);
+  parser.end();
 };
 
-function makePage(srcPath) { 
+// Given the srcPath,
+function makePage(srcPath) {
     var templatePath = path.dirname(require.main.filename);
     var destPath = path.join('www', path.parse(srcPath).dir, path.parse(srcPath).name + '.html');
-    srcPath = path.join('doc-root', srcPath);
+    srcPath = path.join(srcFilePath, srcPath);
     // create base html file
     fs.createReadStream(path.join(templatePath,'server/base.html')).pipe(fs.createWriteStream(destPath));
     // append converted markdown to file
@@ -65,9 +71,9 @@ function makePage(srcPath) {
 // scan doc-root for file and folders
 var scanFolder = function(dir, done) {
     var results = [];
-    var basePath = path.join(process.cwd(),'www');
+
     if (!fs.existsSync(basePath)) {
-        fs.mkdirSync(path.join(process.cwd(),'www'));
+        fs.mkdirSync(basePath);
     }
     fs.readdir(dir, function(err, list){
         if (err) return done(err);
@@ -75,23 +81,24 @@ var scanFolder = function(dir, done) {
         if (!pending) return done(null, results);
         list.forEach(function(file){
             file = path.resolve(dir, file);
-            var relFile = path.relative('./doc-root/', file);
+            var relFile = path.relative(srcFilePath, file);
             fs.stat(file, function(err, stat){
                 // if a folder...
                 if (stat && stat.isDirectory()) {
                     console.log("creating directory:" + relFile);
-                    fs.mkdirSync(path.join('www', relFile));
+                    fs.mkdirSync(path.join(basePath, relFile));
                     //...recursive call to scanFolder function
                     scanFolder(file, function(err, res) {
                         if (! --pending) done(null, results);
                     });
                 }
                 else if (path.extname(file) == ".md") {
+                  console.log("writing " + relFile);
                     makePage(relFile);
-                    console.log(relFile);
+                    console.log("relFile = "+ relFile);
                     if (! --pending) done(null, results);
                 }
-                else { 
+                else {
                     console.log("--ignored--: " + file);
                     if (! --pending) done(null, results);
                 }
@@ -102,14 +109,14 @@ var scanFolder = function(dir, done) {
 
 // run the app
 console.log(__dirname);
-if (typeof program.src === 'undefined'){
+if (typeof srcFilePath === 'undefined'){
     console.error('no source folder location supplied!');
     process.exit(1);
 }
 // need to insert a check for folder existing
 else {
-        console.log("scanning " + program.src + " to build html");
-        scanFolder(program.src, function(err, results){
+        console.log("scanning " + srcFilePath + " to build html");
+        scanFolder(srcFilePath, function(err, results){
             if (err) throw err;
             console.log(results);
         });
