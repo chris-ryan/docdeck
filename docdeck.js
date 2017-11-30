@@ -8,8 +8,8 @@ program.version('0.1.0')
     //.option('-b, --build', 'build html')
     //.arguments('<cmd> [src] [dest]', 'build HTML from supplied source folder')
     //.action(function(srcFolder, command){
-        //src = srcFolder;
-      //  console.log(command.args[0]);
-        //destFolder = dest;
+//src = srcFolder;
+//  console.log(command.args[0]);
+//destFolder = dest;
     //})
     .parse(process.argv);
