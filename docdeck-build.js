@@ -1,22 +1,46 @@
 const fs = require('fs-extra');
 const htmlparser = require('htmlparser2');
+// marked provides a function that parses html and converts it into markdown.
 const marked = require('marked');
 const path = require('path');
 const program = require('commander');
 
-var srcFilePath;
-const basePath = path.join(process.cwd(),'www');
+const htmlFolder = 'www';
+const htmlExt = '.html';
+
+var srcFolderPath;
+// Record the current file directory of where the program is being run from
+const currDir = process.cwd(); // === process.cwd()
+// Record the base directory
+const baseDir = path.dirname(require.main.filename);
+// Record the path using the current working directory
+const basePath = path.join(currDir, htmlFolder);
+
+// Delete and recreate the folder
+if (fs.existsSync(basePath)) {
+  fs.removeSync(basePath);
+}
+fs.mkdirSync(basePath);
 
 // bring across the commander.js arguments
 // <> - required input [] - optional input.
 program
 .arguments('<src>')
 .action(function(src){
-    // Record the src file in the global srcFilePath variable.
-    srcFilePath = src;
+    // Record the src file in the global srcFolderPath variable.
+    srcFolderPath = src;
 })
 .parse(process.argv);
 
+// Check if src is a directory
+if(srcFolderPath){
+fs.stat(srcFolderPath, function(err, stat){
+  // Check if it is a folder
+  if (!stat || !stat.isDirectory()) {
+    console.error("not a valid directory");
+  }
+});
+}
 
 // set marked.js configuration
 marked.setOptions({
@@ -31,7 +55,9 @@ function printTableOfContentsRow(rowNum, headerTag, headerValue) {
 }
 
 // Print out the entire table of contents using a custom parser
-function makeTOC(convertedData){
+function makeTOC(htmlData){
+
+  // Use  parser to print out the table of contents
   let rowNum = 0;
   // Define the parser used to parse the data
   var parser = new htmlparser.Parser({
@@ -45,79 +71,98 @@ function makeTOC(convertedData){
   });
 
   console.log("row tag header")
-  parser.write(convertedData);
+  parser.write(htmlData);
   parser.end();
 };
 
-// Given the srcPath,
-function makePage(srcPath) {
-    var templatePath = path.dirname(require.main.filename);
-    var destPath = path.join('www', path.parse(srcPath).dir, path.parse(srcPath).name + '.html');
-    srcPath = path.join(srcFilePath, srcPath);
-    // create base html file
-    fs.createReadStream(path.join(templatePath,'server/base.html')).pipe(fs.createWriteStream(destPath));
-    // append converted markdown to file
+// Given the relative path of the destination and the baseDirectory, make a page out of the data
+// Note, we assume that this file is of type .md and the data is to be stored in www
+function makePage(relPath) {
+
+    // Record the file path of the file we wish to output to
+    // This outputs the data to the www folder
+
+    // The data in the www folder mirrors the data in the target folder, but
+    // contains html files instead of md files.
+    const destPath = path.join('www', path.parse(relPath).dir, path.parse(relPath).name + '.html');
+    // copy the data in the server/base.html file into the destination folder
+    // Record the complete path to the current file.
+    const srcPath = path.join(srcFolderPath, relPath);
+    fs.createReadStream(path.join(baseDir,'server/base.html'))
+      .pipe(fs.createWriteStream(destPath));
+
+    // data is the contents of the file found at srcPath
     fs.readFile(srcPath, function(err, data){
-        if (err){ throw err; }
-        var convertedData = marked(data.toString()) + "</div></body></html>";
+        if (err){
+          throw err;
+        }
+        // Append the closing tags that correspond to the open tags
+        // found in server/base.html
+        const closingTags = "</div></body></html>";
+        // The markdown file converted into the html file
+        let convertedData = marked(data.toString());
         makeTOC(convertedData);
-        fs.appendFile(destPath, convertedData, function(err){
-            if (err) throw err;
-            console.log("writing... " + destPath);
+        // Append the data to the file found at the destination path
+        fs.appendFile(destPath, convertedData + closingTags, function(err){
+            if (err) {
+              throw err;
+            }
+            console.log("writing to the destination file: " + destPath);
         });
     });
 }
 
-// scan doc-root for file and folders
-var scanFolder = function(dir, done) {
-    var results = [];
 
-    if (!fs.existsSync(basePath)) {
-        fs.mkdirSync(basePath);
-    }
-    fs.readdir(dir, function(err, list){
-        if (err) return done(err);
-        var pending = list.length;
-        if (!pending) return done(null, results);
-        list.forEach(function(file){
-            file = path.resolve(dir, file);
-            var relFile = path.relative(srcFilePath, file);
-            fs.stat(file, function(err, stat){
-                // if a folder...
-                if (stat && stat.isDirectory()) {
-                    console.log("creating directory:" + relFile);
-                    fs.mkdirSync(path.join(basePath, relFile));
-                    //...recursive call to scanFolder function
-                    scanFolder(file, function(err, res) {
-                        if (! --pending) done(null, results);
-                    });
-                }
-                else if (path.extname(file) == ".md") {
-                  console.log("writing " + relFile);
-                    makePage(relFile);
-                    console.log("relFile = "+ relFile);
-                    if (! --pending) done(null, results);
-                }
-                else {
-                    console.log("--ignored--: " + file);
-                    if (! --pending) done(null, results);
-                }
+// scan a given directory for file and folders
+// New dir refers to the new file location that needs to be created
+function scanFolder(folderToScan, done) {
+  // read and convert directory
+  // Function returns a list of items in the current directory
+  fs.readdir(folderToScan, function(err, dirList){
+    if (err) return done(err);
+    // Handle each file one by one
+    dirList.forEach(function(file, index){
+      file = path.resolve(folderToScan, file);
+      var relFile = path.relative(srcFolderPath, file);
+      fs.stat(file, function(err, stat){
+        // If it is a folder, recurse on the directory
+        if (stat && stat.isDirectory()) {
+            console.log("creating directory:" + relFile);
+            fs.mkdirSync(path.join(basePath, relFile));
+            //...recursive call to scanFolder function
+            scanFolder(file, function(err, res) {
+                if (dirList.length === index+1) done();
             });
-        });
+        }
+        else if (path.extname(file) == ".md") {
+            console.log("writing " + relFile);
+            makePage(relFile, currDir);
+            if (dirList.length === index+1) done();
+        }
+        else {
+            console.log("--ignored--: " + file);
+            if (dirList.length === index+1) done();
+        }
+      });
     });
+  });
 };
-
-// run the app
-console.log(__dirname);
-if (typeof srcFilePath === 'undefined'){
+// run the program
+if (typeof srcFolderPath === 'undefined'){
     console.error('no source folder location supplied!');
     process.exit(1);
 }
 // need to insert a check for folder existing
 else {
-        console.log("scanning " + srcFilePath + " to build html");
-        scanFolder(srcFilePath, function(err, results){
-            if (err) throw err;
-            console.log(results);
-        });
+    console.log("scanning " + srcFolderPath + " to build html");
+    scanFolder(srcFolderPath, function(err, results){
+        if (err) throw err;
+        console.log(results);
+    });
+    // Copy the css files
+    fs.copy(path.join(baseDir,'server/init'), htmlFolder, (err)=> {
+      if(err){
+        console.log(err);
+      }
+    });
 }
