@@ -53,6 +53,8 @@ program
     })
     .parse(process.argv);
 
+const srcDir = path.join(baseDir, srcDirName);
+
 // set marked.js configuration
 marked.setOptions({
     highlight: function (code) {
@@ -61,23 +63,27 @@ marked.setOptions({
 });
 
 // run the rest of the program
-main();
+main().catch((err)=>console.error(err));
+
+
 
 // Delete and recreate the folder
 // Prompt the user if and only if the folder already exists
 async function main(){
 
-    if(!isDirectory(srcDirName)){
-        console.error("not a valid directory");
+    if(!await isDirectory(srcDirName)){
+        throw new Error("not a valid directory");
     }
 
     const directoryMade = await makeDirectory(destDir);
     // If the new directory has been created
     if(directoryMade){
+        // scan src for html files and parse them into css
+        await scanFolder(srcDirName, srcDir, destDir);
         copyCss(srcCssDir, destCssDir);
-        buildHtmlFilesFromMarkdown(srcDirName);
     }
 }
+
 
 // Function to create a new directory
 async function makeDirectory(destDir){
@@ -104,6 +110,7 @@ async function makeDirectory(destDir){
     }
 }
 
+
 // Function to copy over the necessary css files into the destination css directory
 function copyCss(srcCssDir, destCssDir){
     // Copy the css files from local directory to target directory
@@ -112,16 +119,6 @@ function copyCss(srcCssDir, destCssDir){
             throw err;
         }
     });
-}
-
-// Build the html files from given markdown files
-function buildHtmlFilesFromMarkdown(src){
-    // scan src for html files and parse them into css
-    scanFolder(src, function(err, results){
-        if (err) throw err;
-        console.log(results);
-    });
-
 }
 
 
@@ -153,21 +150,56 @@ function makeTOC(htmlData){
     parser.end();
 }
 
+// scan a given directory for file and folders
+// New dir refers to the new file location that needs to be created
+/**
+  Given a folder and
+*/
+async function scanFolder(folderToScan, srcDir, destDir) {
+    console.log("srcDirName = "+ srcDir);
+    console.log("destDirName = "+ destDirName);
+    // Function returns a list of items in the current directory
+    const dirList = await fs.readdir(folderToScan);
+    // Handle each file one by one
+    dirList.forEach(async function scanFile(fileName){
+        // Determine the relative path to this file from the location where this
+        // program was called from
+        const fileDir = path.join(folderToScan, fileName);
+        const relFileDir = path.relative(srcDir, fileDir);
+        console.log("relFileDir = "+ relFileDir);
+        const stat = await fs.stat(fileDir);
+        // If the file is a directory,
+        if (stat && stat.isDirectory()) {
+            // Create a directory and scan the files in that folder
+            fs.mkdirSync(path.join(destDir, relFileDir));
+            scanFolder(fileDir, srcDir, destDir);
+        }
+        else if (path.extname(fileDir) === markdownExt) {
+            // Write data to relative file directory
+            scanMarkdownFile(relFileDir);
+        }
+        else {
+            // File does not have the markdown extension and is not a folder
+            console.log("Warning: " + fileDir + " was not a markdown file or a folder");
+        }
+    });
+}
+
+/**
+  This function takes in markDown file path and converts it into a
+*/
 
 // Given the relative path of the destination and the baseDirectory, make a page out of the data
 // Note, we assume that this file is of type .md and the data is to be stored in destDirName
-function makePage(relPath) {
-
-    // Record the file path of the file we wish to output to
-    // This outputs the data to the destDirName folder
-
+// relPath - the relative path from the source to the file we want to copy
+function scanMarkdownFile(relDir) {
     // The data in the destDirName folder mirrors the data in the target folder, but
     // contains html files instead of md files.
-    const destPath = path.join(destDirName, path.parse(relPath).dir,
-        path.parse(relPath).name + htmlExt);
+    const destPath = path.join(destDirName, path.parse(relDir).dir,
+        path.parse(relDir).name + htmlExt);
     // copy the data in the server/base.html file into the destination folder
     // Record the complete path to the current file.
-    const srcPath = path.join(srcDirName, relPath);
+    const srcPath = path.join(srcDirName, relDir);
     fs.createReadStream(path.join(baseDir,'server/base.html'))
         .pipe(fs.createWriteStream(destPath));
 
@@ -192,57 +224,17 @@ function makePage(relPath) {
     });
 }
 
-// Check if src is a directory
-function isDirectory(srcDirName){
-
+// Check if a file is a valid directory
+async function isDirectory(dir){
     // Check that the name was given
-    if (typeof srcDirName === 'undefined'){
+    if (typeof dir === 'undefined'){
         return false;
     }
-    fs.stat(srcDirName, function(err, stat){
-        // If it is a valid folder, return true
-        if (stat && stat.isDirectory()) {
-            return true;
-        }
-    });
-    return false;
-}
-
-// scan a given directory for file and folders
-// New dir refers to the new file location that needs to be created
-function scanFolder(folderToScan, done) {
-    // read and convert directory
-    // Function returns a list of items in the current directory
-    fs.readdir(folderToScan, function(err, dirList){
-        if (err) return done(err);
-        // Handle each file one by one
-        dirList.forEach(function(file, index){
-            // Convert a series of files into an absolute path
-            file = path.resolve(folderToScan, file);
-            var relFile = path.relative(srcDirName, file);
-            fs.stat(file, function(err, stat){
-                // If it is a folder, recurse on the directory
-                if (stat && stat.isDirectory()) {
-                    console.log("creating directory:" + relFile);
-                    fs.mkdirSync(path.join(destDir, relFile));
-                    //...recursive call to scanFolder function
-                    scanFolder(file, function(err) {
-                        if(err){
-                            console.error(err);
-                        }
-                        if (dirList.length === index+1) done();
-                    });
-                }
-                else if (path.extname(file) === markdownExt) {
-                    console.log("writing " + relFile);
-                    makePage(relFile, currDir);
-                    if (dirList.length === index+1) done();
-                }
-                else {
-                    console.log("--ignored--: " + file);
-                    if (dirList.length === index+1) done();
-                }
-            });
-        });
-    });
+    const stat = await fs.stat(dir);
+    // If it is a valid folder, return true
+    if (stat && stat.isDirectory()) {
+        return true;
+    }else{
+        return false;
+    }
 }
