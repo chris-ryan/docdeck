@@ -30,6 +30,10 @@
     "ncp": "^2.0.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2017": "^6.24.1",
+    "babel-preset-stage-3": "^6.24.1",
     "eslint": "^4.12.0",
     "eslint-config-google": "^0.9.1"
   }

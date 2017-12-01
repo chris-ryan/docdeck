@@ -15,5 +15,8 @@ module.exports = {
     "camelcase": 0,
     "semi": 2,
     "no-console":0
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017
   }
 }

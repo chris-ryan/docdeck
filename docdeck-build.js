@@ -1,3 +1,12 @@
+/**
+  This program provides the necessary functionality to generate HTML files
+  from markdown files. This program is intended to be used to generate documentation
+  for the diabCRE knowledgebase
+
+  This file makes use of the files located in server/init files for css
+  and server/base1 2 3 for the html boilerplate.
+ */
+
 const fs = require('fs-extra');
 const htmlparser = require('htmlparser2');
 // marked provides a function that parses html and converts it into markdown
@@ -7,9 +16,23 @@ const program = require('commander');
 const inquirer = require('inquirer');
 
 // We name the destination folder here (relative to current directory)
+// For now, we specify that the program should be placed in the www folder
 const destDirName = 'www';
 const htmlExt = '.html';
 const markdownExt = '.md';
+const srcCssDir = 'server/init';
+const destCssDir = 'css';
+
+/**
+  Naming conventions
+    xxxDir === full path to directory
+    xxxDirName === name of directory
+
+    base === directory where this program is located
+    curr === directory where this program is being called from
+    dest === directory where the html files are to be generated
+    src  === directory where the markdown files are located
+*/
 
 // Define the name of the directory used as the source
 var srcDirName;
@@ -20,78 +43,85 @@ const baseDir = path.dirname(require.main.filename);
 // Record the path using the current working directory
 const destDir = path.join(currDir, destDirName);
 
+// bring across the commander.js arguments
+// <> - required input [] - optional input.
+program
+    .arguments('<src>')
+    .action(function(src){
+        // Record the src file in the global srcDirName variable.
+        srcDirName = src;
+    })
+    .parse(process.argv);
+
+// set marked.js configuration
+marked.setOptions({
+    highlight: function (code) {
+        return require('highlight.js').highlightAuto(code).value;
+    }
+});
+
+// run the rest of the program
+main();
 
 // Delete and recreate the folder
 // Prompt the user if and only if the folder already exists
-if (fs.existsSync(destDir)) {
-    const questions = {
-        message: "Warning: you are about to delete and replace the " + destDirName + " folder.\n"+
-                          "are you sure you want to continue?",
-        type:"confirm",
-        name:"continue"
-    };
-    inquirer.prompt(questions).then(function(response){
+async function main(){
+
+    if(!isDirectory(srcDirName)){
+        console.error("not a valid directory");
+    }
+
+    const directoryMade = await makeDirectory(destDir);
+    // If the new directory has been created
+    if(directoryMade){
+        copyCss(srcCssDir, destCssDir);
+        buildHtmlFilesFromMarkdown(srcDirName);
+    }
+}
+
+// Function to create a new directory
+async function makeDirectory(destDir){
+    const destDirName = path.parse(destDir).name;
+    if (fs.existsSync(destDir)) {
+        const question = {
+            message: "Warning: you are about to delete and replace the " + destDirName + " folder.\n"+
+                            "are you sure you want to continue?",
+            type:"confirm",
+            name:"continue"
+        };
+        const response = await inquirer.prompt(question);
         if(response.continue){
             fs.removeSync(destDir);
             fs.mkdirSync(destDir);
-            // Run the rest of the program
-            exec();
+            return true;
+        }else{
+            return false;
         }
-    });
-}else{
-    fs.mkdirSync(destDir);
-    // Run the rest of the program
-    exec();
+
+    }else{
+        fs.mkdirSync(destDir);
+        return true;
+    }
 }
 
-
-// run the program
-function exec(){
-    // bring across the commander.js arguments
-    // <> - required input [] - optional input.
-    program
-        .arguments('<src>')
-        .action(function(src){
-            // Record the src file in the global srcDirName variable.
-            srcDirName = src;
-        })
-        .parse(process.argv);
-
-    // Check if src is a directory
-    if(srcDirName){
-        fs.stat(srcDirName, function(err, stat){
-            // Check if it is a folder
-            if (!stat || !stat.isDirectory()) {
-                console.error("not a valid directory");
-            }
-        });
-    }
-
-    // set marked.js configuration
-    marked.setOptions({
-        highlight: function (code) {
-            return require('highlight.js').highlightAuto(code).value;
+// Function to copy over the necessary css files into the destination css directory
+function copyCss(srcCssDir, destCssDir){
+    // Copy the css files from local directory to target directory
+    fs.copy(path.join(baseDir, srcCssDir), path.join(destDirName, destCssDir), (err)=> {
+        if(err){
+            throw err;
         }
     });
+}
 
-    if (typeof srcDirName === 'undefined'){
-        console.error('no source folder location supplied!');
-        process.exit(1);
-    }
-    // need to insert a check for folder existing
-    else {
-        console.log("scanning " + srcDirName + " to build html");
-        scanFolder(srcDirName, function(err, results){
-            if (err) throw err;
-            console.log(results);
-        });
-        // Copy the css files
-        fs.copy(path.join(baseDir,'server/init'), destDirName, (err)=> {
-            if(err){
-                console.log(err);
-            }
-        });
-    }
+// Build the html files from given markdown files
+function buildHtmlFilesFromMarkdown(src){
+    // scan src for html files and parse them into css
+    scanFolder(src, function(err, results){
+        if (err) throw err;
+        console.log(results);
+    });
+
 }
 
 
@@ -102,6 +132,7 @@ function printTableOfContentsRow(rowNum, headerTag, headerValue) {
 
 
 // Print out the entire table of contents using a custom parser
+// This parser prints out the corresponding entry for tags of type h1 to h3
 function makeTOC(htmlData){
 
     // Use  parser to print out the table of contents
@@ -161,6 +192,21 @@ function makePage(relPath) {
     });
 }
 
+// Check if src is a directory
+function isDirectory(srcDirName){
+
+    // Check that the name was given
+    if (typeof srcDirName === 'undefined'){
+        return false;
+    }
+    fs.stat(srcDirName, function(err, stat){
+        // If it is a valid folder, return true
+        if (stat && stat.isDirectory()) {
+            return true;
+        }
+    });
+    return false;
+}
 
 // scan a given directory for file and folders
 // New dir refers to the new file location that needs to be created
