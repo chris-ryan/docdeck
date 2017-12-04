@@ -58,7 +58,7 @@ program
     .parse(process.argv);
 
 // Record the fully qualified path to the source
-const srcDir = path.join(baseDir, srcDirName);
+const srcDir = path.join(currDir, srcDirName);
 
 
 // run the rest of the program
@@ -69,12 +69,9 @@ main().catch((err)=>console.error(err));
 // Delete and recreate the folder
 // Prompt the user if and only if the folder already exists
 async function main(){
-    console.log(srcDirName);
-
-    if(!(await file.isDirectory(srcDirName))){
+    if(!(await file.isDirectory(srcDir))){
         throw new Error("not a valid directory");
     }
-    console.log("here");
     const directoryMade = await file.makeDirectory(destDir);
     // If the new directory has been created
     if(directoryMade){
