@@ -9,24 +9,28 @@
 
 const fs = require('fs-extra');
 const htmlparser = require('htmlparser2');
-// marked provides a function that parses html and converts it into markdown
-const marked = require('marked');
 const path = require('path');
 const program = require('commander');
-const inquirer = require('inquirer');
+const file = require('./file-management');
+const html = require('./html-management');
+
 
 // We name the destination folder here (relative to current directory)
 // For now, we specify that the program should be placed in the www folder
 const destDirName = 'www';
-const htmlExt = '.html';
 const markdownExt = '.md';
+const htmlExt = '.html';
+// Specify the locations where the css files can be found
 const srcCssDir = 'server/init';
+// Location where the css files will be placed in the destination folder
 const destCssDir = 'css';
+// Location where the template html can be found
+const templateHtmlDir = 'server/htmlInit/base.html';
 
 /**
   Naming conventions
-    xxxDir === full path to directory
-    xxxDirName === name of directory
+    xxxDir === fully qualified path to directory
+    xxxDirName === name of directory (filePath not given)
 
     base === directory where this program is located
     curr === directory where this program is being called from
@@ -53,84 +57,153 @@ program
     })
     .parse(process.argv);
 
+// Record the fully qualified path to the source
 const srcDir = path.join(baseDir, srcDirName);
 
-// set marked.js configuration
-marked.setOptions({
-    highlight: function (code) {
-        return require('highlight.js').highlightAuto(code).value;
-    }
-});
 
 // run the rest of the program
+// In the event of an error, log the error
 main().catch((err)=>console.error(err));
-
 
 
 // Delete and recreate the folder
 // Prompt the user if and only if the folder already exists
 async function main(){
 
-    if(!await isDirectory(srcDirName)){
+    if(!await file.isDirectory(srcDirName)){
         throw new Error("not a valid directory");
     }
 
-    const directoryMade = await makeDirectory(destDir);
+    const directoryMade = await file.makeDirectory(destDir);
     // If the new directory has been created
     if(directoryMade){
         // scan src for html files and parse them into css
-        await scanFolder(srcDirName, srcDir, destDir);
+        await scanFolder(srcDir, destDir);
+        // Copy over the necessary css files
         copyCss(srcCssDir, destCssDir);
     }
 }
 
-
-// Function to create a new directory
-async function makeDirectory(destDir){
-    const destDirName = path.parse(destDir).name;
-    if (fs.existsSync(destDir)) {
-        const question = {
-            message: "Warning: you are about to delete and replace the " + destDirName + " folder.\n"+
-                            "are you sure you want to continue?",
-            type:"confirm",
-            name:"continue"
-        };
-        const response = await inquirer.prompt(question);
-        if(response.continue){
-            fs.removeSync(destDir);
-            fs.mkdirSync(destDir);
-            return true;
-        }else{
-            return false;
-        }
-
-    }else{
-        fs.mkdirSync(destDir);
-        return true;
-    }
-}
-
-
 // Function to copy over the necessary css files into the destination css directory
+/**
+  The css files will be copied from the source (srcCssDir) to the destination
+  (destCssDir) directory
+*/
 function copyCss(srcCssDir, destCssDir){
     // Copy the css files from local directory to target directory
-    fs.copy(path.join(baseDir, srcCssDir), path.join(destDirName, destCssDir), (err)=> {
+    const srcDir = path.join(baseDir, srcCssDir);
+    const destDir = path.join(destDirName, destCssDir);
+    fs.copy(srcDir, destDir, (err)=> {
         if(err){
             throw err;
         }
     });
 }
 
-
-// Print out a single row of the table of contents
-function printTableOfContentsRow(rowNum, headerTag, headerValue) {
-    console.log(rowNum + ": " + headerTag + " " + headerValue);
+/**
+  Scan and clone a given folder, converting all md files to html.
+  srcDir - directory where the source files can be located
+  destDir - directory where destination files should be placed
+*/
+async function scanFolder(srcDir, destDir, dirOffset) {
+    // The inital offset is nothing
+    dirOffset = dirOffset || "";
+    // Function returns a list of items in the current directory
+    const dirList = await fs.readdir(srcDir);
+    // Handle each file one by one
+    dirList.forEach(async function scanFile(fileName){
+        // Determine the relative path to this file from the location where this
+        // program was called from
+        const srcFileDir = path.join(srcDir, fileName);
+        const destFileDir = path.join(destDir, fileName);
+        const stat = await fs.stat(srcFileDir);
+        // If the file is a directory,
+        if (stat && stat.isDirectory()) {
+            // Create a directory in destination subfolder and scan files in
+            fs.mkdirSync(destFileDir);
+            const newCssOffset = "../" + dirOffset;
+            await scanFolder(srcFileDir, destFileDir, newCssOffset);
+        }
+        else if (path.extname(fileName) === markdownExt) {
+            // Scan the file to the corresponding location in the destination
+            // but the with file ext changed to md
+            const newDestFileDir = file.replaceExt(destFileDir, htmlExt);
+            await processMdFile(srcFileDir, newDestFileDir, dirOffset);
+        }
+        else {
+            // File does not have the markdown extension and is not a folder
+            console.log("Warning: " + srcFileDir + " will be ignored");
+        }
+    });
 }
 
+/**
+    This function allows the user to convert an md file into a html file.
+    The html file will be generated using a template file defined in
+    htmlInit/base.html, referencing css files in a specified location
+    1) Generate boilerplate + css.
+    2) generate mdDocs
+    3) write file to destination
+ */
+async function processMdFile(srcDir, destDir, dirOffset){
+    // Generate outer template Dom with css link
+    let templateDom = await getTemplateDom(dirOffset);
+    // Generate a dom to represent the body of the docs
+    let docsDom = html.htmlToDom(await html.markdownToHtml(srcDir,destDir));
+
+    // Make the documentation a child of the main body
+    let body = htmlparser.DomUtils.getElementById("main-content", templateDom);
+    html.makeDomChild(body, docsDom);
+    // The template dom now contains the documentation as contents
+    const htmlDocs = html.domToHtml(templateDom);
+    await fs.createWriteStream(destDir).write(htmlDocs);
+}
+
+/**
+   Function designed to generate the documentation boilerplate
+   This includes the necessary css and formatting
+
+   This function assumes that the files can be located at the htmlInitDir.
+*/
+function getTemplateDom(dirOffset){
+    // The cssOffset should be set to ./ when undefined
+    dirOffset = dirOffset || './';
+
+    let domResult;
+    // Define the handler to be used in conjunciton with the parser.
+    const handler = new htmlparser.DomHandler( function htmlBoilerplateParser(err, dom){
+        const cssLinks = htmlparser.DomUtils.getElementsByTagName("link", dom);
+        for(let i = 0;i<cssLinks.length;i++){
+            const cssLink = cssLinks[i];
+            if(cssLink.attribs.type === 'text/css'){
+
+                cssLink.attribs.href = path.join(dirOffset, cssLink.attribs.href);
+            }
+        }
+        domResult = dom;
+    });
+    var parser = new htmlparser.WritableStream(handler);
+    // Src refers to the location of the source boilerplate html
+    // This can currently be found in server/htmlInit
+    const src = path.join(baseDir, templateHtmlDir);
+    var fd = fs.createReadStream(src);
+    fd.pipe(parser);
+
+    // This returns a promise containing the dom
+    // This promise returns when 'end' is triggered
+    return new Promise(function(resolve, reject) {
+        fd.on('end', ()=>resolve(domResult));
+        fd.on('error', reject);
+    });
+}
+
+/** Note: the functions below are not necessary, but I will keep them here form
+possible future use */
 
 // Print out the entire table of contents using a custom parser
 // This parser prints out the corresponding entry for tags of type h1 to h3
-function makeTOC(htmlData){
+// This takes in a stream of html data
+function printTableOfContents(htmlData){
 
     // Use  parser to print out the table of contents
     let rowNum = 0;
@@ -144,97 +217,13 @@ function makeTOC(htmlData){
             }
         }
     });
-
+    // Print out the header for each column, before writing out the data
     console.log("row tag header");
     parser.write(htmlData);
     parser.end();
 }
 
-// scan a given directory for file and folders
-// New dir refers to the new file location that needs to be created
-/**
-  Given a folder and
-*/
-async function scanFolder(folderToScan, srcDir, destDir) {
-    console.log("srcDirName = "+ srcDir);
-    console.log("destDirName = "+ destDirName);
-    // Function returns a list of items in the current directory
-    const dirList = await fs.readdir(folderToScan);
-    // Handle each file one by one
-    dirList.forEach(async function scanFile(fileName){
-        // Determine the relative path to this file from the location where this
-        // program was called from
-        const fileDir = path.join(folderToScan, fileName);
-        const relFileDir = path.relative(srcDir, fileDir);
-        console.log("relFileDir = "+ relFileDir);
-        const stat = await fs.stat(fileDir);
-        // If the file is a directory,
-        if (stat && stat.isDirectory()) {
-            // Create a directory and scan the files in that folder
-            fs.mkdirSync(path.join(destDir, relFileDir));
-            scanFolder(fileDir, srcDir, destDir);
-        }
-        else if (path.extname(fileDir) === markdownExt) {
-            // Write data to relative file directory
-            scanMarkdownFile(relFileDir);
-        }
-        else {
-            // File does not have the markdown extension and is not a folder
-            console.log("Warning: " + fileDir + " was not a markdown file or a folder");
-        }
-    });
-}
-
-/**
-  This function takes in markDown file path and converts it into a
-*/
-
-// Given the relative path of the destination and the baseDirectory, make a page out of the data
-// Note, we assume that this file is of type .md and the data is to be stored in destDirName
-// relPath - the relative path from the source to the file we want to copy
-function scanMarkdownFile(relDir) {
-    // The data in the destDirName folder mirrors the data in the target folder, but
-    // contains html files instead of md files.
-    const destPath = path.join(destDirName, path.parse(relDir).dir,
-        path.parse(relDir).name + htmlExt);
-    // copy the data in the server/base.html file into the destination folder
-    // Record the complete path to the current file.
-    const srcPath = path.join(srcDirName, relDir);
-    fs.createReadStream(path.join(baseDir,'server/base.html'))
-        .pipe(fs.createWriteStream(destPath));
-
-    // data is the contents of the file found at srcPath
-    fs.readFile(srcPath, function(err, data){
-        if (err){
-            throw err;
-        }
-        // Append the closing tags that correspond to the open tags
-        // found in server/base.html
-        const closingTags = "</div></body></html>";
-        // The markdown file converted into the html file
-        let convertedData = marked(data.toString());
-        makeTOC(convertedData);
-        // Append the data to the file found at the destination path
-        fs.appendFile(destPath, convertedData + closingTags, function(err){
-            if (err) {
-                throw err;
-            }
-            console.log("writing to the destination file: " + destPath);
-        });
-    });
-}
-
-// Check if a file is a valid directory
-async function isDirectory(dir){
-    // Check that the name was given
-    if (typeof dir === 'undefined'){
-        return false;
-    }
-    const stat = await fs.stat(dir);
-    // If it is a valid folder, return true
-    if (stat && stat.isDirectory()) {
-        return true;
-    }else{
-        return false;
-    }
+// Print out a single row of the table of contents
+function printTableOfContentsRow(rowNum, headerTag, headerValue) {
+    console.log(rowNum + ": " + headerTag + " " + headerValue);
 }

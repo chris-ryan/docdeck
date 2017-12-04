@@ -21,9 +21,11 @@
   "dependencies": {
     "chokidar": "^1.6.0",
     "commander": "^2.12.1",
+    "domutils": "^1.6.2",
     "express": "^4.14.0",
     "fs-extra": "^4.0.2",
     "highlight.js": "^9.6.0",
+    "htmlparser-to-html": "0.0.6",
     "htmlparser2": "^3.9.1",
     "inquirer": "^4.0.1",
     "marked": "^0.3.6",
