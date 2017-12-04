@@ -12,7 +12,7 @@ This will be implemented using the standard ECMAScript linter (eslinter)
 
 1) Use the eslinter
 
-2) Use camelcase (JavaScript convention)
+2) Use camelcase (JavaScript convention). Eg: newFunction.
 
 2) Use uppercase for global constants
 
