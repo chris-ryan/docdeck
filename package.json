@@ -29,7 +29,8 @@
     "htmlparser2": "^3.9.1",
     "inquirer": "^4.0.1",
     "marked": "^0.3.6",
-    "ncp": "^2.0.0"
+    "ncp": "^2.0.0",
+    "simple-git": "^1.84.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
