@@ -4,7 +4,7 @@
 
 
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs-extra');
 const inquirer = require('inquirer');
 /** Change a directory extension to md */
 module.exports.replaceExt = function replaceExt(dir, ext){

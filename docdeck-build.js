@@ -69,11 +69,12 @@ main().catch((err)=>console.error(err));
 // Delete and recreate the folder
 // Prompt the user if and only if the folder already exists
 async function main(){
+    console.log(srcDirName);
 
-    if(!await file.isDirectory(srcDirName)){
+    if(!(await file.isDirectory(srcDirName))){
         throw new Error("not a valid directory");
     }
-
+    console.log("here");
     const directoryMade = await file.makeDirectory(destDir);
     // If the new directory has been created
     if(directoryMade){
@@ -172,14 +173,23 @@ function getTemplateDom(dirOffset){
     let domResult;
     // Define the handler to be used in conjunciton with the parser.
     const handler = new htmlparser.DomHandler( function htmlBoilerplateParser(err, dom){
+        // Add the corresponding directory offset to the html for css
         const cssLinks = htmlparser.DomUtils.getElementsByTagName("link", dom);
         for(let i = 0;i<cssLinks.length;i++){
             const cssLink = cssLinks[i];
             if(cssLink.attribs.type === 'text/css'){
-
                 cssLink.attribs.href = path.join(dirOffset, cssLink.attribs.href);
             }
         }
+        // Add directory offset for script link
+        const scriptLinks = htmlparser.DomUtils.getElementsByTagName("script", dom);
+        for(let i = 0; i< scriptLinks.length;i++){
+            const scriptLink = scriptLinks[i];
+            if(scriptLink.attribs.src){
+                scriptLink.attribs.src = path.join(dirOffset, scriptLink.attribs.src );
+            }
+        }
+
         domResult = dom;
     });
     var parser = new htmlparser.WritableStream(handler);
