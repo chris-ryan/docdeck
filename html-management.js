@@ -6,7 +6,12 @@ const fs = require('fs-extra');
 const htmlparser = require('htmlparser2');
 const marked = require('marked');
 
-
+/**
+  For reference:
+  html object represented using DOM:
+    type, name, attribs, children, list of children
+    next, prev, parent
+ */
 
 
 // set marked.js configuration
@@ -43,9 +48,13 @@ module.exports.htmlToDom = function htmlToDom(html){
 
 /**
   Make a DOM (childDom) a child of a DOM element (parent)
+
+  If the parent already has children, the new child is appended to the list
+  of existing children
 */
 module.exports.makeDomChild = function makeDomChild(parent, childDom){
-    parent.children = childDom;
+    parent.children = (parent.children).concat(childDom);
+    // Ensure that all children point to the correct parent
     let head = childDom;
     while(head !== null && head !== undefined){
         head.parent = parent;

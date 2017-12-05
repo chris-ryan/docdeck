@@ -13,6 +13,7 @@ const path = require('path');
 const program = require('commander');
 const file = require('./file-management');
 const html = require('./html-management');
+const simpleGit = require('simple-git');
 
 
 // We name the destination folder here (relative to current directory)
@@ -103,9 +104,7 @@ function copyCss(srcCssDir, destCssDir){
   srcDir - directory where the source files can be located
   destDir - directory where destination files should be placed
 */
-async function scanFolder(srcDir, destDir, dirOffset) {
-    // The inital offset is nothing
-    dirOffset = dirOffset || "";
+async function scanFolder(srcDir, destDir, dirOffset = "") {
     // Function returns a list of items in the current directory
     const dirList = await fs.readdir(srcDir);
     // Handle each file one by one
@@ -141,7 +140,8 @@ async function scanFolder(srcDir, destDir, dirOffset) {
     htmlInit/base.html, referencing css files in a specified location
     1) Generate boilerplate + css.
     2) generate mdDocs
-    3) write file to destination
+    3) Generate git log history
+    4) write file to destination
  */
 async function processMdFile(srcDir, destDir, dirOffset){
     // Generate outer template Dom with css link
@@ -152,9 +152,45 @@ async function processMdFile(srcDir, destDir, dirOffset){
     // Make the documentation a child of the main body
     let body = htmlparser.DomUtils.getElementById("main-content", templateDom);
     html.makeDomChild(body, docsDom);
+
+    // Get file history and add it to the footer
+    let listLogSummary;
+    const gitRef = simpleGit(path.parse(srcDir).dir);
+    // Function does not return anything, but lets us set the log to a value
+    await gitRef.log({file: path.parse(srcDir).base },
+        (err, lg) => listLogSummary = lg);
+    const htmlTable = listLogSummaryToHtmlTable(listLogSummary);
+    // Make the documentation a child of the footer
+    const footer = htmlparser.DomUtils.getElementsByTagName("footer", templateDom)[0];
+    html.makeDomChild(footer, htmlTable);
+
+
     // The template dom now contains the documentation as contents
     const htmlDocs = html.domToHtml(templateDom);
     await fs.createWriteStream(destDir).write(htmlDocs);
+}
+
+/**
+  Convert a listLogSummary into a htmlTable in dom form (and return it)
+*/
+function listLogSummaryToHtmlTable(listLogSummary){
+    const table = html.htmlToDom("<table></table>");
+
+    const listLogLines = listLogSummary.all;
+    // Do this backwards to avoid O(n^2) complexity appends
+    for(let i = 0; i < listLogLines.length;i++){
+        const listLogLine = listLogLines[i];
+        // list log line contains:
+        // hash, date, message, author_name, author_email
+        let tableLine = html.htmlToDom(
+            `<tr>
+                <th>`+listLogLine.date         +`</th>
+                <th>`+listLogLine.message      +`</th>
+                <th>`+listLogLine.author_name  +`</th>
+            </tr>`);
+        html.makeDomChild(table[0], tableLine);
+    }
+    return table;
 }
 
 /**
