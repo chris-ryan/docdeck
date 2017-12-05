@@ -44,6 +44,29 @@ module.exports.makeDirectory = async function makeDirectory(destDir){
     }
 };
 
+// Function to delete a file. Returns true if file is not found or sucessfully deleted
+module.exports.deleteFile = async function deleteFile(file){
+    if (fs.existsSync(file)) {
+        const question = {
+            message: "Warning: you are about to delete and replace the "
+                            + file + " file.\n"
+                            + "are you sure you want to continue?",
+            type:"confirm",
+            name:"continue"
+        };
+        // If the user does not wish to continue, return false to abort
+        const response = await inquirer.prompt(question);
+        if(response.continue){
+            fs.removeSync(file);
+            return true;
+        }else{
+            return false;
+        }
+
+    }else{
+        return true;
+    }
+};
 
 // Check if a file is a valid directory
 module.exports.isDirectory = async function isDirectory(dir){

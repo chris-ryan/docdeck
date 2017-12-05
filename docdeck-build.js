@@ -64,12 +64,10 @@ const srcDir = path.join(currDir, srcDirName);
 
 // run the rest of the program
 // In the event of an error, log the error
-main().catch((err)=>console.error(err));
-
 
 // Delete and recreate the folder
 // Prompt the user if and only if the folder already exists
-async function main(){
+(async function mdDirToHtmlDir(){
     if(!(await file.isDirectory(srcDir))){
         throw new Error("not a valid directory");
     }
@@ -85,7 +83,7 @@ async function main(){
         // Copy over the necessary css files
         copyCss(srcCssDir, destCssDir);
     }
-}
+})().catch((err)=>console.error(err));
 
 // Function to copy over the necessary css files into the destination css directory
 /**
@@ -255,11 +253,13 @@ function getTemplateDom(dirOffset = './'){
 }
 
 /** Note: the functions below are not necessary, but I will keep them here form
-possible future use */
+possible future use. */
 
 // Print out the entire table of contents using a custom parser
 // This parser prints out the corresponding entry for tags of type h1 to h3
 // This takes in a stream of html data
+
+// eslint-disable-next-line no-unused-vars
 function printTableOfContents(htmlData){
 
     // Use  parser to print out the table of contents
