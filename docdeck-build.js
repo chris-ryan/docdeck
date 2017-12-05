@@ -138,51 +138,62 @@ async function scanFolder(srcDir, destDir, dirOffset = "") {
     This function allows the user to convert an md file into a html file.
     The html file will be generated using a template file defined in
     htmlInit/base.html, referencing css files in a specified location
-    1) Generate boilerplate + css.
+    This is done in 4 steps
+    1) Generate boilerplate + css (templateDom)
     2) generate mdDocs
     3) Generate git log history
-    4) write file to destination
+    4) write the file to destination
  */
 async function processMdFile(srcDir, destDir, dirOffset){
     // Generate outer template Dom with css link
-    let templateDom = await getTemplateDom(dirOffset);
-    // Generate a dom to represent the body of the docs
-    let docsDom = html.htmlToDom(await html.markdownToHtml(srcDir,destDir));
+    const templateDom = await getTemplateDom(dirOffset);
 
+    // Generate the documentation as a DOM object
+    const docs = html.htmlToDom(await html.markdownToHtml(srcDir,destDir));
     // Make the documentation a child of the main body
-    let body = htmlparser.DomUtils.getElementById("main-content", templateDom);
-    html.makeDomChild(body, docsDom);
+    const body = htmlparser.DomUtils.getElementById("main-content", templateDom);
+    html.makeDomChild(body, docs);
 
-    // Get file history and add it to the footer
-    let listLogSummary;
-    const gitRef = simpleGit(path.parse(srcDir).dir);
-    // Function does not return anything, but lets us set the log to a value
-    await gitRef.log({file: path.parse(srcDir).base },
-        (err, lg) => listLogSummary = lg);
-    const htmlTable = listLogSummaryToHtmlTable(listLogSummary);
-    // Make the documentation a child of the footer
+    // Generate the git history as a table
+    const htmlTable = await getGitHistoryAsHtmlDom(srcDir);
+    // Make the git history a chil of the footer
     const footer = htmlparser.DomUtils.getElementsByTagName("footer", templateDom)[0];
     html.makeDomChild(footer, htmlTable);
 
-
-    // The template dom now contains the documentation as contents
+    // Write out the document to the destination directory
     const htmlDocs = html.domToHtml(templateDom);
     await fs.createWriteStream(destDir).write(htmlDocs);
 }
 
 /**
-  Convert a listLogSummary into a htmlTable in dom form (and return it)
+  Get the git history of a specific directory and
+  generate a htmlTable representation in dom form (and return it)
 */
-function listLogSummaryToHtmlTable(listLogSummary){
-    const table = html.htmlToDom("<table></table>");
+async function getGitHistoryAsHtmlDom(dir){
+    // Get a summary of the logs for this dir using simple-git
+    let listLogSummary;
+    const gitRef = simpleGit(path.parse(dir).dir);
+    await gitRef.log({file: path.parse(dir).base },
+        (err, lg) => listLogSummary = lg);
 
+    // Create the html table template (as dom object)
+    const table = html.htmlToDom("<table></table>");
+    // Add the column headers
+    const tableHeader = html.htmlToDom(
+        `<tr>
+            <th> Date </th>
+            <th> Message </th>
+            <th> Author name </th>
+        </tr>`);
+    html.makeDomChild(table[0], tableHeader);
+
+    // Add all other log info to DOM table
     const listLogLines = listLogSummary.all;
-    // Do this backwards to avoid O(n^2) complexity appends
     for(let i = 0; i < listLogLines.length;i++){
         const listLogLine = listLogLines[i];
         // list log line contains:
         // hash, date, message, author_name, author_email
-        let tableLine = html.htmlToDom(
+        const tableLine = html.htmlToDom(
             `<tr>
                 <th>`+listLogLine.date         +`</th>
                 <th>`+listLogLine.message      +`</th>
@@ -197,12 +208,9 @@ function listLogSummaryToHtmlTable(listLogSummary){
    Function designed to generate the documentation boilerplate
    This includes the necessary css and formatting
 
-   This function assumes that the files can be located at the htmlInitDir.
+   This function assumes that the files can be located at the htmlInitDir
 */
-function getTemplateDom(dirOffset){
-    // The cssOffset should be set to ./ when undefined
-    dirOffset = dirOffset || './';
-
+function getTemplateDom(dirOffset = './'){
     let domResult;
     // Define the handler to be used in conjunciton with the parser.
     const handler = new htmlparser.DomHandler( function htmlBoilerplateParser(err, dom){
