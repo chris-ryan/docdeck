@@ -73,11 +73,15 @@ async function main(){
     if(!(await file.isDirectory(srcDir))){
         throw new Error("not a valid directory");
     }
+    // Check if a git object exists
+    const gitPath = path.join(srcDir, ".git");
+    // Is git is true iff this is a git repo.
+    const isGit = fs.existsSync(gitPath);
     const directoryMade = await file.makeDirectory(destDir);
     // If the new directory has been created
     if(directoryMade){
         // scan src for html files and parse them into css
-        await scanFolder(srcDir, destDir);
+        await scanFolder(srcDir, destDir, isGit);
         // Copy over the necessary css files
         copyCss(srcCssDir, destCssDir);
     }
@@ -104,7 +108,7 @@ function copyCss(srcCssDir, destCssDir){
   srcDir - directory where the source files can be located
   destDir - directory where destination files should be placed
 */
-async function scanFolder(srcDir, destDir, dirOffset = "") {
+async function scanFolder(srcDir, destDir, isGit, dirOffset = "") {
     // Function returns a list of items in the current directory
     const dirList = await fs.readdir(srcDir);
     // Handle each file one by one
@@ -119,13 +123,13 @@ async function scanFolder(srcDir, destDir, dirOffset = "") {
             // Create a directory in destination subfolder and scan files in
             fs.mkdirSync(destFileDir);
             const newCssOffset = "../" + dirOffset;
-            await scanFolder(srcFileDir, destFileDir, newCssOffset);
+            await scanFolder(srcFileDir, destFileDir, isGit, newCssOffset);
         }
         else if (path.extname(fileName) === markdownExt) {
             // Scan the file to the corresponding location in the destination
             // but the with file ext changed to md
             const newDestFileDir = file.replaceExt(destFileDir, htmlExt);
-            await processMdFile(srcFileDir, newDestFileDir, dirOffset);
+            await processMdFile(srcFileDir, newDestFileDir, isGit, dirOffset);
         }
         else {
             // File does not have the markdown extension and is not a folder
@@ -144,7 +148,7 @@ async function scanFolder(srcDir, destDir, dirOffset = "") {
     3) Generate git log history
     4) write the file to destination
  */
-async function processMdFile(srcDir, destDir, dirOffset){
+async function processMdFile(srcDir, destDir, isGit, dirOffset){
     // Generate outer template Dom with css link
     const templateDom = await getTemplateDom(dirOffset);
 
@@ -154,11 +158,13 @@ async function processMdFile(srcDir, destDir, dirOffset){
     const body = htmlparser.DomUtils.getElementById("main-content", templateDom);
     html.makeDomChild(body, docs);
 
-    // Generate the git history as a table
-    const htmlTable = await getGitHistoryAsHtmlDom(srcDir);
-    // Make the git history a chil of the footer
-    const footer = htmlparser.DomUtils.getElementsByTagName("footer", templateDom)[0];
-    html.makeDomChild(footer, htmlTable);
+    if(isGit){
+        // Generate the git history as a dom table
+        const htmlTable = await getGitHistoryAsHtmlDom(srcDir);
+        // Make the git history a chil of the footer
+        const footer = htmlparser.DomUtils.getElementsByTagName("footer", templateDom)[0];
+        html.makeDomChild(footer, htmlTable);
+    }
 
     // Write out the document to the destination directory
     const htmlDocs = html.domToHtml(templateDom);
@@ -191,7 +197,7 @@ async function getGitHistoryAsHtmlDom(dir){
     const listLogLines = listLogSummary.all;
     for(let i = 0; i < listLogLines.length;i++){
         const listLogLine = listLogLines[i];
-        // list log line contains:
+        // listLogLine contains:
         // hash, date, message, author_name, author_email
         const tableLine = html.htmlToDom(
             `<tr>
