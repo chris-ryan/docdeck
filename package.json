@@ -28,7 +28,7 @@
     "htmlparser-to-html": "0.0.6",
     "htmlparser2": "^3.9.1",
     "inquirer": "^4.0.1",
-    "marked": "^0.3.6",
+    "marked": "^0.3.12",
     "ncp": "^2.0.0",
     "simple-git": "^1.84.0"
   },
